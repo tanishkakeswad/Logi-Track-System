@@ -10,7 +10,21 @@ import com.edutech.logisticsmanagementandtrackingsystem.entity.Customer;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CustomerRepository;
 
-
+@Service
 public class CustomerService {
  // implement service logic here
+    @Autowired
+    private CargoRepository cargoRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public Customer createCustomer(Customer customer){
+        return customerRepository.save(customer);
+    }
+
+    // public CargoStatusResponse viewCargoStatus(Long cargold){
+    //      Cargo cargo=cargoRepository.findById(cargold).get();
+    //     String status=cargo.getStatus();
+    //     return status;
+    // }
 }

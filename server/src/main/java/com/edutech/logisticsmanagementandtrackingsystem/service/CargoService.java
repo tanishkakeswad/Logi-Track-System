@@ -9,9 +9,34 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoReposito
 import com.edutech.logisticsmanagementandtrackingsystem.repository.DriverRepository;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.Collections;
 import java.util.List;
 
 
+@Service
 public class CargoService {
  // implement service logic here
+ @Autowired
+ CargoRepository cargoRepository;
+ @Autowired
+ DriverRepository driverRepository;
+
+ 
+
+public Cargo addCargo(Cargo cargo){
+    return cargoRepository.save(cargo);
+}
+
+public List<Cargo> viewAllCargo(){
+    return cargoRepository.findAll();
+}
+
+public boolean assignCargoToDriver(long cargoId,Long driverId){
+    Cargo carg=cargoRepository.findById(cargoId).get();
+    Driver driver=driverRepository.findById(driverId).get();
+    driver.setAssignedCargos(Collections.singletonList(carg));
+    return true;
+}
+
 }

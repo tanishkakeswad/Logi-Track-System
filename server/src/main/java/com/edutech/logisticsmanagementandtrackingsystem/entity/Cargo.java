@@ -12,10 +12,10 @@ public class Cargo {
     private String size;
     private String status; 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Business business;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Driver driver;
 
     

@@ -13,8 +13,26 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.UserRepositor
 
 import java.util.ArrayList;
 
-
+@Service
 public class UserService  {
  // implement service logic here
 
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User registerUser(User user){
+        return userRepository.save(user);
+    }
+
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
+    // public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
+    //      User user =userRepository.findByUsername(username);
+    //      return user;
+
+    // }
 }
