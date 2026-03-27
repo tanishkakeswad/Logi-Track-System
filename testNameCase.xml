@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <property name="testAssignCargoToDriver" value="testAssignCargoToDriver"/>
+    <property name="testViewCargoStatus" value="testViewCargoStatus"/>
+    <property name="testPermissionForDriverEndpoints" value="testPermissionForDriverEndpoints"/>
+    <property name="testUpdateCargoStatus" value="testUpdateCargoStatus"/>
+    <property name="testLoginUser" value="testLoginUser"/>
+    <property name="testPermissionForBusinessEndpoints" value="testPermissionForBusinessEndpoints"/>
+    <property name="testRegisterCustomer" value="testRegisterCustomer"/>
+    <property name="testAddCargo" value="testAddCargo"/>
+    <property name="testPermissionForCustomerEndpoints" value="testPermissionForCustomerEndpoints"/>
+    <property name="testLoginWithWrongUsernameOrPassword" value="testLoginWithWrongUsernameOrPassword"/>
+    <property name="testViewAllCargos" value="testViewAllCargos"/>
+    <property name="testViewAssignedCargos" value="testViewAssignedCargos"/>
+    <property name="testRegisterBusiness" value="testRegisterBusiness"/>
+    <property name="testRegisterDriver" value="testRegisterDriver"/>
+    
+    <property name="AddcargoComponent should have invalid form if any field is empty"
+              value="AddcargoComponent should have invalid form if any field is empty"/>
+
+    <property name="AddcargoComponent should have valid form if all fields are filled"
+              value="AddcargoComponent should have valid form if all fields are filled"/>
+
+    <property name="HttpService should be created"
+              value="HttpService should be created"/>
+
+    <property name="HttpService should fetch order status"
+              value="HttpService should fetch order status"/>
+
+    <property name="HttpService should update cargo status"
+              value="HttpService should update cargo status"/>
+
+    <property name="HttpService should assign driver to cargo"
+              value="HttpService should assign driver to cargo"/>
+
+    <property name="HttpService should get assigned orders for driver"
+              value="HttpService should get assigned orders for driver"/>
+
+    <property name="HttpService should assign driver to cargo (duplicate)"
+              value="HttpService should assign driver to cargo"/>
+
+    <property name="HttpService should fetch cargo"
+              value="HttpService should fetch cargo"/>
+
+    <property name="HttpService should fetch driver"
+              value="HttpService should fetch driver"/>
+
+    <property name="HttpService should add cargo"
+              value="HttpService should add cargo"/>
+
+    <property name="HttpService should login"
+              value="HttpService should login"/>
+
+    <property name="HttpService should register user"
+              value="HttpService should register user"/>
+
+    <property name="LoginComponent should have invalid form if username and password are empty"
+              value="LoginComponent should have invalid form if username and password are empty"/>
+
+    <property name="LoginComponent should have invalid form if username or password is empty"
+              value="LoginComponent should have invalid form if username or password is empty"/>
+
+    <property name="LoginComponent should have valid form if username and password are provided"
+              value="LoginComponent should have valid form if username and password are provided"/>
+
+    <property name="RegistrationComponent should have invalid form if any field is empty"
+              value="RegistrationComponent should have invalid form if any field is empty"/>
+
+    <property name="RegistrationComponent should have invalid form if email is invalid"
+              value="RegistrationComponent should have invalid form if email is invalid"/>
+
+    <property name="RegistrationComponent should have valid form if all fields are filled correctly"
+              value="RegistrationComponent should have valid form if all fields are filled correctly"/>
+
+</properties>
