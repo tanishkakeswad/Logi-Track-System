@@ -26,7 +26,7 @@ import com.edutech.logisticsmanagementandtrackingsystem.service.DriverService;
 import com.edutech.logisticsmanagementandtrackingsystem.service.UserService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class RegisterAndLoginController {
         // register user in user repository by user service
         // after register in user repository then based on provided user role, register user in business, customer or driver repository
