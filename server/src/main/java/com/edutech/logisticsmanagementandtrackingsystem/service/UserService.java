@@ -14,7 +14,7 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.UserRepositor
 import java.util.ArrayList;
 
 @Service
-public class UserService  {
+public class UserService  implements UserDetailsService{
  // implement service logic here
 
     @Autowired
@@ -30,9 +30,25 @@ public class UserService  {
         return userRepository.findByUsername(username);
     }
 
-    // public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
-    //      User user =userRepository.findByUsername(username);
-    //      return user;
+    
+  @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
 
-    // }
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(
+                "User not found with username: " + username
+            );
+        }
+
+return org.springframework.security.core.userdetails.User
+            .withUsername(user.getUsername())
+            .password(user.getPassword())
+            .roles(user.getRole()) // BUSINESS / DRIVER / CUSTOMER
+            .build();
+    }
+
+
 }
