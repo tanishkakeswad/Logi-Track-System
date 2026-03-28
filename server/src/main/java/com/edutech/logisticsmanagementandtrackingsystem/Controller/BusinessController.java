@@ -63,6 +63,10 @@ public class BusinessController {
       
     }
 
+    public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId){
+            return new ResponseEntity<>(cargoService.getCargoById(cargoId),HttpStatus.OK);
+    }
+
     
     
 }

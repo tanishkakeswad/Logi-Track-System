@@ -39,4 +39,15 @@ public boolean assignCargoToDriver(long cargoId,Long driverId){
     return true;
 }
 
+public Cargo getCargoById(long cargoId){
+    List<Cargo> cargo = viewAllCargo();
+    for (Cargo c : cargo) {
+        if (c.getId()==cargoId) {
+            return c;
+            
+        }
+    }
+    return null;
+}
+
 }
