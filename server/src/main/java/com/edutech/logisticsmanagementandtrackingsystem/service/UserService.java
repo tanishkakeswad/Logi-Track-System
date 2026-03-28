@@ -14,7 +14,7 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.UserRepositor
 import java.util.ArrayList;
 
 @Service
-public class UserService  {
+public class UserService implements UserDetailsService {
  // implement service logic here
 
     @Autowired
@@ -30,9 +30,9 @@ public class UserService  {
         return userRepository.findByUsername(username);
     }
 
-    // public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
-    //      User user =userRepository.findByUsername(username);
-    //      return user;
+    public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException{
+         User user =userRepository.findByUsername(username);
+         return (UserDetails) user;
 
-    // }
+    }
 }

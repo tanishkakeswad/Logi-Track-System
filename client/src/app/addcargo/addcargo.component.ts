@@ -10,5 +10,39 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './addcargo.component.html',
   styleUrls: ['./addcargo.component.scss']
 })
-export class AddcargoComponent {}
- //todo: Complete missing code.. 
+export class AddcargoComponent {
+  itemForm!:FormGroup;
+  formModel:any={status:null};
+  showError:boolean=false;
+  errorMessage:any;
+  cargList:any=[];
+  assignModel:any={};
+  driverList:any=[];
+  showMessage:any;
+  responseMessage:any;
+  constructor(private router:Router,private http:HttpService,private fb:FormBuilder,private authService:AuthService){
+    
+  }
+  ngOnInit():void{
+
+  }
+
+  getCargo(){
+
+  }
+
+  getDrivers(){
+
+  }
+  onSubmit(){
+
+  }
+  addDriver(valus:any){
+
+  }
+  assignDriver(){
+
+  }
+
+}
+

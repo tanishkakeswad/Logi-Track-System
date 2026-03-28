@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 @Entity
-public class Driver {
+public class Driver{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
