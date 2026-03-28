@@ -17,7 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.edutech.logisticsmanagementandtrackingsystem.jwt.JwtRequestFilter;
 
-
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
@@ -69,28 +70,28 @@ http.csrf().disable()
         .authorizeRequests()
 
         // ✅ POST: permit all
-        .antMatchers(HttpMethod.POST, "/api/register", "/api/login")
+        .antMatchers(HttpMethod.POST, "/register", "/login")
             .permitAll()
 
         // ✅ POST: BUSINESS authority
-        .antMatchers(HttpMethod.POST, "/api/business/cargo", "/api/business/assign-cargo")
-            .hasAuthority("BUSINESS")
+        .antMatchers(HttpMethod.POST, "/business/cargo", "/business/assign-cargo")
+            .hasRole("BUSINESS")
 
         // ✅ GET: BUSINESS authority
-        .antMatchers(HttpMethod.GET, "/api/business/drivers", "/api/business/cargo")
-            .hasAuthority("BUSINESS")
+        .antMatchers(HttpMethod.GET, "/business/drivers", "/business/cargo")
+            .hasRole("BUSINESS")
 
         // ✅ GET: DRIVER authority
-        .antMatchers(HttpMethod.GET, "/api/driver/cargo")
-            .hasAuthority("DRIVER")
+        .antMatchers(HttpMethod.GET, "/driver/cargo")
+            .hasRole("DRIVER")
 
         // ✅ GET: CUSTOMER authority
-        .antMatchers(HttpMethod.GET, "/api/customer/cargo-status")
-            .hasAuthority("CUSTOMER")
+        .antMatchers(HttpMethod.GET, "/customer/cargo-status")
+            .hasRole("CUSTOMER")
 
         // ✅ PUT: CUSTOMER authority
-        .antMatchers(HttpMethod.PUT, "/api/customer/cargo-status")
-            .hasAuthority("CUSTOMER")
+        .antMatchers(HttpMethod.PUT, "/customer/cargo-status")
+            .hasRole("CUSTOMER")
 
         // ✅ All other endpoints require authentication
         .anyRequest().authenticated()
@@ -101,7 +102,16 @@ http.csrf().disable()
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
-        return authenticationManagerBean();
+        return super.authenticationManagerBean();
     }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(passwordEncoder);
+    }
+
+
 
 }

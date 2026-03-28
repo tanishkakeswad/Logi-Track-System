@@ -2,9 +2,11 @@ package com.edutech.logisticsmanagementandtrackingsystem.entity;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

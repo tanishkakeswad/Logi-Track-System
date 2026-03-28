@@ -67,7 +67,7 @@ public class RegisterAndLoginController {
             case "BUSINESS":
                 Business business = new Business();
                 business.setUser(savedUser);
-                businessService.createBusiness(business);
+                // businessService.createBusiness(business);
                 break;
 
             case "CUSTOMER":
@@ -120,7 +120,7 @@ public class RegisterAndLoginController {
                 .loadUserByUsername(loginRequest.getUsername());
 
         // Generate JWT token
-        String token = jwtUtil.generateToken(userDetails);
+        String token = jwtUtil.generateToken(userDetails.getUsername());
 
         // Fetch user entity for response data
         User user = userService

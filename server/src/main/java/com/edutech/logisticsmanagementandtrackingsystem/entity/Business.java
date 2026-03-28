@@ -13,11 +13,24 @@ public class Business {
     private String name;
     private String email;
 
+    @OneToOne
+    @JoinColumn(name="user_id",nullable = false)
+    private User user;
+
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Cargo> cargos;
 
     
+    
+    public Business(Long id, String name, String email, User user, List<Cargo> cargos) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.user = user;
+        this.cargos = cargos;
+    }
+
     public Business(String name, String email, List<Cargo> cargos) {
         this.name = name;
         this.email = email;
@@ -51,6 +64,14 @@ public class Business {
         this.email = email;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<Cargo> getCargos() {
         return cargos;
     }
@@ -59,4 +80,5 @@ public class Business {
         this.cargos = cargos;
     }
 
+   
 }
