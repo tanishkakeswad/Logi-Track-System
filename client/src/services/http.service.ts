@@ -17,7 +17,7 @@ export class HttpService {
 
   //Customer Controller
   getOrderStatus(cargoId:any):Observable<any>{
-    return this.http.get<any>(`${this.serverName}/api/customer/cargo-status/${cargoId}`);
+    return this.http.get<any>(`${this.serverName}/api/customer/cargo-status/${  cargoId}`);
   }
   
   //Driver controller

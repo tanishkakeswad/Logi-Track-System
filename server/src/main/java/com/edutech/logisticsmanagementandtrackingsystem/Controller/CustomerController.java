@@ -22,6 +22,7 @@ public class CustomerController {
     private CustomerService customerService;
 
 
+         @GetMapping("/cargo-status") 
         // get cargo status and return it with status code 200
         public ResponseEntity<CargoStatusResponse> viewCargoStatus(@RequestParam Long cargoId){
             CargoStatusResponse cargoStatusResponse = customerService.viewCargoStatus(cargoId);
