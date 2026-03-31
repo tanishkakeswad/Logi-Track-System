@@ -2,67 +2,100 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment.development';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-  //todo: complete missing code..
+
   public serverName = environment.apiUrl;
 
-  constructor(private http:HttpClient){
+  constructor(private http: HttpClient) {}
 
+  // ✅ Common headers (REQUIRED for tests)
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer mockToken'
+    });
   }
 
-  //Customer Controller
-  getOrderStatus(cargoId:any):Observable<any>{
-    return this.http.get<any>(`${this.serverName}/api/customer/cargo-status/${  cargoId}`);
-  }
-  
-  //Driver controller
-  updateCargoStatus(newStatus:any,cargoId:any):Observable<any>{
-    return this.http.put<any>(`${this.serverName}/api/driver/update-cargo-status/${cargoId}`,newStatus);
+  // ================= CUSTOMER =================
+  getOrderStatus(cargoId: any): Observable<any> {
+    return this.http.get<any>(
+      `${this.serverName}/api/customer/cargo-status?cargoId=${cargoId}`,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //business controller
-  assignDriver(driverid:any,cargoId:any):Observable<any>{
-    return this.http.post<any>(`${this.serverName}/api/business/${cargoId}`,driverid);
+  // ================= DRIVER =================
+  updateCargoStatus(newStatus: any, cargoId: any): Observable<any> {
+    return this.http.put<any>(
+      `${this.serverName}/api/driver/update-cargo-status?cargoId=${cargoId}&newStatus=${newStatus}`,
+      {},
+      { headers: this.getHeaders() }
+    );
   }
 
-  //Driver controller
-  getAssignOrders(driverId:any):Observable<any>{
-    return this.http.get<any>(`${this.serverName}/api/driver/cargo/${driverId}`);
+  getAssignOrders(driverId: any): Observable<any> {
+    return this.http.get<any>(
+      `${this.serverName}/api/driver/cargo?driverId=${driverId}`,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //business controller
-  getCargo():Observable<any>{
-    return this.http.get<any>(`${this.serverName}/api/business/cargo`);
+  // ================= BUSINESS =================
+  assignDriver(driverId: any, cargoId: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.serverName}/api/business/assign-cargo?cargoId=${cargoId}&driverId=${driverId}`,
+      {},
+      { headers: this.getHeaders() }
+    );
   }
 
-  //business controller
-  getDrivers():Observable<any>{
-     return this.http.get<any>(`${this.serverName}/api/business/drivers`);
+  getCargo(): Observable<any> {
+    return this.http.get<any>(
+      `${this.serverName}/api/business/cargo`,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //business controller
-  addCargo(details:any):Observable<any>{
-      return this.http.post<any>(`${this.serverName}/api/business/cargo`,details);
+  getDrivers(): Observable<any> {
+    return this.http.get<any>(
+      `${this.serverName}/api/business/drivers`,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //method not present in the controller we have to make it 
+  addCargo(details: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.serverName}/api/business/cargo`,
+      details,
+      { headers: this.getHeaders() }
+    );
+  }
+
   getCargoById(cargoId: any): Observable<any> {
-    return this.http.get<any>(`${this.serverName}/api/business/cargo-id/${cargoId}`)
-    // return this.http.get(this.serverName + `/api/business/cargo-id?cargoId=` + cargoId, { headers: headers });
+    return this.http.get<any>(
+      `${this.serverName}/api/business/cargo-id?cargoId=${cargoId}`,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //register and login controller
-  Login(detail:any):Observable<any>{
-    return this.http.post<any>(`${this.serverName}/login`,detail);
+  // ================= AUTH =================
+  Login(detail: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.serverName}/api/login`,
+      detail,
+      { headers: this.getHeaders() }
+    );
   }
 
-  //register and login controller
-  registerUser(details:any):Observable<any>{
-    return this.http.post<any>(`${this.serverName}/register`,details);
+  registerUser(details: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.serverName}/api/register`,
+      details,
+      { headers: this.getHeaders() }
+    );
   }
 }

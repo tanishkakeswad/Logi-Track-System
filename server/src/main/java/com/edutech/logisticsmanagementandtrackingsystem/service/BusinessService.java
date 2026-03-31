@@ -11,5 +11,10 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.BusinessRepos
 public class BusinessService {
     // implement service logic here
     
-   
+   @Autowired
+private BusinessRepository businessRepository;
+
+public Business createBusiness(Business business){
+    return businessRepository.save(business);
+}
 }

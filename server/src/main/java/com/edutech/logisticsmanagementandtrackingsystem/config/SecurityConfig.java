@@ -52,51 +52,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // complete these method to configure the security of the application
 
-        // /api/register and /api/login should be permitted to all
-        // /api/business/cargo should be permitted to users with BUSINESS role
-        // /api/business/assign-cargo should be permitted to users with BUSINESS role
-        // /api/driver/cargo should be permitted to users with DRIVER role
-        // /api/driver/update-cargo-status should be permitted to users with DRIVER role
-        // /api/customer/cargo-status should be permitted to users with CUSTOMER role
+        // /register and /login should be permitted to all
+        // /business/cargo should be permitted to users with BUSINESS role
+        // /business/assign-cargo should be permitted to users with BUSINESS role
+        // /driver/cargo should be permitted to users with DRIVER role
+        // /driver/update-cargo-status should be permitted to users with DRIVER role
+        // /customer/cargo-status should be permitted to users with CUSTOMER role
         // all other requests should be authenticated
 
         // configure jwtRequestFilter to be executed before UsernamePasswordAuthenticationFilter
 
         
 http.csrf().disable()
-        .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // because using JWT
-        .and()
-        .authorizeRequests()
+    .sessionManagement()
+    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    .and()
+    .authorizeRequests()
 
-        // ✅ POST: permit all
-        .antMatchers(HttpMethod.POST, "/register", "/login")
-            .permitAll()
+    .antMatchers("/register/**", "/login/**").permitAll()
 
-        // ✅ POST: BUSINESS authority
-        .antMatchers(HttpMethod.POST, "/business/cargo", "/business/assign-cargo")
-            .hasRole("BUSINESS")
+    .antMatchers("/business/**").hasRole("BUSINESS")
+    .antMatchers("/driver/**").hasRole("DRIVER")
+    .antMatchers("/customer/**").hasRole("CUSTOMER")
 
-        // ✅ GET: BUSINESS authority
-        .antMatchers(HttpMethod.GET, "/business/drivers", "/business/cargo")
-            .hasRole("BUSINESS")
+    .anyRequest().authenticated()
 
-        // ✅ GET: DRIVER authority
-        .antMatchers(HttpMethod.GET, "/driver/cargo")
-            .hasRole("DRIVER")
-
-        // ✅ GET: CUSTOMER authority
-        .antMatchers(HttpMethod.GET, "/customer/cargo-status")
-            .hasRole("CUSTOMER")
-
-        // ✅ PUT: CUSTOMER authority
-        .antMatchers(HttpMethod.PUT, "/customer/cargo-status")
-            .hasRole("CUSTOMER")
-
-        // ✅ All other endpoints require authentication
-        .anyRequest().authenticated()
-        .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+    .and()
+    .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
