@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/business")
 public class BusinessController {
     
     @Autowired
@@ -25,22 +25,22 @@ public class BusinessController {
     @Autowired
     private DriverService driverService;
 
-    @PostMapping("/api/business/cargo")
+    @PostMapping("/cargo")
     public ResponseEntity<Cargo> addCargo( @RequestBody Cargo cargo ){
         return new  ResponseEntity<Cargo>(cargoService.addCargo(cargo),HttpStatus.OK);
     }
 
-    @GetMapping("/api/business/drivers")
+    @GetMapping("/drivers")
     public ResponseEntity<List<Driver>> getAllDrivers(){
         return new ResponseEntity<List<Driver>>(driverService.getAllDrivers(),HttpStatus.OK);
     }
 
-    @GetMapping("/api/business/cargo")
+    @GetMapping("/cargo")
     public ResponseEntity<List<Cargo>> getAllCargo(){
         return new ResponseEntity<>(cargoService.viewAllCargo(),HttpStatus.OK);
     }
 
-    @PostMapping("/api/business/assign-cargo")
+    @PostMapping("/assign-cargo")
     public ResponseEntity<Map<String,String>> assignCargo(@RequestParam Long cargoId ,@RequestParam Long driverId){
         Map<String,String> response = new HashMap<>();
 
@@ -62,10 +62,11 @@ public class BusinessController {
         }
       
     }
-
-    public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId){
-            return new ResponseEntity<>(cargoService.getCargoById(cargoId),HttpStatus.OK);
-    }
+    
+    @GetMapping("/cargo-by-id")
+public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId){
+    return new ResponseEntity<>(cargoService.getCargoById(cargoId), HttpStatus.OK);
+}
 
     
     

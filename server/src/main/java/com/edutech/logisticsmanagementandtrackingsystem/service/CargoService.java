@@ -32,22 +32,34 @@ public List<Cargo> viewAllCargo(){
     return cargoRepository.findAll();
 }
 
-public boolean assignCargoToDriver(long cargoId,Long driverId){
-    Cargo carg=cargoRepository.findById(cargoId).get();
-    Driver driver=driverRepository.findById(driverId).get();
-    driver.setAssignedCargos(Collections.singletonList(carg));
+
+public boolean assignCargoToDriver(long cargoId, Long driverId) {
+
+    Cargo cargo = cargoRepository.findById(cargoId)
+        .orElseThrow(() -> new RuntimeException("Cargo not found"));
+
+    Driver driver = driverRepository.findById(driverId)
+        .orElseThrow(() -> new RuntimeException("Driver not found"));
+
+    cargo.setDriver(driver);
+
+    // 🔥 VERY IMPORTANT (force flush)
+    cargoRepository.saveAndFlush(cargo);
+
     return true;
 }
+public boolean updateCargoStatus(Long cargoId, String newStatus) {
 
+    Cargo cargo = cargoRepository.findById(cargoId)
+        .orElseThrow(() -> new RuntimeException("Cargo not found"));
+
+    cargo.setStatus(newStatus.toUpperCase()); // 🔥 normalize
+    cargoRepository.save(cargo);
+
+    return true;
+}
 public Cargo getCargoById(long cargoId){
-    List<Cargo> cargo = viewAllCargo();
-    for (Cargo c : cargo) {
-        if (c.getId()==cargoId) {
-            return c;
-            
-        }
-    }
-    return null;
+    return cargoRepository.findById(cargoId).orElse(null);
 }
 
 }

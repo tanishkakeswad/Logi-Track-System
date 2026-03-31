@@ -18,6 +18,9 @@ public class User{
     private String email;
     private String role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Customer customer;
+
     public User() {
     }
 

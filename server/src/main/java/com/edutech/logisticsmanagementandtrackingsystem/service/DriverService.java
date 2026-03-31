@@ -7,7 +7,7 @@ import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.DriverRepository;
-
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
@@ -27,15 +27,39 @@ public class DriverService {
     return driverRepository.findAll();
  }
 
- public List<Cargo> viewDriverCargos(Long driverId){
-    Driver driver=driverRepository.findById(driverId).get();
-    return driver.getAssignedCargos();
- }
+public List<Cargo> viewDriverCargos(Long driverId) {
 
- public boolean updateCargoStatus(Long cargoId,String newStatus){
-    Cargo cargo=cargoRepository.findById(cargoId).get();
-    cargo.setStatus(newStatus);
+    return cargoRepository.findAll()
+        .stream()
+        .filter(c -> c.getDriver() != null &&
+                     c.getDriver().getId().equals(driverId))
+        .collect(Collectors.toList());
+}
+
+
+
+public boolean updateCargoStatus(Long cargoId, String newStatus) {
+
+    Cargo cargo = cargoRepository.findById(cargoId)
+        .orElse(null);
+
+    if (cargo == null) return false;
+
+    cargo.setStatus(newStatus.toUpperCase()); // 🔥 important
+    cargoRepository.save(cargo);
+
     return true;
- }
+}
+public boolean assignCargoToDriver(Long cargoId, Long driverId) {
 
+    Cargo cargo = cargoRepository.findById(cargoId).orElse(null);
+    Driver driver = driverRepository.findById(driverId).orElse(null);
+
+    if (cargo == null || driver == null) return false;
+
+    cargo.setDriver(driver);
+    cargoRepository.save(cargo); // 🔥 REQUIRED
+
+    return true;
+}
 }

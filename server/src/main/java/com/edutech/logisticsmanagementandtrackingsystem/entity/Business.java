@@ -3,6 +3,8 @@ package com.edutech.logisticsmanagementandtrackingsystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,13 +15,13 @@ public class Business {
     private String name;
     private String email;
 
-    @OneToOne
-    @JoinColumn(name="user_id",nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
     private User user;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Cargo> cargos;
+    private List<Cargo> cargos = new ArrayList<>();
 
     
     
@@ -35,6 +37,12 @@ public class Business {
         this.name = name;
         this.email = email;
         this.cargos = cargos;
+    }
+    
+    public Business(String name, String email, User user) {
+        this.name = name;
+        this.email = email;
+        this.user = user;
     }
 
     public Business() {

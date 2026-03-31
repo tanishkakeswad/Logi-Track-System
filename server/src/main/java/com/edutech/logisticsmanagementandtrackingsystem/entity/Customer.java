@@ -11,7 +11,7 @@ public class Customer {
     private String name;
     private String email;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id",nullable = false)
     private User user;
 

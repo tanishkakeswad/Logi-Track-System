@@ -16,8 +16,8 @@ public class Driver{
     private String name;
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
     
