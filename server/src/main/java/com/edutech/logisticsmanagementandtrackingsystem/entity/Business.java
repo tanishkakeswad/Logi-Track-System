@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +18,9 @@ public class Business {
     private String name;
     private String email;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name="user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)

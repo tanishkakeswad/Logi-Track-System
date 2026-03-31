@@ -2,6 +2,9 @@ package com.edutech.logisticsmanagementandtrackingsystem.entity;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class Customer {
     @Id
@@ -11,8 +14,9 @@ public class Customer {
     private String name;
     private String email;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name="user_id",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     

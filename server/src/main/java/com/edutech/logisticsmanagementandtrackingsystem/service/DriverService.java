@@ -28,12 +28,14 @@ public class DriverService {
  }
 
 public List<Cargo> viewDriverCargos(Long driverId) {
+    Driver driver=driverRepository.findById(driverId).get();
+    return driver.getAssignedCargos();
 
-    return cargoRepository.findAll()
-        .stream()
-        .filter(c -> c.getDriver() != null &&
-                     c.getDriver().getId().equals(driverId))
-        .collect(Collectors.toList());
+    // return cargoRepository.findAll()
+    //     .stream()
+    //     .filter(c -> c.getDriver() != null &&
+    //                  c.getDriver().getId().equals(driverId))
+    //     .collect(Collectors.toList());
 }
 
 

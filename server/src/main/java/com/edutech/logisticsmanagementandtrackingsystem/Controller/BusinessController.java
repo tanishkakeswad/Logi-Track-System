@@ -48,7 +48,7 @@ public class BusinessController {
         Map<String,String> response = new HashMap<>();
 
         try {
-            boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId) != null;
+            boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId);
 
             if (assigned) {
                 response.put("message", "Cargo assigned successfully");

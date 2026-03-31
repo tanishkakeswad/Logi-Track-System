@@ -2,6 +2,9 @@ package com.edutech.logisticsmanagementandtrackingsystem.entity;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -16,8 +19,9 @@ public class Driver{
     private String name;
     private String email;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     

@@ -33,20 +33,21 @@ public class CargoService {
 
 
 
-    public Cargo assignCargoToDriver(long cargoId, Long driverId) {
+    public boolean assignCargoToDriver(long cargoId, Long driverId) {
         Cargo cargo = cargoRepository.findById(cargoId)
                 .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
         Driver driver = driverRepository.findById(driverId)
                 .orElseThrow(() -> new EntityNotFoundException("Driver not found"));
 
         cargo.setDriver(driver);
-        return cargoRepository.saveAndFlush(cargo); 
+        cargoRepository.save(cargo); 
+        return true;
     }
 
     public boolean updateCargoStatus(Long cargoId, String newStatus) {
 
     Cargo cargo = cargoRepository.findById(cargoId)
-    .orElseThrow(() -> new RuntimeException("Cargo not found"));
+    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
     cargo.setStatus(newStatus.toUpperCase()); 
     cargoRepository.save(cargo);
