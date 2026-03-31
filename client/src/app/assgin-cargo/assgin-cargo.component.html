@@ -1,1 +1,80 @@
-//todo: Complete missing code..
+<div class="d-flex justify-content-center text-white mt-4">
+  <h2 class="mb-0">Manage Cargo</h2>
+</div>
+
+<div class="row mt-3">
+  <div class="card">
+    <div class="card-header d-flex justify-content-center fw-bold">Assign Cargo Information</div>
+  </div>
+  <div class="container">
+    <div class="table-responsive-sm w-35 p-2 mx-4 ">
+      <table class="table table table-dark table-hover align-middle rounded">
+        <thead>
+          <tr>
+            <th class="text-center">A.W.B No.</th>
+            <th>Content</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th>Action</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <!-- show cargo information here  -->
+          <tr *ngFor="let cargo of cargList">
+            <td class="text-center">{{cargo.id}}</td>
+            <td>{{cargo.content}}</td>
+            <td>{{cargo.size}}</td>
+            <td>{{cargo.status}}</td>
+            <td>
+              <div *ngIf="cargo.status == 'Order Delivered'">
+                <button data-bs-toggle="modal" (click)="addStatus(cargo)" data-bs-target="#driverModal"
+                  class="btn btn-primary" [disabled]=true>Update Status</button>
+              </div>
+              <div *ngIf="cargo.status != 'Order Delivered'">
+                <button data-bs-toggle="modal" (click)="addStatus(cargo)" data-bs-target="#driverModal"
+                  class="btn btn-primary" [disabled]=false>Update Status</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="driverModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="driverModalLabel">Update Status </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- //complete this -->
+        <select [(ngModel)]="statusModel.newStatus" class="form-control" name="" id="">
+          <option value="null">Choose Status</option>
+          <!-- <div *ngIf="statusModel.status == 'Order In-transit'">
+             <option value="Order In-transit" [disabled] = true>Order In-transit</option>
+            </div> -->
+
+          <option *ngIf="statusModel.status != 'Order In-transit'" value="Order In-transit">Order In-transit</option>
+          <option value="Order Delivered">Order Delivered</option>
+        </select>
+
+        <div *ngIf="showMessage" class="alert alert-success mt-4" role="alert">
+          {{responseMessage}}
+        </div>
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+          {{errorMessage}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="assignDriver()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

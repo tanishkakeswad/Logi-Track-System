@@ -22,9 +22,11 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    // public CargoStatusResponse viewCargoStatus(Long cargold){
-    //      Cargo cargo=cargoRepository.findById(cargold).get();
-    //     String status=cargo.getStatus();
-    //     return status;
-    // }
+    public CargoStatusResponse viewCargoStatus(Long cargoId){
+         Cargo cargo=cargoRepository.findById(cargoId).get();
+        String status=cargo.getStatus();
+        return new CargoStatusResponse(cargoId, status);
+        
+    }
+
 }

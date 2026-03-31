@@ -2,13 +2,16 @@ package com.edutech.logisticsmanagementandtrackingsystem.entity;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String username;
     private String password;
@@ -18,11 +21,11 @@ public class User {
     public User() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
