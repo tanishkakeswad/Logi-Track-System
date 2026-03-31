@@ -56,9 +56,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             // Validate token and set authentication if valid
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
+                String role=(String) claims.get("role");
                 Collection<? extends GrantedAuthority> authorities = AuthorityUtils
-                        .createAuthorityList((String) claims.get("role"));
-                // adds the time of authentiication of the token
+                        .createAuthorityList("ROLE_"+role);
+                // adds the time of authentication of the token
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

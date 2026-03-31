@@ -15,7 +15,7 @@ setId(id:any){
 }
 
 get getId():string |null{
-  return localStorage.getItem('username');
+  return localStorage.getItem('id');
 }
 
 saveToken(token:string){

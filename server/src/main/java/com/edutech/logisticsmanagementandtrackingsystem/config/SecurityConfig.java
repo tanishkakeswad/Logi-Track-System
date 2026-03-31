@@ -1,12 +1,10 @@
 package com.edutech.logisticsmanagementandtrackingsystem.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,12 +18,10 @@ import com.edutech.logisticsmanagementandtrackingsystem.jwt.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final UserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private final PasswordEncoder passwordEncoder;
-
-    
-   
 
     public SecurityConfig(UserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter,
             PasswordEncoder passwordEncoder) {
@@ -34,66 +30,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-
-
-    // public SecurityConfig(boolean disableDefaults, UserDetailsService userDetailsService,
-    //         JwtRequestFilter jwtRequestFilter, PasswordEncoder passwordEncoder) {
-    //     super(disableDefaults);
-    //     this.userDetailsService = userDetailsService;
-    //     this.jwtRequestFilter = jwtRequestFilter;
-    //     this.passwordEncoder = passwordEncoder;
-    // }
-
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // complete these method to configure the security of the application
 
-        // /register and /login should be permitted to all
-        // /business/cargo should be permitted to users with BUSINESS role
-        // /business/assign-cargo should be permitted to users with BUSINESS role
-        // /driver/cargo should be permitted to users with DRIVER role
-        // /driver/update-cargo-status should be permitted to users with DRIVER role
-        // /customer/cargo-status should be permitted to users with CUSTOMER role
-        // all other requests should be authenticated
+        http.csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
 
-        // configure jwtRequestFilter to be executed before UsernamePasswordAuthenticationFilter
+                // Public endpoints
+                .antMatchers(HttpMethod.POST, "/register", "/login").permitAll()
 
-        
-http.csrf().disable()
-    .sessionManagement()
-    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    .and()
-    .authorizeRequests()
+                // BUSINESS role endpoints
+                .antMatchers(HttpMethod.POST, "/business/cargo", "/business/assign-cargo").hasRole("BUSINESS")
+                .antMatchers(HttpMethod.GET, "/business/drivers", "/business/cargo", "/business/cargo-id").hasRole("BUSINESS")
 
-    .antMatchers("/register/**", "/login/**").permitAll()
+                // DRIVER role endpoints
+                .antMatchers(HttpMethod.GET, "/driver/cargo").hasRole("DRIVER")
+                .antMatchers(HttpMethod.PUT, "/driver/update-cargo-status").hasRole("DRIVER")
 
-    .antMatchers("/business/**").hasRole("BUSINESS")
-    .antMatchers("/driver/**").hasRole("DRIVER")
-    .antMatchers("/customer/**").hasRole("CUSTOMER")
+                // CUSTOMER role endpoints
+                .antMatchers(HttpMethod.GET, "/customer/cargo-status").hasRole("CUSTOMER")
 
-    .anyRequest().authenticated()
+                // All other requests must be authenticated
+                .anyRequest().authenticated()
 
-    .and()
-    .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth
-        .userDetailsService(userDetailsService)
-        .passwordEncoder(passwordEncoder);
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
     }
-
-
-
 }

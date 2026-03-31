@@ -27,11 +27,10 @@ public class CustomerService {
     Cargo cargo = cargoRepository.findById(cargoId).orElse(null);
 
     if (cargo == null) {
-        return null; // controller will return 404
-    }
+        return null; }
 
     CargoStatusResponse response = new CargoStatusResponse();
-    response.setCargoId(cargo.getId());   // 🔥 IMPORTANT
+    response.setCargoId(cargo.getId());  
     response.setStatus(cargo.getStatus());
 
     return response;

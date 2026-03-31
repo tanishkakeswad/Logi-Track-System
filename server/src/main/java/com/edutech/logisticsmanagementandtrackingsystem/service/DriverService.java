@@ -41,11 +41,11 @@ public List<Cargo> viewDriverCargos(Long driverId) {
 public boolean updateCargoStatus(Long cargoId, String newStatus) {
 
     Cargo cargo = cargoRepository.findById(cargoId)
-        .orElse(null);
+        .orElseThrow(()->new EntityNotFoundException("Cargo not found."));
 
     if (cargo == null) return false;
 
-    cargo.setStatus(newStatus.toUpperCase()); // 🔥 important
+    cargo.setStatus(newStatus.toUpperCase());
     cargoRepository.save(cargo);
 
     return true;
@@ -58,7 +58,7 @@ public boolean assignCargoToDriver(Long cargoId, Long driverId) {
     if (cargo == null || driver == null) return false;
 
     cargo.setDriver(driver);
-    cargoRepository.save(cargo); // 🔥 REQUIRED
+    cargoRepository.save(cargo);
 
     return true;
 }

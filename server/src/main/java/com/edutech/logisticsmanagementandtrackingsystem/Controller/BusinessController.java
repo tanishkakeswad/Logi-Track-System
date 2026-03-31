@@ -25,6 +25,8 @@ public class BusinessController {
     @Autowired
     private DriverService driverService;
 
+
+
     @PostMapping("/cargo")
     public ResponseEntity<Cargo> addCargo( @RequestBody Cargo cargo ){
         return new  ResponseEntity<Cargo>(cargoService.addCargo(cargo),HttpStatus.OK);
@@ -34,6 +36,7 @@ public class BusinessController {
     public ResponseEntity<List<Driver>> getAllDrivers(){
         return new ResponseEntity<List<Driver>>(driverService.getAllDrivers(),HttpStatus.OK);
     }
+
 
     @GetMapping("/cargo")
     public ResponseEntity<List<Cargo>> getAllCargo(){
@@ -45,7 +48,7 @@ public class BusinessController {
         Map<String,String> response = new HashMap<>();
 
         try {
-            boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId);
+            boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId) != null;
 
             if (assigned) {
                 response.put("message", "Cargo assigned successfully");
