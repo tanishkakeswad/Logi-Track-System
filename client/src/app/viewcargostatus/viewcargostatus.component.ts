@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './viewcargostatus.component.html',
   styleUrls: ['./viewcargostatus.component.scss']
 })
-export class ViewcargostatusComponent 
+export class ViewcargostatusComponent {}
     
   //todo: complete missing code..
 

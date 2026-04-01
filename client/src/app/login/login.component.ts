@@ -5,7 +5,6 @@ import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,19 +18,37 @@ export class LoginComponent implements OnInit {
   constructor(public router:Router, public httpService:HttpService, private formBuilder: FormBuilder, private authService:AuthService) 
     {
       this.itemForm = this.formBuilder.group({
-        //compelete this 
-       
+        username:['',Validators.required],
+        password:['',Validators.required]
     });
   }
 
   ngOnInit(): void {
   }
   onLogin() {
-  //compelete this 
-}
+    if (this.itemForm.valid) {
+        const loginDetails = this.itemForm.value;
+        this.httpService.Login(loginDetails).subscribe({
+          next: (response: any) => {
+            this.authService.saveToken(response.token);
+            this.authService.setRole(response.role);
+            this.authService.setId(response.id);
+            this.router.navigate(['/dashboard']);
+          },
+          error: () => {
+            this.showError = true;
+            this.errorMessage = 'Invalid username or password';
+          }}
+        );
+      } else {
+        this.showError = true;
+        this.errorMessage = 'Please fill in all required fields';
+        this.itemForm.reset();
+      }
+  }
 
 registration()
   {
-     //compelete this 
+     this.router.navigateByUrl('registration');
   }
 }

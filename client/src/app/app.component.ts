@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   IsLoggin:any=false;
-  roleName: string | null;
+  // roleName: string | null;
   constructor(private authService: AuthService, private router:Router)
   {
     debugger;
-    this.IsLoggin=authService.getLoginStatus;
-    this.roleName=authService.getRole;
+    // this.IsLoggin=authService.getLoginStatus;
+    // this.roleName=authService.getRole;
     if(this.IsLoggin==false)
     {
       this.router.navigateByUrl('/login'); 
@@ -23,7 +23,7 @@ export class AppComponent {
   }
   logout()
 {
-  this.authService.logout();
+  // this.authService.logout();
   window.location.reload();
 }
 

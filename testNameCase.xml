@@ -1,117 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
-
-    <!-- ================= BACKEND : Spring Boot ================= -->
-
-    <!-- LogisticsManagementAndTrackingSystemApplicationTests.java -->
-
-    <property name="testRegisterBusiness"
-              value="User registration as BUSINESS role"/>
-
-    <property name="testRegisterCustomer"
-              value="User registration as CUSTOMER role"/>
-
-    <property name="testRegisterDriver"
-              value="User registration as DRIVER role"/>
-
-    <property name="testLoginUser"
-              value="User login with valid credentials"/>
-
-    <property name="testLoginWithWrongUsernameOrPassword"
-              value="User login with invalid credentials"/>
-
-    <property name="testViewCargoStatus"
-              value="Customer can view cargo status"/>
-
-    <property name="testUpdateCargoStatus"
-              value="Driver can update cargo status"/>
-
-    <property name="testViewAssignedCargos"
-              value="Driver can view assigned cargos"/>
-
-    <property name="testViewAllCargos"
-              value="Business can view all cargos"/>
-
-    <property name="testAssignCargoToDriver"
-              value="Business can assign cargo to driver"/>
-
-    <property name="testAddCargo"
-              value="Business can add new cargo"/>
-
-    <property name="testPermissionForBusinessEndpoints"
-              value="Unauthorized access blocked for business endpoints"/>
-
-    <property name="testPermissionForDriverEndpoints"
-              value="Unauthorized access blocked for driver endpoints"/>
-
-    <property name="testPermissionForCustomerEndpoints"
-              value="Unauthorized access blocked for customer endpoints"/>
-
-    <!-- ================= FRONTEND : Angular ================= -->
-
-    <!-- AddcargoComponent.spec.ts -->
-
+  <property name="testAssignCargoToDriver" value="testAssignCargoToDriver"/>
+    <property name="testViewCargoStatus" value="testViewCargoStatus"/>
+    <property name="testPermissionForDriverEndpoints" value="testPermissionForDriverEndpoints"/>
+    <property name="testUpdateCargoStatus" value="testUpdateCargoStatus"/>
+    <property name="testLoginUser" value="testLoginUser"/>
+    <property name="testPermissionForBusinessEndpoints" value="testPermissionForBusinessEndpoints"/>
+    <property name="testRegisterCustomer" value="testRegisterCustomer"/>
+    <property name="testAddCargo" value="testAddCargo"/>
+    <property name="testPermissionForCustomerEndpoints" value="testPermissionForCustomerEndpoints"/>
+    <property name="testLoginWithWrongUsernameOrPassword" value="testLoginWithWrongUsernameOrPassword"/>
+    <property name="testViewAllCargos" value="testViewAllCargos"/>
+    <property name="testViewAssignedCargos" value="testViewAssignedCargos"/>
+    <property name="testRegisterBusiness" value="testRegisterBusiness"/>
+    <property name="testRegisterDriver" value="testRegisterDriver"/>
+    
     <property name="AddcargoComponent should have invalid form if any field is empty"
-              value="AddcargoComponent form invalid when fields are empty"/>
+              value="AddcargoComponent should have invalid form if any field is empty"/>
 
     <property name="AddcargoComponent should have valid form if all fields are filled"
-              value="AddcargoComponent form valid when all fields are filled"/>
-
-    <!-- HttpService.spec.ts -->
+              value="AddcargoComponent should have valid form if all fields are filled"/>
 
     <property name="HttpService should be created"
               value="HttpService should be created"/>
 
     <property name="HttpService should fetch order status"
-              value="HttpService fetches cargo order status"/>
+              value="HttpService should fetch order status"/>
 
     <property name="HttpService should update cargo status"
-              value="HttpService updates cargo status"/>
+              value="HttpService should update cargo status"/>
 
     <property name="HttpService should assign driver to cargo"
-              value="HttpService assigns driver to cargo"/>
+              value="HttpService should assign driver to cargo"/>
 
     <property name="HttpService should get assigned orders for driver"
-              value="HttpService fetches assigned orders for driver"/>
+              value="HttpService should get assigned orders for driver"/>
 
-    <property name="HttpService should assign driver to cargo"
-              value="HttpService assigns driver to cargo"/>
+    <property name="HttpService should assign driver to cargo (duplicate)"
+              value="HttpService should assign driver to cargo"/>
 
     <property name="HttpService should fetch cargo"
-              value="HttpService fetches cargo list for business"/>
+              value="HttpService should fetch cargo"/>
 
     <property name="HttpService should fetch driver"
-              value="HttpService fetches drivers list"/>
+              value="HttpService should fetch driver"/>
 
     <property name="HttpService should add cargo"
-              value="HttpService adds new cargo"/>
+              value="HttpService should add cargo"/>
 
     <property name="HttpService should login"
-              value="HttpService login API"/>
+              value="HttpService should login"/>
 
     <property name="HttpService should register user"
-              value="HttpService user registration API"/>
-
-    <!-- LoginComponent.spec.ts -->
+              value="HttpService should register user"/>
 
     <property name="LoginComponent should have invalid form if username and password are empty"
-              value="LoginComponent form invalid when fields are empty"/>
+              value="LoginComponent should have invalid form if username and password are empty"/>
 
     <property name="LoginComponent should have invalid form if username or password is empty"
-              value="LoginComponent form invalid when one field is missing"/>
+              value="LoginComponent should have invalid form if username or password is empty"/>
 
     <property name="LoginComponent should have valid form if username and password are provided"
-              value="LoginComponent form valid when username and password provided"/>
-
-    <!-- RegistrationComponent.spec.ts -->
+              value="LoginComponent should have valid form if username and password are provided"/>
 
     <property name="RegistrationComponent should have invalid form if any field is empty"
-              value="RegistrationComponent form invalid when fields are empty"/>
+              value="RegistrationComponent should have invalid form if any field is empty"/>
 
     <property name="RegistrationComponent should have invalid form if email is invalid"
-              value="RegistrationComponent invalid email validation"/>
+              value="RegistrationComponent should have invalid form if email is invalid"/>
 
     <property name="RegistrationComponent should have valid form if all fields are filled correctly"
-              value="RegistrationComponent form valid with correct inputs"/>
+              value="RegistrationComponent should have valid form if all fields are filled correctly"/>
 
 </properties>
