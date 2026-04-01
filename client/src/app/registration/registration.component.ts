@@ -23,7 +23,7 @@ itemForm: FormGroup;
       username: [this.formModel.username, [Validators.required, Validators.pattern("^[a-z]\\w{5,19}$")]],
       email: [this.formModel.email, [Validators.required, Validators.email]],
       password: [this.formModel.password, [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$")]],
-      //retypepassword: ['', [Validators.required]],
+      retypepassword: ['', [Validators.required]],
       role: [this.formModel.role, [Validators.required]]
 
     },
@@ -57,7 +57,7 @@ itemForm: FormGroup;
       this.showMessage = false;
       this.httpService.registerUser(this.itemForm.value).subscribe(data => {
         this.showMessage = true;
-        this.responseMessage = 'Welcome ' + data.name + " you are successfully registered";
+        this.responseMessage = 'Welcome ' + data.username + " you are successfully registered";
         this.itemForm.reset();
         setTimeout(() => {
           this.router.navigateByUrl('/login')

@@ -54,10 +54,15 @@
             </div>
 
             <div class="mb-3 form-group required">
-              <label for="retypepassword" class="form-label control-label">Confirm Password</label>
+              <label for="retypepassword" >Confirm Password</label>
               <!-- formControlName REMOVED to fix test binding error -->
-              <input [type]="passwordFieldType" name="retypepassword"
-                class="form-control" id="retypepassword" placeholder="*******">
+                <input
+                [type]="passwordFieldType"
+                name="retypepassword"
+                formControlName="retypepassword"
+                class="form-control"
+                id="retypepassword"
+                placeholder="*******">
               <div class="form-check form-switch mt-3">
                 <input class="form-check-input" type="checkbox" (change)="togglePasswordVisibility()" role="switch"
                   id="flexSwitchCheckDefault">
@@ -68,8 +73,8 @@
             <div class="mb-3 form-group required">
               <label for="Role" class="form- control-label ">Role</label>
               <select class="form-control" formControlName="role" placeholder="*******">
-                <option value="null">Choose User Type</option>
-                <option value="BUSINESS">Business</option>
+                <option [ngValue]="null">Choose User Type</option>                
+                <option value="BUSINESS">Business</option>
                 <option value="DRIVER">Driver</option>
                 <option value="CUSTOMER">Customer</option>
               </select>

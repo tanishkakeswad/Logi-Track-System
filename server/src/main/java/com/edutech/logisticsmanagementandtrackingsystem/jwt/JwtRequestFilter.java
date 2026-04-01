@@ -35,17 +35,30 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getServletPath();
+        if (path.equals("/api/register") || path.equals("/api/login")) {
+        filterChain.doFilter(request, response);
+        return;
+}
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
 
         // Extract JWT token from the Authorization header
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
+        
+if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        jwt = authorizationHeader.substring(7);
+        try {
             username = jwtUtil.extractUsername(jwt);
-            // Handle invalid tokens here if needed
+        } catch (Exception e) {
+            // ❗ Invalid or malformed token → ignore authentication
+            filterChain.doFilter(request, response);
+            return;
         }
+    }
+
 
         // If username is extracted and no authentication exists in the
         // SecurityContextHolder
@@ -58,7 +71,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
                 String role=(String) claims.get("role");
                 Collection<? extends GrantedAuthority> authorities = AuthorityUtils
-                        .createAuthorityList("ROLE_"+role);
+                        .createAuthorityList(role);
                 // adds the time of authentication of the token
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, authorities);
