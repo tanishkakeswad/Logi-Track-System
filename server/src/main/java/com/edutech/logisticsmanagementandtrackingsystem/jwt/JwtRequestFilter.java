@@ -1,7 +1,6 @@
 package com.edutech.logisticsmanagementandtrackingsystem.jwt;
 
-
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,7 @@ import java.util.Collection;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
@@ -31,50 +31,55 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    // Intercepts incoming requests to process JWT tokens for authentication
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
         String path = request.getServletPath();
+
+        // ✅ Allow public endpoints without JWT
         if (path.equals("/api/register") || path.equals("/api/login")) {
-        filterChain.doFilter(request, response);
-        return;
-}
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
 
-        // Extract JWT token from the Authorization header
-        
-if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-        jwt = authorizationHeader.substring(7);
-        try {
-            username = jwtUtil.extractUsername(jwt);
-        } catch (Exception e) {
-            // ❗ Invalid or malformed token → ignore authentication
-            filterChain.doFilter(request, response);
-            return;
+        // ✅ Extract JWT from header
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+
+            try {
+                username = jwtUtil.extractUsername(jwt);
+            } catch (Exception e) {
+                // ❗ Invalid or malformed token
+                System.out.println("Invalid JWT Token: " + jwt);
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
-    }
 
-
-        // If username is extracted and no authentication exists in the
-        // SecurityContextHolder
+        // ✅ Authenticate user if token is valid
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // Load UserDetails from UserDetailsService
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // Validate token and set authentication if valid
             if (jwtUtil.validateToken(jwt, userDetails)) {
+
                 Claims claims = jwtUtil.extractAllClaims(jwt);
-                String role=(String) claims.get("role");
-                Collection<? extends GrantedAuthority> authorities = AuthorityUtils
-                        .createAuthorityList(role);
-                // adds the time of authentication of the token
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, authorities);
+                String role = (String) claims.get("role");
+
+                Collection<? extends GrantedAuthority> authorities =
+                        AuthorityUtils.createAuthorityList(role);
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

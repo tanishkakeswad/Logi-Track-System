@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginResponse {
    //Implement required code here!!!
-
+private Long id;
    private String token;
    private String username;
    private String email;
@@ -52,6 +52,14 @@ public class LoginResponse {
 
    public void setRole(String role) {
       this.role = role;
+   }
+
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
    }
 
    

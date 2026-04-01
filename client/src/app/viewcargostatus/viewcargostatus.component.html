@@ -1,1 +1,47 @@
-//todo: complete missing code.
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm">
+
+    <h3 class="text-center mb-3">View Cargo Status</h3>
+
+    <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
+
+      <div class="mb-3">
+        <label class="form-label">Cargo ID</label>
+        <input type="number"
+               class="form-control"
+               formControlName="cargoId"
+               placeholder="Enter Cargo ID">
+
+        <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
+             class="text-danger mt-1">
+          Cargo ID is required
+        </div>
+      </div>
+
+      <button class="btn btn-dark w-100" type="submit">
+        Get Status
+      </button>
+
+    </form>
+
+    <!-- ERROR -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+
+    <!-- RESULT -->
+    <div *ngIf="showResult" class="alert alert-success mt-3">
+
+      <p><strong>Cargo ID:</strong> {{ cargoData?.cargoId }}</p>
+      <p><strong>Status:</strong> {{ cargoData?.status }}</p>
+      <p><strong>Source:</strong> {{ cargoData?.source }}</p>
+      <p><strong>Destination:</strong> {{ cargoData?.destination }}</p>
+
+    </div>
+
+    <button class="btn btn-outline-danger mt-3 w-100" (click)="logout()">
+      Logout
+    </button>
+
+  </div>
+</div>

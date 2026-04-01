@@ -55,26 +55,64 @@ public class RegisterAndLoginController {
         return ResponseEntity.badRequest().body("Invalid role");
     }
 
+    // @PostMapping("/login")
+    // public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    //     try {
+    //         authenticationManager.authenticate(
+    //             new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+    //         );
+    //     } catch (AuthenticationException e) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    //     }
+
+    //     UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+    //     String token = jwtUtil.generateToken(userDetails.getUsername());
+    //     User user = userService.getUserByUsername(loginRequest.getUsername());
+
+    //     LoginResponse response = new LoginResponse();
+    //     response.setToken(token); // Fixes $.token path
+    //     response.setUsername(user.getUsername());
+    //     response.setEmail(user.getEmail());
+    //     response.setRole(user.getRole());
+
+    //     return ResponseEntity.ok(response);
+    // }
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
-        String token = jwtUtil.generateToken(userDetails.getUsername());
-        User user = userService.getUserByUsername(loginRequest.getUsername());
-
-        LoginResponse response = new LoginResponse();
-        response.setToken(token); // Fixes $.token path
-        response.setUsername(user.getUsername());
-        response.setEmail(user.getEmail());
-        response.setRole(user.getRole());
-
-        return ResponseEntity.ok(response);
+public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    try {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+            )
+        );
+    } catch (AuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+    String token = jwtUtil.generateToken(userDetails.getUsername());
+    User user = userService.getUserByUsername(loginRequest.getUsername());
+
+    LoginResponse response = new LoginResponse();
+    response.setToken(token);
+    response.setUsername(user.getUsername());
+    response.setEmail(user.getEmail());
+    response.setRole(user.getRole());
+
+    // ✅ ADD THIS BLOCK HERE (INSIDE METHOD)
+    if (user.getRole().equals("DRIVER")) {
+        Driver driver = driverService.getAllDrivers()
+            .stream()
+            .filter(d -> d.getUser().getId().equals(user.getId()))
+            .findFirst()
+            .orElse(null);
+
+        if (driver != null) {
+            response.setId(driver.getId()); // 🔥 THIS FIXES YOUR ISSUE
+        }
+    }
+
+    return ResponseEntity.ok(response);
+}
 }
