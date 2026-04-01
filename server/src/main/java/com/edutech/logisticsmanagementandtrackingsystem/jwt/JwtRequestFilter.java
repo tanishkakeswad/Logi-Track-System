@@ -1,6 +1,5 @@
 package com.edutech.logisticsmanagementandtrackingsystem.jwt;
 
-
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -37,25 +36,31 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getServletPath();
+
+        // Allow public endpoints without JWT
         if (path.equals("/api/register") || path.equals("/api/login")) {
-        filterChain.doFilter(request, response);
-        return;
-}
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
 
         // Extract JWT token from the Authorization header
-        
-if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-        jwt = authorizationHeader.substring(7);
-        try {
-            username = jwtUtil.extractUsername(jwt);
-        } catch (Exception e) {
-            // ❗ Invalid or malformed token → ignore authentication
-            filterChain.doFilter(request, response);
-            return;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+
+            try {
+                username = jwtUtil.extractUsername(jwt);
+            } catch (Exception e) {
+                System.out.println("Invalid JWT Token: " + jwt);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            // Handle invalid tokens here if needed
         }
     }
 
@@ -69,7 +74,7 @@ if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             // Validate token and set authentication if valid
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 Claims claims = jwtUtil.extractAllClaims(jwt);
-                String role=(String) claims.get("role");
+                String role = (String) claims.get("role");
                 Collection<? extends GrantedAuthority> authorities = AuthorityUtils
                         .createAuthorityList(role);
                 // adds the time of authentication of the token
