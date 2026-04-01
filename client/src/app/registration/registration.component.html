@@ -36,45 +36,23 @@
                             </div>
                         </div>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input type="email"
-                                   id="email"
-                                   formControlName="email"
-                                   class="form-control"
-                                   placeholder="name@example.com">
+            <!-- Email -->
+            <div class="mb-3 form-group required">
+              <label class="form-label control-label">Email</label>
+              <input type="email" class="form-control" formControlName="email">
+              <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
+                <span class="text-danger">Enter valid email</span>
+              </div>
+            </div>
 
-                            <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched"
-                                 class="text-danger small mt-1">
-                                <div *ngIf="itemForm.get('email')?.hasError('required')">
-                                    Email is required.
-                                </div>
-                                <div *ngIf="itemForm.get('email')?.hasError('email')">
-                                    Enter a valid email address.
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input [type]="passwordFieldType"
-                                   id="password"
-                                   formControlName="password"
-                                   class="form-control"
-                                   placeholder="•••••••">
-
-                            <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched"
-                                 class="text-danger small mt-1">
-                                <div *ngIf="itemForm.get('password')?.hasError('required')">
-                                    Password is required.
-                                </div>
-                                <div *ngIf="itemForm.get('password')?.hasError('pattern')">
-                                    Strong password required (upper, lower, number, symbol).
-                                </div>
-                            </div>
-                        </div>
+            <!-- Password -->
+            <div class="mb-3 form-group required">
+              <label class="form-label control-label">Password</label>
+              <input [type]="passwordFieldType" class="form-control" formControlName="password">
+              <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
+                <span class="text-danger">Strong password required</span>
+              </div>
+            </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">

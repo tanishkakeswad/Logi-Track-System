@@ -1,6 +1,31 @@
-<div class="row text-center">
-<h1 class="text-capitalize">Welcome to Logistic Management System</h1>
+<h2>Welcome To Logistic Management System</h2>
+
+<!-- BUSINESS -->
+<div *ngIf="role === 'BUSINESS'">
+  <button routerLink="/addcargo">
+    Add Cargo
+  </button>
+
+  <button routerLink="/asgin-cargo">
+    Assign Cargo
+  </button>
 </div>
-<app-addcargo></app-addcargo>
-<app-assgin-cargo></app-assgin-cargo>
-<app-viewcargostatus></app-viewcargostatus>
+
+<!-- DRIVER -->
+<div *ngIf="role === 'DRIVER'">
+  <button routerLink="/asgin-cargo">
+    View Assigned Cargo
+  </button>
+</div>
+
+<!-- CUSTOMER -->
+<div *ngIf="role === 'CUSTOMER'">
+  <button routerLink="/viewcargostatus">
+    View Cargo Status
+  </button>
+</div>
+
+<button (click)="logout()">
+  Logout
+</button>
+``

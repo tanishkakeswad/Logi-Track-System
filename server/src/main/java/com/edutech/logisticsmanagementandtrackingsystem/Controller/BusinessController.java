@@ -66,9 +66,15 @@ public class BusinessController {
       
     }
     
-    @GetMapping("/cargo-by-id")
-public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId){
-    return new ResponseEntity<>(cargoService.getCargoById(cargoId), HttpStatus.OK);
+    @GetMapping("/cargo-id")
+public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId) {
+    Cargo cargo = cargoService.getCargoById(cargoId);
+
+    if (cargo == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    return ResponseEntity.ok(cargo);
 }
 
     

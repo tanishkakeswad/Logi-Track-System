@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 import { environment } from '../environments/environment.development';
 
 @Injectable({
@@ -10,15 +11,25 @@ export class HttpService {
 
   public serverName = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+  private http: HttpClient,
+  private authService: AuthService
+) {}
 
   // ✅ Common headers (REQUIRED for tests)
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer mockToken'
-    });
+  const token = this.authService.getToken();
+
+  let headers = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
+
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
   }
+
+  return headers;
+}
 
   // ================= CUSTOMER =================
   getOrderStatus(cargoId: any): Observable<any> {
@@ -84,18 +95,18 @@ export class HttpService {
 
   // ================= AUTH =================
   Login(detail: any): Observable<any> {
-    return this.http.post<any>(
-      `${this.serverName}/api/login`,
-      detail,
-      { headers: this.getHeaders() }
-    );
-  }
+  return this.http.post<any>(
+    `${this.serverName}/api/login`,
+    detail,
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
+}
 
   registerUser(details: any): Observable<any> {
-    return this.http.post<any>(
-      `${this.serverName}/api/register`,
-      details,
-      { headers: this.getHeaders() }
-    );
-  }
+  return this.http.post<any>(
+    `${this.serverName}/api/register`,
+    details,
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
+}
 }
