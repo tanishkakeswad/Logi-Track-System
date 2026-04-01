@@ -1,12 +1,18 @@
 /* ✅ Solid Black Navbar */
+
+
 .navbar.black-nav {
-  background-color: #000000;   /* Deep black */
-  border-bottom: 1px solid #222; /* subtle bottom line */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  position: sticky;
+  position: absolute;   /* ✅ overlay above page */
   top: 0;
-  z-index: 1000;
+  left: 0;
+  width: 100%;
+  z-index: 9999;         /* ✅ sits above every component */
+  background-color: rgba(0, 0, 0, 0.05); /* translucent */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
+
+
 
 /* ✅ Bold, White, Spaced Navbar Links */
 .nav-links .nav-link {

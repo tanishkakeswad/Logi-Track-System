@@ -17,10 +17,13 @@ import { AssginCargoComponent } from './assgin-cargo/assgin-cargo.component';
 import { ViewcargostatusComponent } from './viewcargostatus/viewcargostatus.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
+import { LandingComponent } from './landing/landing.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    LandingComponent,
     NavbarComponent,
     FooterComponent,
     LoginComponent,
