@@ -1,0 +1,49 @@
+/* ✅ Solid Black Navbar */
+.navbar.black-nav {
+  background-color: #000000;   /* Deep black */
+  border-bottom: 1px solid #222; /* subtle bottom line */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ✅ Bold, White, Spaced Navbar Links */
+.nav-links .nav-link {
+  font-weight: 700;
+  color: #ffffff !important;
+  margin-left: 1.4rem;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+
+/* ✅ Hover Effect */
+.nav-links .nav-link:hover {
+  color: #ff8c42 !important;
+  transition: 0.2s ease-in-out;
+}
+
+/* ✅ Active Route */
+.nav-links .nav-link.active {
+  color: #ffa463 !important;
+}
+
+/* ✅ Logo scaling (without expanding navbar height) */
+.nav-logo {
+  height: 40px;
+  width: auto;
+  transform: scale(3.5);
+  transform-origin: left center;
+}
+
+/* ✅ Mobile Adjustments */
+@media (max-width: 767px) {
+  .nav-links .nav-link {
+    margin-left: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .nav-logo {
+    transform: scale(1.3);
+  }
+}
