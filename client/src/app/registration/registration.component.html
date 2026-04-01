@@ -1,95 +1,135 @@
 <div class="container">
-  <div class="row d-flex justify-content-center mt-5">
-    <div class="col-12 col-md-8 col-lg-6">
-      <div class="card bg-white">
-        <div class="card-body p-3">
+    <div class="row justify-content-center mt-5">
+        <div class="col-12 col-md-8 col-lg-5">
 
-          <form class="mb-3 mt-md-4" [formGroup]="itemForm" (ngSubmit)="onRegister()">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
 
-            <h2 class="fw-bold mb-2 text-uppercase">LogiTrax Ltd.</h2>
-            <p class="mb-5">Please enter your details here</p>
+                    <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
 
-            <!-- Username -->
-            <div class="mb-3 form-group required">
-              <label for="username" class="form-label control-label">Username</label>
-              <input type="text" class="form-control" id="username" formControlName="username">
-              <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched">
-                <span class="text-danger">Invalid username</span>
-              </div>
+                        <h3 class="fw-bold text-uppercase mb-1 text-center">LogiTrax Ltd.</h3>
+                        <p class="text-center text-muted mb-4">
+                            Please enter your details here
+                        </p>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   id="username"
+                                   formControlName="username"
+                                   class="form-control"
+                                   placeholder="Enter username">
+
+                            <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched"
+                                 class="text-danger small mt-1">
+                                <div *ngIf="itemForm.get('username')?.hasError('required')">
+                                    Username is required.
+                                </div>
+                                <div *ngIf="itemForm.get('username')?.hasError('pattern')">
+                                    <ul class="mb-0">
+                                        <li>Must be 5–19 characters</li>
+                                        <li>Cannot start with capital letter, number, or symbol</li>
+                                        <li class="text-success">Examples: yash123, esha21, yash21k</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email"
+                                   id="email"
+                                   formControlName="email"
+                                   class="form-control"
+                                   placeholder="name@example.com">
+
+                            <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched"
+                                 class="text-danger small mt-1">
+                                <div *ngIf="itemForm.get('email')?.hasError('required')">
+                                    Email is required.
+                                </div>
+                                <div *ngIf="itemForm.get('email')?.hasError('email')">
+                                    Enter a valid email address.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input [type]="passwordFieldType"
+                                   id="password"
+                                   formControlName="password"
+                                   class="form-control"
+                                   placeholder="•••••••">
+
+                            <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched"
+                                 class="text-danger small mt-1">
+                                <div *ngIf="itemForm.get('password')?.hasError('required')">
+                                    Password is required.
+                                </div>
+                                <div *ngIf="itemForm.get('password')?.hasError('pattern')">
+                                    Strong password required (upper, lower, number, symbol).
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="retypepassword" class="form-label">Confirm Password</label>
+                            <input [type]="passwordFieldType"
+                                   id="retypepassword"
+                                   class="form-control"
+                                   placeholder="•••••••">
+
+                            <div class="form-check form-switch mt-2">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       id="showPasswordToggle"
+                                       (change)="togglePasswordVisibility()">
+                                <label class="form-check-label" for="showPasswordToggle">
+                                    Show Password
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-4">
+                            <label class="form-label">Role <span class="text-danger">*</span></label>
+                            <select formControlName="role" class="form-select">
+                                <option value="">Choose user type</option>
+                                <option value="BUSINESS">Business</option>
+                                <option value="DRIVER">Driver</option>
+                                <option value="CUSTOMER">Customer</option>
+                            </select>
+
+                            <div *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched"
+                                 class="text-danger small mt-1">
+                                Role is required.
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-dark w-100">
+                            Submit
+                        </button>
+
+                    </form>
+
+                    <!-- Login Link -->
+                    <p class="text-center mt-3 mb-0">
+                        <a [routerLink]="['/login']" class="fw-bold">Go to Login</a>
+                    </p>
+
+                    <!-- Success / Error -->
+                    <div *ngIf="showMessage" class="alert alert-success mt-3">{{responseMessage}} Redirecting…</div>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{responseMessage}}</div>
+
+                </div>
             </div>
-
-            <!-- Email -->
-            <div class="mb-3 form-group required">
-              <label class="form-label control-label">Email</label>
-              <input type="email" class="form-control" formControlName="email">
-              <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched">
-                <span class="text-danger">Enter valid email</span>
-              </div>
-            </div>
-
-            <!-- Password -->
-            <div class="mb-3 form-group required">
-              <label class="form-label control-label">Password</label>
-              <input [type]="passwordFieldType" class="form-control" formControlName="password">
-              <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched">
-                <span class="text-danger">Strong password required</span>
-              </div>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mb-3 form-group required">
-              <label class="form-label control-label">Confirm Password</label>
-              <input [type]="passwordFieldType"
-                     class="form-control"
-                     id="retypepassword"
-                     formControlName="retypepassword">
-
-              <div *ngIf="itemForm.errors?.['notMatch'] && itemForm.get('retypepassword')?.touched" class="text-danger">
-                Password doesn't match.
-              </div>
-
-              <div *ngIf="!itemForm.errors?.['notMatch'] && itemForm.get('retypepassword')?.value" class="text-success">
-                Password Matched
-              </div>
-
-
-              <div class="form-check form-switch mt-3">
-                <input class="form-check-input" type="checkbox" (change)="togglePasswordVisibility()">
-                <label class="form-check-label">Show Password</label>
-              </div>
-            </div>
-
-            <!-- Role -->
-            <div class="mb-3 form-group required">
-              <label class="form-label control-label">Role</label>
-              <select class="form-control" formControlName="role">
-                <option [ngValue]="null">Choose User Type</option>
-                <option value="BUSINESS">Business</option>
-                <option value="DRIVER">Driver</option>
-                <option value="CUSTOMER">Customer</option>
-              </select>
-              <div *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched">
-                <span class="text-danger">Role required</span>
-              </div>
-            </div>
-
-            <div class="d-grid">
-              <button class="btn btn-outline-dark" type="submit">Submit</button>
-            </div>
-          </form>
-
-          <!-- Success -->
-          <div *ngIf="showMessage" class="alert alert-success mt-4">
-            {{responseMessage}} Redirecting you to login page...
-          </div>
-
-          <!-- Error -->
-          <div *ngIf="errorMessage" class="alert alert-danger mt-4">
-            {{responseMessage}}
-          </div>
 
         </div>
-      </div>
     </div>
-  </div>
 </div>
