@@ -18,6 +18,7 @@ import { ViewcargostatusComponent } from './viewcargostatus/viewcargostatus.comp
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingComponent } from './landing/landing.component';
+import { AboutComponent } from './about/about.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { LandingComponent } from './landing/landing.component';
       DashbaordComponent,
       AddcargoComponent,
       AssginCargoComponent,
-      ViewcargostatusComponent
+      ViewcargostatusComponent,
+      AboutComponent
   ],
   imports: [
     BrowserModule,

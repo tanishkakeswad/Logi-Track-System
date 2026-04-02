@@ -1,0 +1,128 @@
+/* ============================
+    ✅ FULL PAGE BACKGROUND
+============================ */
+.about-wrapper {
+    padding-top: 120px;     /* space below navbar */
+    padding-bottom: 60px;   /* space above footer */
+    min-height: 100vh;
+
+    /* ✅ Dark Blue → Black Vertical Gradient */
+    background: linear-gradient(
+        to bottom,
+        #003049 0%,
+        #000000 100%
+    );
+}
+
+
+/* ============================
+    ✅ ABOUT SECTION
+============================ */
+.about-section {
+    padding: 40px 0;
+}
+
+.title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #f77f00;     /* ✅ Orange heading */
+    margin-bottom: 20px;
+    text-shadow: 0px 3px 6px rgba(0,0,0,0.4);
+}
+
+.description {
+    max-width: 900px;
+    margin: 20px auto;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #e5e5e5;      /* ✅ Light grey text for readability */
+    text-align: center;
+}
+
+
+/* ============================
+    ✅ TEAM SECTION
+============================ */
+.team-section {
+    padding: 60px 0;
+}
+
+.subtitle {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    font-weight: 700;
+    color: #f77f00;      /* ✅ Orange heading */
+    text-shadow: 0px 3px 6px rgba(0,0,0,0.4);
+}
+
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+
+/* ✅ Team Member Card (Dark Mode Friendly) */
+.member-card {
+    width: 230px;
+    background: rgba(255,255,255,0.08);   /* ✅ translucent white card */
+    padding: 25px 15px;
+    border-radius: 12px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    transition: 0.25s ease-in-out;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.member-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.6);
+}
+
+/* ✅ Avatar Circle */
+.avatar-circle {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+    background: #f77f00;        /* ✅ Bright orange */
+    color: #003049;             /* Dark blue text */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.member-card h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #ffffff;
+}
+
+.member-card p {
+    color: #d4d4d4;
+    font-size: 0.95rem;
+}
+
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+
+    .title {
+        font-size: 2.2rem;
+    }
+
+    .description {
+        font-size: 1.1rem;
+        padding: 0 12px;
+    }
+
+    .member-card {
+        width: 90%;
+        max-width: 340px;
+    }
+}
