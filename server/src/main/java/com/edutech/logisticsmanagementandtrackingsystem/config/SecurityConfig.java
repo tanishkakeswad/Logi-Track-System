@@ -39,12 +39,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                // Public endpoints
-                .antMatchers(HttpMethod.POST, "/api/register", "/api/login")
-                .permitAll()
+                //  PUBLIC ENDPOINTS (UPDATED)
+                .antMatchers(HttpMethod.POST,
+                        "/api/register",
+                        "/api/login",
+                        "/api/send-otp"   //  ADDED THIS
+                ).permitAll()
 
-                // BUSINESS role endpoints — use hasAuthority (tests use
-                // @WithMockUser(authorities="BUSINESS"))
+                // BUSINESS role endpoints
                 .antMatchers(HttpMethod.POST, "/api/business/cargo", "/api/business/assign-cargo")
                 .hasAuthority("BUSINESS")
                 .antMatchers(HttpMethod.GET, "/api/business/drivers", "/api/business/cargo", "/api/business/cargo-id")
