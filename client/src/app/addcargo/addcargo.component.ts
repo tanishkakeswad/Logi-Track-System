@@ -102,13 +102,13 @@ export class AddcargoComponent {
     }
   }
   addDriver(value: any) {
+    
     this.assignModel.cargoId = value.id
   }
 
 
 
   assignDriver() {
-    console.log("assigning")
     this.assignModel.driverId = this.driverId;
     console.log(this.assignModel.driverId)
     if (this.assignModel.driverId != null) {
@@ -118,7 +118,7 @@ export class AddcargoComponent {
         this.responseMessage = data.message;
         window.location.reload();
       }, error => {
-        // Handle error
+        
         this.showError = true;
         this.errorMessage = "An error occurred while assigning driver. Please try again later.";
         console.error('Error:', error);

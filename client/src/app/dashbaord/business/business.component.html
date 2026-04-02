@@ -1,16 +1,29 @@
-<h2>Welcome To Logistic Management System</h2>
-<br><br><br>
+<div class="business-dashboard">
 
-<button routerLink="/addcargo">
-  Add Cargo
-</button>
+  <div class="dashboard-container">
 
-<button routerLink="/assgin-cargo">
-  Assign Cargo
-</button>
+    <h1 class="dashboard-title">
+      Welcome to <span>Cargo</span><span>Wala</span>
+    </h1>
 
-<br><br>
+    <p class="dashboard-subtitle">
+      Business Control Panel
+    </p>
 
-<button (click)="logout()">
-  Logout
-</button>
+    <div class="dashboard-actions">
+
+      <button class="action-card" routerLink="/addcargo">
+        <h3>Add Cargo</h3>
+        <p>Create and manage new cargo shipments</p>
+      </button>
+
+      <button class="action-card" routerLink="/assgin-cargo">
+        <h3>Assign Cargo</h3>
+        <p>Assign cargos to drivers efficiently</p>
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
