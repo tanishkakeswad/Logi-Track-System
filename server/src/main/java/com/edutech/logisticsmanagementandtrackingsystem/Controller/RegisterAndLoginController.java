@@ -28,91 +28,107 @@ public class RegisterAndLoginController {
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private JwtUtil jwtUtil;
 
+    //  ADD THIS
+    @Autowired private OtpService otpService;
+
+    // =========================
+    //  SEND OTP
+    // =========================
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestParam String email) {
+        otpService.generateAndSendOtp(email);
+        return ResponseEntity.ok("OTP sent successfully");
+    }
+
+    // =========================
+    //  REGISTER WITH OTP
+    // =========================
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, Object> request) {
+
+        String email = (String) request.get("email");
+        String otp = (String) request.get("otp");
+
+        //  OTP VALIDATION
+        if (!otpService.verifyOtp(email, otp)) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+        }
+
+        // Convert request → User object
+        User user = new User();
+        user.setUsername((String) request.get("username"));
+        user.setEmail(email);
+        user.setPassword((String) request.get("password"));
+        user.setRole((String) request.get("role"));
+
         User savedUser = userService.registerUser(user);
         String role = savedUser.getRole().toUpperCase();
 
         if (role.equals("BUSINESS")) {
             Business b = new Business();
-            b.setName(savedUser.getUsername()); // Fixes $.name path
+            b.setName(savedUser.getUsername());
             b.setEmail(savedUser.getEmail());
             b.setUser(savedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(businessService.createBusiness(b));
+
         } else if (role.equals("CUSTOMER")) {
             Customer c = new Customer();
-            c.setName(savedUser.getUsername()); // Fixes $.name path
+            c.setName(savedUser.getUsername());
             c.setEmail(savedUser.getEmail());
             c.setUser(savedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(c));
+
         } else if (role.equals("DRIVER")) {
             Driver d = new Driver();
-            d.setName(savedUser.getUsername()); // Fixes $.name path
+            d.setName(savedUser.getUsername());
             d.setEmail(savedUser.getEmail());
             d.setUser(savedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(driverService.createDriver(d));
         }
+
         return ResponseEntity.badRequest().body("Invalid role");
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-    //     try {
-    //         authenticationManager.authenticate(
-    //             new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-    //         );
-    //     } catch (AuthenticationException e) {
-    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    //     }
-
-    //     UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
-    //     String token = jwtUtil.generateToken(userDetails.getUsername());
-    //     User user = userService.getUserByUsername(loginRequest.getUsername());
-
-    //     LoginResponse response = new LoginResponse();
-    //     response.setToken(token); // Fixes $.token path
-    //     response.setUsername(user.getUsername());
-    //     response.setEmail(user.getEmail());
-    //     response.setRole(user.getRole());
-
-    //     return ResponseEntity.ok(response);
-    // }
+    // =========================
+    //  LOGIN (UNCHANGED + YOUR FIX)
+    // =========================
     @PostMapping("/login")
-public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-    try {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
-            )
-        );
-    } catch (AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
-    String token = jwtUtil.generateToken(userDetails.getUsername());
-    User user = userService.getUserByUsername(loginRequest.getUsername());
-
-    LoginResponse response = new LoginResponse();
-    response.setToken(token);
-    response.setUsername(user.getUsername());
-    response.setEmail(user.getEmail());
-    response.setRole(user.getRole());
-
-    // ✅ ADD THIS BLOCK HERE (INSIDE METHOD)
-    if (user.getRole().equals("DRIVER")) {
-        Driver driver = driverService.getAllDrivers()
-            .stream()
-            .filter(d -> d.getUser().getId().equals(user.getId()))
-            .findFirst()
-            .orElse(null);
-
-        if (driver != null) {
-            response.setId(driver.getId()); // 🔥 THIS FIXES YOUR ISSUE
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+                )
+            );
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-    }
 
-    return ResponseEntity.ok(response);
+        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+        String token = jwtUtil.generateToken(userDetails.getUsername());
+        User user = userService.getUserByUsername(loginRequest.getUsername());
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+
+        //  DRIVER ID FIX (your logic kept)
+        if (user.getRole().equals("DRIVER")) {
+            Driver driver = driverService.getAllDrivers()
+                .stream()
+                .filter(d -> d.getUser().getId().equals(user.getId()))
+                .findFirst()
+                .orElse(null);
+
+            if (driver != null) {
+                response.setId(driver.getId());
+            }
+        }
+
+        return ResponseEntity.ok(response);
+    }
 }
-}
+

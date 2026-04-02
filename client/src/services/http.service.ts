@@ -109,4 +109,8 @@ export class HttpService {
     { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
   );
 }
+
+  sendOtp(email:string){
+    return this.http.post(`${this.serverName}/api/send-otp?email=${email}`,{})
+  }
 }
