@@ -11,7 +11,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
-import { DashbaordComponent } from './dashbaord/dashbaord.component';
 import { AddcargoComponent } from './addcargo/addcargo.component';
 import { AssginCargoComponent } from './assgin-cargo/assgin-cargo.component';
 import { ViewcargostatusComponent } from './viewcargostatus/viewcargostatus.component';
@@ -19,6 +18,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
+import { DriverComponent } from './dashbaord/driver/driver.component';
+import { BusinessComponent } from './dashbaord/business/business.component';
+import { CustomerComponent } from './dashbaord/customer/customer.component';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import { AboutComponent } from './about/about.component';
     FooterComponent,
     LoginComponent,
       RegistrationComponent,
-      DashbaordComponent,
+      DriverComponent,
+      BusinessComponent,
+      CustomerComponent,
       AddcargoComponent,
       AssginCargoComponent,
       ViewcargostatusComponent,

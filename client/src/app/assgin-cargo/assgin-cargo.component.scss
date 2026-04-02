@@ -1,0 +1,101 @@
+.assigned-cargo-page {
+    margin-top: 100px;
+  padding: 40px 20px;
+}
+
+/* Header */
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+
+  h2 {
+    color: #003049;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #555;
+    font-size: 14px;
+  }
+}
+
+/* Alert */
+.custom-alert {
+  background-color: rgba(247, 127, 0, 0.1);
+  color: #003049;
+  border: 1px solid #f77f00;
+}
+
+/* Table */
+.cargo-table {
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+
+  thead {
+    background-color: #003049;
+
+    th {
+      color: #ffffff;
+      font-weight: 600;
+      border: none;
+    }
+  }
+
+  tbody tr {
+    transition: background 0.2s ease;
+
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+
+  td {
+    vertical-align: middle;
+    font-size: 14px;
+  }
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+
+  &.Order\\ In-transit {
+    background-color: #f77f00;
+  }
+
+  &.Order\\ Delivered {
+    background-color: #2e7d32;
+  }
+}
+
+/* Buttons */
+.update-btn {
+  background-color: #003049;
+  color: #ffffff;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.update-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.save-btn {
+  background-color: #f77f00;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Modal */
+.modal-header-custom {
+  background-color: #003049;
+  color: #ffffff;
+}

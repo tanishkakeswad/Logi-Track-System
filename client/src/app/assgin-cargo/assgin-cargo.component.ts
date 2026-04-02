@@ -101,8 +101,8 @@ export class AssginCargoComponent implements OnInit {
   }
 
   // ✅ Logout
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+  // logout() {
+  //   this.authService.logout();
+  //   this.router.navigate(['/login']);
+  // }
 }

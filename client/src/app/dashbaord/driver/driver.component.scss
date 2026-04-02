@@ -1,0 +1,107 @@
+/* =============================
+   Driver Dashboard Container
+   ============================= */
+.driver-dashboard {
+  min-height: calc(100vh - 70px);
+
+  /* Gradient background */
+  background: linear-gradient(
+    to bottom,
+    #003049 0%,
+    #000000 100%
+  );
+
+  /* Offset for fixed navbar */
+  padding-top: 90px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 60px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =============================
+   Header Section
+   ============================= */
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 45px;
+
+  h1 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    color: #f1f1f1;
+    font-size: 15px;
+    opacity: 0.9;
+  }
+}
+
+/* =============================
+   Content Wrapper
+   ============================= */
+.dashboard-content {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* =============================
+   Dashboard Card
+   ============================= */
+.dashboard-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 32px 28px;
+  text-align: center;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+
+  h3 {
+    color: #003049;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+}
+
+/* =============================
+   Primary Action Button
+   ============================= */
+.primary-btn {
+  background-color: #f77f00;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background-color: #e06f00;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

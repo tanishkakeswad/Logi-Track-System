@@ -1,4 +1,20 @@
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* App layout wrapper */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page content */
 .page-wrapper {
-  padding-top: 80px;   /* same as navbar height */
+  flex: 1;             /* ✅ pushes footer to bottom */
+  padding-top: 80px;   /* ✅ keeps navbar spacing */
+  display: flex;
+  flex-direction: column;
 }
