@@ -1,0 +1,108 @@
+/* ============================
+   ✅ PAGE WRAPPER
+============================ */
+.business-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    #003049 0%,
+    #000000 100%
+  );
+
+  padding-top: 120px;  /* ✅ prevents navbar overlap */
+  padding-bottom: 80px; /* ✅ prevents footer overlap */
+
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================
+   ✅ CONTAINER
+============================ */
+.dashboard-container {
+  text-align: center;
+  color: #ffffff;
+  max-width: 900px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+/* ============================
+   ✅ TITLES
+============================ */
+.dashboard-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.dashboard-title span:first-child {
+  color: #ffffff;
+}
+
+.dashboard-title span:last-child {
+  color: #f77f00;
+}
+
+.dashboard-subtitle {
+  font-size: 1.2rem;
+  color: #d1d1d1;
+  margin-bottom: 50px;
+}
+
+/* ============================
+   ✅ ACTION CARDS
+============================ */
+.dashboard-actions {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-card {
+  width: 260px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 30px 20px;
+
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+.action-card h3 {
+  color: #f77f00;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.action-card p {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+}
+
+/* ✅ Hover Effects */
+.action-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border-color: #f77f00;
+}
+
+/* ============================
+   ✅ RESPONSIVE
+============================ */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 2.2rem;
+  }
+
+  .action-card {
+    width: 100%;
+    max-width: 340px;
+  }
+}
