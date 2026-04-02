@@ -2,13 +2,13 @@
   <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
 
-      <div class="col-12 col-md-8 col-lg-5 d-flex justify-content-center">
+      <div class="col-12 col-md-8 col-lg-5">
 
-        <div class="card register-card shadow-sm border-0 rounded-3 w-100">
+        <div class="card register-card">
           <div class="card-body p-4">
 
             <!-- Header -->
-            <h3 class="fw-bold text-uppercase mb-1 text-center fs-1">
+            <h3 class="fw-bold text-uppercase text-center fs-1 mb-1">
               <span class="custom-cargo-color">Cargo</span>
               <span class="custom-wala-color">Wala</span>
             </h3>
@@ -21,11 +21,14 @@
 
               <!-- Username -->
               <div class="mb-3">
-                <label class="form-label">Username <span class="text-danger">*</span></label>
-
-                <input type="text" class="form-control"
-                       formControlName="username"
-                       placeholder="Enter username">
+                <label class="form-label">
+                  Username <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="username"
+                  placeholder="Enter username">
 
                 <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched"
                      class="text-danger small mt-1">
@@ -33,20 +36,24 @@
                 </div>
               </div>
 
-              <!-- Email + OTP -->
+              <!-- Email + OTP button -->
               <div class="mb-3">
-                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <label class="form-label">
+                  Email <span class="text-danger">*</span>
+                </label>
 
                 <div class="d-flex gap-2">
-                  <input type="email"
-                         class="form-control"
-                         formControlName="email"
-                         placeholder="name@example.com">
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    placeholder="name@example.com">
 
-                  <button type="button"
-                          class="btn btn-otp"
-                          (click)="sendOtp()"
-                          [disabled]="itemForm.get('email')?.invalid">
+                  <button
+                    type="button"
+                    class="btn btn-otp"
+                    (click)="sendOtp()"
+                    [disabled]="itemForm.get('email')?.invalid">
                     Send OTP
                   </button>
                 </div>
@@ -59,12 +66,14 @@
 
               <!-- OTP -->
               <div class="mb-3">
-                <label class="form-label">OTP <span class="text-danger">*</span></label>
-
-                <input type="text"
-                       class="form-control"
-                       formControlName="otp"
-                       placeholder="Enter OTP">
+                <label class="form-label">
+                  OTP <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="otp"
+                  placeholder="Enter OTP">
 
                 <div *ngIf="itemForm.get('otp')?.invalid && itemForm.get('otp')?.touched"
                      class="text-danger small mt-1">
@@ -74,22 +83,26 @@
 
               <!-- Password -->
               <div class="mb-3">
-                <label class="form-label">Password <span class="text-danger">*</span></label>
-
-                <input [type]="passwordFieldType"
-                       class="form-control"
-                       formControlName="password"
-                       placeholder="•••••••">
+                <label class="form-label">
+                  Password <span class="text-danger">*</span>
+                </label>
+                <input
+                  [type]="passwordFieldType"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="••••••••">
               </div>
 
               <!-- Confirm Password -->
               <div class="mb-3">
-                <label class="form-label">Confirm Password</label>
-
-                <input [type]="passwordFieldType"
-                       class="form-control"
-                       formControlName="retypepassword"
-                       placeholder="•••••••">
+                <label class="form-label">
+                  Confirm Password
+                </label>
+                <input
+                  [type]="passwordFieldType"
+                  class="form-control"
+                  formControlName="retypepassword"
+                  placeholder="••••••••">
 
                 <div *ngIf="itemForm.errors?.['notMatch'] && itemForm.get('retypepassword')?.touched"
                      class="text-danger small mt-1">
@@ -97,9 +110,10 @@
                 </div>
 
                 <div class="form-check form-switch mt-2">
-                  <input type="checkbox"
-                         class="form-check-input"
-                         (change)="togglePasswordVisibility()">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    (change)="togglePasswordVisibility()">
                   <label class="form-check-label">
                     Show Password
                   </label>
@@ -108,8 +122,9 @@
 
               <!-- Role -->
               <div class="mb-4">
-                <label class="form-label">Role <span class="text-danger">*</span></label>
-
+                <label class="form-label">
+                  Role <span class="text-danger">*</span>
+                </label>
                 <select class="form-select" formControlName="role">
                   <option value="">Choose user type</option>
                   <option value="BUSINESS">Business</option>
@@ -119,15 +134,16 @@
               </div>
 
               <!-- Submit -->
-              <button type="submit"
-                      class="btn btn-custom-gradient w-100"
-                      [disabled]="itemForm.invalid">
+              <button
+                type="submit"
+                class="btn btn-custom-gradient w-100"
+                [disabled]="itemForm.invalid">
                 Register
               </button>
 
             </form>
 
-            <!-- Login -->
+            <!-- Go to Login -->
             <p class="text-center mt-3 mb-0">
               <a routerLink="/login"
                  class="fw-bold custom-cargo-color text-decoration-none">
@@ -139,7 +155,6 @@
             <div *ngIf="showMessage" class="alert alert-success mt-3">
               {{ responseMessage }}
             </div>
-
             <div *ngIf="errorMessage" class="alert alert-danger mt-3">
               {{ responseMessage }}
             </div>
