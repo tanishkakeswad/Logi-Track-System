@@ -1,135 +1,73 @@
-<div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-12 col-md-8 col-lg-5">
+<div class="register-bg">
 
-            <div class="card shadow-sm border-0 rounded-3">
-                <div class="card-body p-4">
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
 
-                    <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+      <div class="col-12 col-md-8 col-lg-5">
 
-                        <h3 class="fw-bold text-uppercase mb-1 text-center">LogiTrax Ltd.</h3>
-                        <p class="text-center text-muted mb-4">
-                            Please enter your details here
-                        </p>
+        <div class="card register-card">
+          <div class="card-body p-4">
 
-                        <!-- Username -->
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                            <input type="text"
-                                   id="username"
-                                   formControlName="username"
-                                   class="form-control"
-                                   placeholder="Enter username">
+            <h3 class="fw-bold text-uppercase mb-1 text-center fs-1">
+              <span class="custom-cargo-color">Cargo</span><span class="custom-wala-color">Wala</span>
+            </h3>
 
-                            <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched"
-                                 class="text-danger small mt-1">
-                                <div *ngIf="itemForm.get('username')?.hasError('required')">
-                                    Username is required.
-                                </div>
-                                <div *ngIf="itemForm.get('username')?.hasError('pattern')">
-                                    <ul class="mb-0">
-                                        <li>Must be 5–19 characters</li>
-                                        <li>Cannot start with capital letter, number, or symbol</li>
-                                        <li class="text-success">Examples: yash123, esha21, yash21k</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+            <p class="text-center text-black mb-4">
+              Please enter your details here
+            </p>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input type="email"
-                                   id="email"
-                                   formControlName="email"
-                                   class="form-control"
-                                   placeholder="name@example.com">
+            <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
 
-                            <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched"
-                                 class="text-danger small mt-1">
-                                <div *ngIf="itemForm.get('email')?.hasError('required')">
-                                    Email is required.
-                                </div>
-                                <div *ngIf="itemForm.get('email')?.hasError('email')">
-                                    Enter a valid email address.
-                                </div>
-                            </div>
-                        </div>
+              <!-- Username -->
+              <div class="mb-3">
+                <label class="form-label">Username <span class="text-danger">*</span></label>
+                <input type="text" formControlName="username" class="form-control" placeholder="Enter username">
+              </div>
 
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input [type]="passwordFieldType"
-                                   id="password"
-                                   formControlName="password"
-                                   class="form-control"
-                                   placeholder="•••••••">
+              <!-- Email -->
+              <div class="mb-3">
+                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" formControlName="email" class="form-control" placeholder="name@example.com">
+              </div>
 
-                            <div *ngIf="itemForm.get('password')?.invalid && itemForm.get('password')?.touched"
-                                 class="text-danger small mt-1">
-                                <div *ngIf="itemForm.get('password')?.hasError('required')">
-                                    Password is required.
-                                </div>
-                                <div *ngIf="itemForm.get('password')?.hasError('pattern')">
-                                    Strong password required (upper, lower, number, symbol).
-                                </div>
-                            </div>
-                        </div>
+              <!-- Password -->
+              <div class="mb-3">
+                <label class="form-label">Password <span class="text-danger">*</span></label>
+                <input [type]="passwordFieldType" formControlName="password" class="form-control" placeholder="••••••">
+              </div>
 
-                        <!-- Confirm Password -->
-                        <div class="mb-3">
-                            <label for="retypepassword" class="form-label">Confirm Password</label>
-                            <input [type]="passwordFieldType"
-                                   id="retypepassword"
-                                   class="form-control"
-                                   placeholder="•••••••">
+              <!-- Confirm -->
+              <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input [type]="passwordFieldType" class="form-control" placeholder="••••••">
+              </div>
 
-                            <div class="form-check form-switch mt-2">
-                                <input type="checkbox"
-                                       class="form-check-input"
-                                       id="showPasswordToggle"
-                                       (change)="togglePasswordVisibility()">
-                                <label class="form-check-label" for="showPasswordToggle">
-                                    Show Password
-                                </label>
-                            </div>
-                        </div>
+              <!-- Role -->
+              <div class="mb-4">
+                <label class="form-label">Role <span class="text-danger">*</span></label>
+                <select class="form-select" formControlName="role">
+                  <option value="">Choose user type</option>
+                  <option value="BUSINESS">Business</option>
+                  <option value="DRIVER">Driver</option>
+                  <option value="CUSTOMER">Customer</option>
+                </select>
+              </div>
 
-                        <!-- Role -->
-                        <div class="mb-4">
-                            <label class="form-label">Role <span class="text-danger">*</span></label>
-                            <select formControlName="role" class="form-select">
-                                <option value="">Choose user type</option>
-                                <option value="BUSINESS">Business</option>
-                                <option value="DRIVER">Driver</option>
-                                <option value="CUSTOMER">Customer</option>
-                            </select>
+              <!-- Submit -->
+              <button class="btn btn-custom-gradient w-100 " [disabled]="itemForm.invalid" type="submit">Submit</button>
 
-                            <div *ngIf="itemForm.get('role')?.invalid && itemForm.get('role')?.touched"
-                                 class="text-danger small mt-1">
-                                Role is required.
-                            </div>
-                        </div>
+            </form>
 
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-dark w-100">
-                            Submit
-                        </button>
+            <!-- go to login -->
+            <p class="text-center mt-3 mb-0">
+              <a routerLink="/login" class="fw-bold custom-cargo-color text-decoration-none">Go to Login</a>
+            </p>
 
-                    </form>
-
-                    <!-- Login Link -->
-                    <p class="text-center mt-3 mb-0">
-                        <a [routerLink]="['/login']" class="fw-bold">Go to Login</a>
-                    </p>
-
-                    <!-- Success / Error -->
-                    <div *ngIf="showMessage" class="alert alert-success mt-3">{{responseMessage}} Redirecting…</div>
-                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{responseMessage}}</div>
-
-                </div>
-            </div>
-
+          </div>
         </div>
+
+      </div>
     </div>
+  </div>
+
 </div>

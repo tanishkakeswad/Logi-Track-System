@@ -8,6 +8,7 @@ import { DashbaordComponent } from './dashbaord/dashbaord.component';
 import { AssginCargoComponent } from './assgin-cargo/assgin-cargo.component';
 import { ViewcargostatusComponent } from './viewcargostatus/viewcargostatus.component';
 import { LandingComponent } from './landing/landing.component'; 
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },          
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'addcargo', component: AddcargoComponent },
   { path: 'asgin-cargo', component: AssginCargoComponent },
   { path: 'viewcargostatus', component: ViewcargostatusComponent },
+  {path: 'about', component: AboutComponent},
 
   { path: '**', redirectTo: '', pathMatch: 'full' }   
 ];
