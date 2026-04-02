@@ -1,47 +1,73 @@
-<div class="container mt-5">
-  <div class="card p-4 shadow-sm">
+<div class="view-status-page">
 
-    <h3 class="text-center mb-3">View Cargo Status</h3>
+  <!-- Page Header -->
+  <div class="page-header text-center">
+    <h1>
+      Track <span>Cargo</span> Status
+    </h1>
+    <p>Enter your Cargo ID to get real-time updates</p>
+  </div>
 
-    <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
+  <!-- Form Card -->
+  <div class="container d-flex justify-content-center">
+    <div class="card status-card">
 
-      <div class="mb-3">
-        <label class="form-label">Cargo ID</label>
-        <input type="number"
-               class="form-control"
-               formControlName="cargoId"
-               placeholder="Enter Cargo ID">
+      <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
 
-        <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
-             class="text-danger mt-1">
-          Cargo ID is required
+        <div class="mb-3">
+          <label class="form-label">Cargo ID</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="cargoId"
+            placeholder="Enter Cargo ID" />
+
+          <div
+            *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
+            class="text-danger mt-1">
+            Cargo ID is required
+          </div>
         </div>
+
+        <button class="btn primary-btn w-100" type="submit">
+          Get Status
+        </button>
+
+      </form>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
       </div>
 
-      <button class="btn btn-dark w-100" type="submit">
-        Get Status
-      </button>
+      <!-- Result -->
+      <div *ngIf="showResult" class="status-result mt-4">
 
-    </form>
+        <div class="result-item">
+          <span> Cargo ID</span>
+          <strong>{{ cargoData?.cargoId }}</strong>
+        </div>
 
-    <!-- ERROR -->
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-      {{ errorMessage }}
+        <div class="result-item">
+          <span>Status</span>
+          <strong class="status-badge">
+            {{ cargoData?.status }}
+          </strong>
+        </div>
+
+        <div class="result-item">
+          <span>Source</span>
+          <strong>{{ cargoData?.source }}</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Destination</span>
+          <strong>{{ cargoData?.destination }}</strong>
+        </div>
+
+      </div>
+
     </div>
-
-    <!-- RESULT -->
-    <div *ngIf="showResult" class="alert alert-success mt-3">
-
-      <p><strong>Cargo ID:</strong> {{ cargoData?.cargoId }}</p>
-      <p><strong>Status:</strong> {{ cargoData?.status }}</p>
-      <p><strong>Source:</strong> {{ cargoData?.source }}</p>
-      <p><strong>Destination:</strong> {{ cargoData?.destination }}</p>
-
-    </div>
-
-    <button class="btn btn-outline-danger mt-3 w-100" (click)="logout()">
-      Logout
-    </button>
-
   </div>
+
 </div>

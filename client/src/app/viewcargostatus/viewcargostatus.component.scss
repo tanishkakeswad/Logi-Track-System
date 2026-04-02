@@ -1,0 +1,91 @@
+/* PAGE WRAPPER */
+.view-status-page {
+  min-height: 100vh;
+  padding-top: 120px;   /* navbar spacing */
+  padding-bottom: 80px; /* footer spacing */
+
+  background: linear-gradient(
+    to bottom,
+    #003049 0%,
+    #000000 100%
+  );
+
+  color: #ffffff;
+}
+
+/* HEADER */
+.page-header h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.page-header span {
+  color: #f77f00;
+}
+
+.page-header p {
+  color: #cfcfcf;
+  margin-bottom: 40px;
+}
+
+/* CARD */
+.status-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+/* BUTTON */
+.primary-btn {
+  background: #f77f00;
+  color: #003049;
+  font-weight: 600;
+}
+
+.primary-btn:hover {
+  background: #ff9a00;
+}
+
+/* RESULT */
+.status-result {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 20px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-item span {
+  color: #cfcfcf;
+}
+
+.result-item strong {
+  color: #ffffff;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 14px;
+  background: #f77f00;
+  color: #003049;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2.1rem;
+  }
+
+  .status-card {
+    margin: 0 10px;
+  }
+}
