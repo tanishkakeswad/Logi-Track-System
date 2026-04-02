@@ -30,10 +30,23 @@ export class LoginComponent implements OnInit {
         const loginDetails = this.itemForm.value;
         this.httpService.Login(loginDetails).subscribe({
           next: (response: any) => {
-            this.authService.saveToken(response.token);
-            this.authService.setRole(response.role);
-            this.authService.setId(response.id);
-            this.router.navigate(['/dashboard']);
+            const role = response.role?.trim().toUpperCase();
+
+          this.authService.saveToken(response.token);
+          this.authService.setRole(role);
+          this.authService.setId(response.id);
+
+          if (role === 'BUSINESS') {
+            this.router.navigateByUrl('/dashboard/business');
+          } else if (role === 'DRIVER') {
+            this.router.navigateByUrl('/dashboard/driver');
+          } else if (role === 'CUSTOMER') {
+            this.router.navigateByUrl('/dashboard/customer');
+          } else {
+            // safety fallback
+            this.router.navigateByUrl('/');
+          }
+
           },
           error: () => {
             this.showError = true;

@@ -1,18 +1,19 @@
-<div class="container mt-4">
+<div class="assigned-cargo-page">
 
-  <h2 class="text-center mb-4">Manage Cargo</h2>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h2>Assigned Cargos</h2>
+    <p>View and update the status of your assigned shipments</p>
+  </div>
 
-  <!-- DEBUG -->
-  <p class="text-center">Total Cargo: {{ cargList.length }}</p>
-
-  <!-- ERROR -->
-  <div *ngIf="showError" class="alert alert-danger text-center">
+  <!-- Error / Empty State -->
+  <div *ngIf="showError" class="alert custom-alert text-center">
     {{ errorMessage }}
   </div>
 
-  <!-- TABLE -->
+  <!-- Cargo Table -->
   <div class="table-responsive" *ngIf="cargList.length > 0">
-    <table class="table table-dark table-hover text-center">
+    <table class="table cargo-table">
       <thead>
         <tr>
           <th>A.W.B No.</th>
@@ -28,10 +29,14 @@
           <td>{{ cargo.id }}</td>
           <td>{{ cargo.content }}</td>
           <td>{{ cargo.size }}</td>
-          <td>{{ cargo.status }}</td>
           <td>
-            <button 
-              class="btn btn-primary"
+            <span class="status-badge" [ngClass]="cargo.status">
+              {{ cargo.status }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn update-btn"
               [disabled]="cargo.status === 'Order Delivered'"
               (click)="addStatus(cargo)"
               data-bs-toggle="modal"
@@ -44,46 +49,45 @@
     </table>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal fade" id="driverModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
+</div>
 
-        <div class="modal-header">
-          <h5 class="modal-title">Update Status</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<!-- Update Status Modal -->
+<div class="modal fade" id="driverModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header modal-header-custom">
+        <h5 class="modal-title">Update Cargo Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <select [(ngModel)]="statusModel.newStatus" class="form-select">
+          <option [ngValue]="null">Choose Status</option>
+          <option value="Order In-transit">Order In-transit</option>
+          <option value="Order Delivered">Order Delivered</option>
+        </select>
+
+        <div *ngIf="showMessage" class="alert alert-success mt-3">
+          {{ responseMessage }}
         </div>
 
-        <div class="modal-body">
-
-          <select [(ngModel)]="statusModel.newStatus" class="form-control">
-            <option [ngValue]="null">Choose Status</option>
-            <option value="Order In-transit">Order In-transit</option>
-            <option value="Order Delivered">Order Delivered</option>
-          </select>
-
-          <div *ngIf="showMessage" class="alert alert-success mt-3">
-            {{ responseMessage }}
-          </div>
-
-          <div *ngIf="showError" class="alert alert-danger mt-3">
-            {{ errorMessage }}
-          </div>
-
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class="btn btn-primary" (click)="assignDriver()">Save</button>
+        <div *ngIf="showError" class="alert alert-danger mt-3">
+          {{ errorMessage }}
         </div>
 
       </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn save-btn" (click)="assignDriver()">
+          Save
+        </button>
+      </div>
+
     </div>
   </div>
-
-  <!-- LOGOUT -->
-  <button class="btn btn-danger w-100 mt-3" (click)="logout()">
-    Logout
-  </button>
-
 </div>
