@@ -24,18 +24,20 @@
 
     </form>
 
-    <!-- ERROR -->
     <div *ngIf="errorMessage" class="alert alert-danger mt-3">
       {{ errorMessage }}
     </div>
 
-    <!-- RESULT -->
-    <div *ngIf="showResult" class="alert alert-success mt-3">
+    <div *ngIf="showResult && cargoData" class="alert alert-success mt-3">
 
       <p><strong>Cargo ID:</strong> {{ cargoData?.cargoId }}</p>
       <p><strong>Status:</strong> {{ cargoData?.status }}</p>
       <p><strong>Source:</strong> {{ cargoData?.source }}</p>
       <p><strong>Destination:</strong> {{ cargoData?.destination }}</p>
+
+      <button class="track-btn mt-2" (click)="openTracking()">
+        Live Tracking
+      </button>
 
     </div>
 
@@ -44,4 +46,56 @@
     </button>
 
   </div>
+</div>
+
+
+<!-- 🔥 TRACKING MODAL -->
+<div class="tracking-overlay" *ngIf="showTracking && cargoData">
+
+  <div class="tracking-card">
+
+    <h3>Live Cargo Tracking</h3>
+
+    <div class="tracking-steps">
+
+      <!-- CONFIRMED -->
+      <div class="step"
+           [class.active]="cargoData.status === 'CONFIRMED'">
+        <div class="circle">✔</div>
+        <p>Confirmed</p>
+      </div>
+
+      <div class="line"></div>
+
+      <!-- OUT FOR DELIVERY -->
+      <div class="step"
+           [class.active]="cargoData.status === 'OUT_FOR_DELIVERY'">
+        <div class="circle">✔</div>
+        <p>Out for Delivery</p>
+      </div>
+
+      <div class="line"></div>
+
+      <!-- IN TRANSIT -->
+      <div class="step"
+           [class.active]="cargoData.status === 'IN_TRANSIT'">
+        <div class="circle">✔</div>
+        <p>In Transit</p>
+      </div>
+
+      <div class="line"></div>
+
+      <!-- DELIVERED -->
+      <div class="step"
+           [class.active]="cargoData.status === 'ORDER_DELIVERED'">
+        <div class="circle">✔</div>
+        <p>Delivered</p>
+      </div>
+
+    </div>
+
+    <button class="close-btn" (click)="closeTracking()">Close</button>
+
+  </div>
+
 </div>

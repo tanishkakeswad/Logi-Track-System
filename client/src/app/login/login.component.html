@@ -1,51 +1,93 @@
 <div class="page-wrapper">
-<div class="login-bg">
+  <div class="login-bg">
+    <div class="container-fluid h-100">
+      <div class="row h-100">
 
-  <div class="container-fluid h-100">
-    <div class="row h-100">
+        <!-- LEFT SIDE -->
+        <div class="col-lg-7 d-none d-lg-block"></div>
 
-      <!-- LEFT SIDE (empty for large screens, hidden on mobile) -->
-      <div class="col-lg-7 d-none d-lg-block"></div>
+        <!-- RIGHT SIDE (Login card) -->
+        <div class="col-12 col-lg-5 d-flex align-items-center justify-content-center justify-content-lg-end">
+          <div class="card shadow-sm border-0 rounded-3 w-100 login-card">
+            <div class="card-body p-4">
 
-      <!-- RIGHT SIDE (Login card) -->
-      <div class="col-12 col-lg-5 d-flex align-items-center justify-content-center justify-content-lg-end">
+              <h3 class="fw-bold text-uppercase text-center mb-1 fs-1">
+                <span class="custom-cargo-color">Cargo</span><span class="custom-wala-color">Wala</span>
+              </h3>
+              <p class="text-center text-black mb-4">Enter Username &amp; Password</p>
 
-        <div class="card shadow-sm border-0 rounded-3 w-100 login-card">
-          <div class="card-body p-4">
+              <form [formGroup]="itemForm" (ngSubmit)="onLogin()">
 
-            <h3 class="fw-bold text-uppercase text-center mb-1 fs-1"><span class="custom-cargo-color">Cargo</span><span class="custom-wala-color">Wala</span></h3>
-            <p class="text-center text-black mb-4">Enter Username & Password</p>
+                <!-- Username -->
+                <div class="mb-3">
+                  <label class="form-label">Username</label>
+                  <input type="text" class="form-control" placeholder="Enter username" formControlName="username">
+                </div>
 
-            <form [formGroup]="itemForm" (ngSubmit)="onLogin()">
+                <!-- Password -->
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" placeholder="********" formControlName="password">
+                </div>
 
-              <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" placeholder="Enter username" formControlName="username">
-              </div>
+                <!-- IMAGE CAPTCHA -->
+                <div class="mb-3">
+                  <label class="form-label">
+                    Captcha Verification
+                    <span class="captcha-hint">(case-sensitive)</span>
+                  </label>
 
-              <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" placeholder="********" formControlName="password">
-              </div>
+                  <!-- Canvas image + refresh button -->
+                  <div class="captcha-row">
+                    <canvas #captchaCanvas width="220" height="58" class="captcha-canvas"></canvas>
+                    <button
+                      type="button"
+                      class="captcha-refresh"
+                      (click)="refreshCaptcha()"
+                      title="Get new captcha"
+                    >
+                      &#x21bb;
+                    </button>
+                  </div>
 
-              <button type="submit" class="btn btn-custom-gradient w-100" [disabled]="itemForm.invalid">
-                Login
-              </button>
+                  <!-- Text input -->
+                  <input
+                    type="text"
+                    class="form-control mt-2"
+                    [class.is-valid]="captchaValid"
+                    [class.is-invalid]="captchaError"
+                    placeholder="Type the 6 characters shown above"
+                    [(ngModel)]="captchaInput"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="verifyCaptcha()"
+                    autocomplete="off"
+                    maxlength="6"
+                  />
 
-            </form>
+                  <small class="text-success d-block mt-1" *ngIf="captchaValid">✔ Captcha verified</small>
+                  <small class="text-danger d-block mt-1" *ngIf="captchaError">✘ Incorrect — try again or refresh</small>
+                </div>
 
-            <p class="text-center mt-3 mb-0 text-black">
-              Don't have an account?
-              <a routerLink="/registration" class="fw-bold custom-cargo-color text-decoration-none">Register</a>
-            </p>
+                <!-- Error message -->
+                <div class="alert alert-danger py-2 mb-3" *ngIf="showError">{{ errorMessage }}</div>
 
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-custom-gradient w-100" [disabled]="isLoginDisabled">
+                  Login
+                </button>
+
+              </form>
+
+              <p class="text-center mt-3 mb-0 text-black">
+                Don't have an account?
+                <a routerLink="/registration" class="fw-bold custom-cargo-color text-decoration-none">Register</a>
+              </p>
+
+            </div>
           </div>
         </div>
 
       </div>
-
     </div>
   </div>
-
-</div>
 </div>

@@ -16,6 +16,8 @@ export class ViewcargostatusComponent implements OnInit {
   errorMessage: string = '';
   showResult: boolean = false;
 
+  showTracking: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private httpService: HttpService,
@@ -29,26 +31,54 @@ export class ViewcargostatusComponent implements OnInit {
     });
   }
 
-  // ✅ Fetch Cargo Status
   getStatus() {
-    if (this.cargoForm.invalid) {
-      this.errorMessage = 'Please enter Cargo ID';
-      return;
-    }
+  if (this.cargoForm.invalid) {
+    this.errorMessage = 'Please enter Cargo ID';
+    return;
+  }
 
-    const cargoId = this.cargoForm.value.cargoId;
+  const cargoId = this.cargoForm.value.cargoId;
 
-    this.httpService.getOrderStatus(cargoId).subscribe({
-      next: (res) => {
-        this.cargoData = res;
-        this.showResult = true;
-        this.errorMessage = '';
-      },
-      error: (err) => {
-        this.errorMessage = 'Cargo not found or error occurred';
-        this.showResult = false;
+  this.httpService.getOrderStatus(cargoId).subscribe({
+    next: (res) => {
+      this.cargoData = res;
+
+      // 🔥 normalize status
+      if (this.cargoData?.status) {
+        this.cargoData.status = this.cargoData.status
+          .toUpperCase()
+          .replace(/\s+/g, '_');
       }
-    });
+
+      this.showResult = true;
+      this.errorMessage = '';
+    },
+    error: () => {
+      this.errorMessage = 'Cargo not found or error occurred';
+      this.showResult = false;
+    }
+  });
+}
+
+  // 🔥 tracking modal
+  openTracking() {
+    this.showTracking = true;
+  }
+
+  closeTracking() {
+    this.showTracking = false;
+  }
+
+  // 🔥 STEP LOGIC (CLEAN)
+  isStepActive(step: string): boolean {
+    if (!this.cargoData) return false;
+
+    const order = ['CONFIRMED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'ORDER_DELIVERED'];
+    return order.indexOf(this.cargoData.status) >= order.indexOf(step);
+  }
+
+  isLineActive(step: string): boolean {
+    return this.isStepActive(step);
   }
 
   logout() {
