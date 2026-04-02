@@ -70,6 +70,24 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 
+		<!-- Email -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+
+<!-- Lombok (if not already) -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+</dependency>
+
+<!-- Validation -->
+<dependency>
+    <groupId>jakarta.validation</groupId>
+    <artifactId>jakarta.validation-api</artifactId>
+</dependency>
+
 		<!-- Hot reload -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
