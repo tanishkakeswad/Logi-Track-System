@@ -32,11 +32,9 @@
 .register-card {
   max-width: 420px;
   width: 100%;
-  background: #FFFFFF
-;
+  background: #ffffff;
   border-radius: 14px;
-  border: 1px solid #E0E0E0
-;
+  border: 1px solid #e0e0e0;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -64,24 +62,15 @@
 
 /* Register Button */
 .btn-custom-gradient {
-  background-image: linear-gradient(to right, #FF4800
-, #FA6C2A
-);
+  background-image: linear-gradient(to right, #ff4800, #fa6c2a);
   color: #fff;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: 600;
-}
-
 /* Branding */
-.custom-cargo-color {
   color: #003049
 ;
 }
 
 .custom-wala-color {
-  color: #F77F00
-;
+  color: #f77f00;
 }
 
 /* Mobile */
