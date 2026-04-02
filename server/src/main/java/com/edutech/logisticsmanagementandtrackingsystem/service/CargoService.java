@@ -3,9 +3,11 @@ package com.edutech.logisticsmanagementandtrackingsystem.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
+import com.edutech.logisticsmanagementandtrackingsystem.entity.CargoDocument;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
+import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoDocumentRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.DriverRepository;
 
@@ -22,6 +24,12 @@ public class CargoService {
     CargoRepository cargoRepository;
     @Autowired
     DriverRepository driverRepository;
+    @Autowired
+    private CargoDocumentRepository cargoDocumentRepository;
+
+    @Autowired
+    private DocumentStorageService documentStorageService;
+
 
     public Cargo addCargo(Cargo cargo) {
         return cargoRepository.save(cargo);
@@ -58,4 +66,19 @@ public class CargoService {
         return cargoRepository.findById(cargoId).orElse(null);
     }
 
+    public Cargo createCargoWithDocuments(Cargo cargo, MultipartFile[] documents) {
+    Cargo savedCargo = cargoRepository.save(cargo);
+
+    if (documents != null) {
+        for (MultipartFile file : documents) {
+            try {
+                CargoDocument doc = documentStorageService.storeFile(file, savedCargo);
+                cargoDocumentRepository.save(doc);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to upload document", e);
+            }
+        }
+    }
+    return savedCargo;
+}
 }

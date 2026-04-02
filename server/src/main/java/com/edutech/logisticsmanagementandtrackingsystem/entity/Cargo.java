@@ -1,5 +1,8 @@
 package com.edutech.logisticsmanagementandtrackingsystem.entity;
 
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
  
 @Entity
@@ -18,7 +21,9 @@ public class Cargo {
     @ManyToOne(fetch = FetchType.EAGER)
     private Driver driver;
 
-    
+   @OneToMany(mappedBy = "cargo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("cargo")
+    private List<CargoDocument> documents;
     
     public Cargo(String content, String size, String status, Business business, Driver driver) {
         this.content = content;
@@ -80,5 +85,14 @@ public class Cargo {
     }
     public Long getCargoId() {
     return this.id;
+    }
+
+    public List<CargoDocument> getDocuments() {
+    return documents;
 }
+
+public void setDocuments(List<CargoDocument> documents) {
+    this.documents = documents;
+}
+
 }

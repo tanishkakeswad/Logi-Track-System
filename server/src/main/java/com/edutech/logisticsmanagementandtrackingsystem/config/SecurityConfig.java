@@ -62,6 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/customer/cargo-status")
                 .hasAuthority("CUSTOMER")
 
+                .antMatchers(HttpMethod.POST, "/api/business/cargo-with-documents")
+                .hasAuthority("BUSINESS")
+
+                .antMatchers(HttpMethod.GET, "/api/documents/**")
+                .hasAnyAuthority("BUSINESS", "DRIVER")
                 // All other requests must be authenticated
                 .anyRequest().authenticated()
 

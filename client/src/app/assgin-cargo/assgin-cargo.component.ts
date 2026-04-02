@@ -99,10 +99,22 @@ export class AssginCargoComponent implements OnInit {
       }
     });
   }
+viewDocument(documentId: number) {
+  this.httpService.downloadDocument(documentId).subscribe({
+    next: (blob: Blob) => {
+      const fileURL = window.URL.createObjectURL(blob);
+      window.open(fileURL);
+    },
+    error: () => {
+      this.showError = true;
+      this.errorMessage = 'You are not authorized to view this document';
+    }
+  });
+}
 
   // ✅ Logout
-  // logout() {
-  //   this.authService.logout();
-  //   this.router.navigate(['/login']);
-  // }
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
