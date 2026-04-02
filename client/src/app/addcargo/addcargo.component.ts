@@ -120,6 +120,7 @@ onSubmit() {
   }
 }
   addDriver(value: any) {
+    
     this.assignModel.cargoId = value.id
   }
 
@@ -130,7 +131,6 @@ onFileSelected(event: any) {
 }
 
   assignDriver() {
-    console.log("assigning")
     this.assignModel.driverId = this.driverId;
     console.log(this.assignModel.driverId)
     if (this.assignModel.driverId != null) {
@@ -140,7 +140,7 @@ onFileSelected(event: any) {
         this.responseMessage = data.message;
         window.location.reload();
       }, error => {
-        // Handle error
+        
         this.showError = true;
         this.errorMessage = "An error occurred while assigning driver. Please try again later.";
         console.error('Error:', error);
