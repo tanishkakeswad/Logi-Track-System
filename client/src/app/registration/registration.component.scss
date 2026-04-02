@@ -30,22 +30,13 @@
 }
 
 /* Card */
-.card {
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #E0E0E0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* Card width */
 .register-card {
-  max-width: 450px;
+  max-width: 420px;
   width: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Inputs */
@@ -53,14 +44,6 @@
 .form-select {
   border-radius: 8px;
   padding: 10px;
-  border: 1px solid #ddd;
-  transition: 0.2s;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #003049;
-  box-shadow: 0 0 5px rgba(0, 48, 73, 0.3);
 }
 
 /* OTP Button */
@@ -68,10 +51,8 @@
   white-space: nowrap;
   background-color: #003049;
   color: #fff;
-  border: none;
   border-radius: 8px;
   padding: 8px 14px;
-  transition: 0.3s;
 }
 
 .btn-otp:hover {
@@ -80,26 +61,20 @@
 
 /* Register Button */
 .btn-custom-gradient {
-  background-image: linear-gradient(to right, #FF4800, #fa6c2a);
-  color: white;
-  border: none;
+  background-image: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #fff;
   border-radius: 10px;
   padding: 12px;
   font-weight: 600;
-  transition: 0.3s;
 }
 
-.btn-custom-gradient:hover {
-  opacity: 0.9;
-}
-
-/* Title colors */
+/* Branding */
 .custom-cargo-color {
   color: #003049;
 }
 
 .custom-wala-color {
-  color: #F77F00;
+  color: #f77f00;
 }
 
 /* Mobile */
