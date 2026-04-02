@@ -1,12 +1,26 @@
-<h2>Welcome To Logistic Management System</h2>
-<br><br><br>
+<div class="customer-dashboard">
 
-<button routerLink="/viewcargostatus">
-  View Cargo Status
-</button>
+  <div class="dashboard-container">
 
-<br><br>
+    <h1 class="dashboard-title">
+      Welcome to <span>Cargo</span><span>Wala</span>
+    </h1>
 
-<button (click)="logout()">
-  Logout
-</button>
+    <p class="dashboard-subtitle">
+      Track and monitor your shipments with ease
+    </p>
+
+    <div class="dashboard-actions">
+      <button
+        class="action-card"
+        routerLink="/viewcargostatus">
+        <h3>View Cargo Status</h3>
+        <p>
+          Check real-time updates of your shipments
+        </p>
+      </button>
+    </div>
+
+  </div>
+
+</div>
