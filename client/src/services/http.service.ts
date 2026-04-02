@@ -55,6 +55,16 @@ export class HttpService {
     );
   }
 
+  downloadDocument(documentId: number) {
+  return this.http.get(
+    `${this.serverName}/api/documents/${documentId}/download`,
+    {
+      headers: this.getHeaders(),
+      responseType: 'blob'
+    }
+  );
+}
+
   // ================= BUSINESS =================
   assignDriver(driverId: any, cargoId: any): Observable<any> {
     return this.http.post<any>(
@@ -92,7 +102,20 @@ export class HttpService {
       { headers: this.getHeaders() }
     );
   }
+  addCargoWithDocuments(formData: FormData): Observable<any> {
+  const token = this.authService.getToken();
+  let headers = new HttpHeaders();
 
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return this.http.post<any>(
+    `${this.serverName}/api/business/cargo-with-documents`,
+    formData,
+    { headers }
+  );
+}
   // ================= AUTH =================
   Login(detail: any): Observable<any> {
   return this.http.post<any>(

@@ -19,6 +19,7 @@
           <th>Content</th>
           <th>Size</th>
           <th>Status</th>
+          <th>Documents</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -30,12 +31,24 @@
           <td>{{ cargo.size }}</td>
           <td>{{ cargo.status }}</td>
           <td>
-            <button 
-              class="btn btn-primary"
-              [disabled]="cargo.status === 'Order Delivered'"
-              (click)="addStatus(cargo)"
-              data-bs-toggle="modal"
-              data-bs-target="#driverModal">
+            <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs">
+              <ul class="list-unstyled mb-0">
+                <li *ngFor="let doc of cargo.documents">
+                  {{ doc.originalFileName }}
+                  <button class="btn btn-sm btn-link" (click)="viewDocument(doc.id)">
+                    View
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <ng-template #noDocs>
+              <span class="text-muted">No Documents</span>
+            </ng-template>
+          </td>
+          <td>
+            <button class="btn btn-primary" [disabled]="cargo.status === 'Order Delivered'" (click)="addStatus(cargo)"
+              data-bs-toggle="modal" data-bs-target="#driverModal">
               Update Status
             </button>
           </td>

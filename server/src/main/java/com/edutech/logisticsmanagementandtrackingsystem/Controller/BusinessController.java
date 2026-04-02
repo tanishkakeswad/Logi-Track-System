@@ -1,6 +1,6 @@
 package com.edutech.logisticsmanagementandtrackingsystem.Controller;
 
-
+import org.springframework.web.multipart.MultipartFile;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
 import com.edutech.logisticsmanagementandtrackingsystem.service.CargoService;
@@ -76,7 +76,14 @@ public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId) {
 
     return ResponseEntity.ok(cargo);
 }
+    @PostMapping("/cargo-with-documents")
+public ResponseEntity<Cargo> addCargoWithDocuments(
+        @RequestPart("cargo") Cargo cargo,
+        @RequestPart(value = "documents", required = false) MultipartFile[] documents) {
 
+    Cargo savedCargo = cargoService.createCargoWithDocuments(cargo, documents);
+    return ResponseEntity.ok(savedCargo);
+}
     
     
 }

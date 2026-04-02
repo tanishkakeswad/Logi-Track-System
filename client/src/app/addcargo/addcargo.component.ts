@@ -25,6 +25,7 @@ export class AddcargoComponent {
   driverId: any;
   cargoId: any
   cargoToShow: any[] = [];
+  selectedFiles: File[] = [];
   constructor(public router: Router, public httpService: HttpService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.itemForm = this.formBuilder.group({
       content: [this.formModel.content, [Validators.required]],
@@ -83,29 +84,50 @@ export class AddcargoComponent {
     }
   }
 
-  onSubmit() {
-    if (this.itemForm.valid) {
-      this.showError = false;
+onSubmit() {
+  if (this.itemForm.valid) {
+    this.showError = false;
 
-      this.httpService.addCargo(this.itemForm.value).subscribe((data: any) => {
+    const formData = new FormData();
+
+    // Append cargo JSON
+    formData.append(
+      'cargo',
+      new Blob([JSON.stringify(this.itemForm.value)], {
+        type: 'application/json'
+      })
+    );
+
+    // Append documents
+    this.selectedFiles.forEach(file => {
+      formData.append('documents', file, file.name);
+    });
+
+    this.httpService.addCargoWithDocuments(formData).subscribe(
+      (data: any) => {
         this.itemForm.reset();
+        this.selectedFiles = [];
         this.getCargo();
-      }, error => {
-        // Handle error
+      },
+      error => {
         this.showError = true;
-        this.errorMessage = "An error occurred while logging in. Please try again later.";
-        console.error('Login error:', error);
-      });;
-    }
-    else {
-      this.itemForm.markAllAsTouched();
-    }
+        this.errorMessage = 'Failed to add cargo with documents';
+        console.error(error);
+      }
+    );
+  } else {
+    this.itemForm.markAllAsTouched();
   }
+}
   addDriver(value: any) {
     this.assignModel.cargoId = value.id
   }
 
-
+onFileSelected(event: any) {
+  if (event.target.files && event.target.files.length > 0) {
+    this.selectedFiles = Array.from(event.target.files);
+  }
+}
 
   assignDriver() {
     console.log("assigning")
