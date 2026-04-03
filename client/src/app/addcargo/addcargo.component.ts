@@ -84,51 +84,62 @@ export class AddcargoComponent {
     }
   }
 
-onSubmit() {
-  if (this.itemForm.valid) {
-    this.showError = false;
+  onSubmit() {
+    if (this.itemForm.valid) {
+      this.showError = false;
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    // Append cargo JSON
-    formData.append(
-      'cargo',
-      new Blob([JSON.stringify(this.itemForm.value)], {
-        type: 'application/json'
-      })
-    );
+      // Append cargo JSON
+      formData.append(
+        'cargo',
+        new Blob([JSON.stringify(this.itemForm.value)], {
+          type: 'application/json'
+        })
+      );
 
-    // Append documents
-    this.selectedFiles.forEach(file => {
-      formData.append('documents', file, file.name);
-    });
+      // Append documents
+      this.selectedFiles.forEach(file => {
+        formData.append('documents', file, file.name);
+      });
 
-    this.httpService.addCargoWithDocuments(formData).subscribe(
-      (data: any) => {
-        this.itemForm.reset();
-        this.selectedFiles = [];
-        this.getCargo();
-      },
-      error => {
-        this.showError = true;
-        this.errorMessage = 'Failed to add cargo with documents';
-        console.error(error);
-      }
-    );
-  } else {
-    this.itemForm.markAllAsTouched();
+      this.httpService.addCargoWithDocuments(formData).subscribe(
+        (data: any) => {
+          this.itemForm.reset();
+          this.selectedFiles = [];
+          this.getCargo();
+        },
+        error => {
+          this.showError = true;
+          this.errorMessage = 'Failed to add cargo with documents';
+          console.error(error);
+        }
+      );
+    } else {
+      this.itemForm.markAllAsTouched();
+    }
   }
-}
   addDriver(value: any) {
-    
+
     this.assignModel.cargoId = value.id
   }
 
-onFileSelected(event: any) {
-  if (event.target.files && event.target.files.length > 0) {
-    this.selectedFiles = Array.from(event.target.files);
+  onFileSelected(event: any) {
+    const files: File[] = Array.from(event.target.files);
+
+    for (const file of files) {
+      // :white_check_mark: 10MB = 10 * 1024 * 1024 bytes
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10 MB');
+        event.target.value = ''; // reset file input
+        this.selectedFiles = [];
+        return;
+      }
+    }
+
+    // :white_check_mark: If validation passes
+    this.selectedFiles = files;
   }
-}
 
   assignDriver() {
     this.assignModel.driverId = this.driverId;
@@ -140,7 +151,7 @@ onFileSelected(event: any) {
         this.responseMessage = data.message;
         window.location.reload();
       }, error => {
-        
+
         this.showError = true;
         this.errorMessage = "An error occurred while assigning driver. Please try again later.";
         console.error('Error:', error);
@@ -148,8 +159,8 @@ onFileSelected(event: any) {
     }
   }
 
-  
-logout(): void {
+
+  logout(): void {
     // Clear login tokens/session
     this.authService.logout();
 
