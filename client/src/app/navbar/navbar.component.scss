@@ -1,29 +1,32 @@
-/* Fixed navbar height */
-.navbar.black-nav {
-  background-color: #000;
-  border-bottom: 1px solid #222;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+/* Transparent overlay navbar */
+.navbar.transparent-nav {
+  position: fixed;         /* overlays hero */
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1000;
 
-  height: 72px;           /* ✅ fixed navbar height */
+  height: 72px;
   padding-top: 0;
   padding-bottom: 0;
-}
-.navbar{
+
+  background: transparent; /* ✅ no black background */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
   font-family: 'Poppins', sans-serif;
 }
 
 /* Brand wrapper */
 .navbar-brand {
-  height: 72px;           /* ✅ match navbar height */
+  height: 72px;
   display: flex;
   align-items: center;
-  padding: 0;             /* remove bootstrap extra spacing */
+  padding: 0;
 }
 
-/* ✅ Logo: bigger but controlled, never crops */
+/* Logo */
 .nav-logo {
-  max-height: 52px;       /* ✅ this controls visual size */
+  max-height: 54px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -31,34 +34,104 @@
 
 /* Links */
 .nav-links .nav-link {
-  font-weight: 700;
-  color: #fff !important;
-  margin-left: 1.4rem;
+  position: relative;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92) !important;
+  margin-left: 1.25rem;
   letter-spacing: 0.3px;
-  text-transform: uppercase;
+  padding: 0.5rem 0.2rem;
+  text-transform: none;
+}
+
+/* underline hover */
+.nav-links .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: #f77f00;
+  transition: width 0.22s ease;
+  border-radius: 2px;
 }
 
 .nav-links .nav-link:hover {
-  color: #f77f00 !important;
-  transition: 0.2s ease-in-out;
+  color: #ffffff !important;
+}
+
+.nav-links .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Active route */
+.nav-links .nav-link.active {
+  color: #ffffff !important;
+}
+
+.nav-links .nav-link.active::after {
+  width: 100%;
+}
+
+/* CTA pill */
+.nav-cta {
+  padding: 10px 16px !important;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 24px rgba(250, 108, 42, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-cta::after {
+  display: none;
+}
+
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(250, 108, 42, 0.35);
+}
+
+/* Toggler polish */
+.navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
 }
 
 /* Mobile */
 @media (max-width: 991px) {
-  .navbar.black-nav {
-    height: 64px;
+  .navbar.transparent-nav {
+    height: auto;           /* allow expanded menu */
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.65); /* ✅ ONLY on mobile for readability */
+    backdrop-filter: blur(10px);
   }
 
   .navbar-brand {
-    height: 64px;
+    height: auto;
   }
 
   .nav-logo {
-    max-height: 44px;     /* ✅ slightly smaller for mobile */
+    max-height: 46px;
   }
 
   .nav-links .nav-link {
     margin-left: 0;
-    padding: 0.6rem 0;
+    padding: 0.75rem 0;
+  }
+
+  .nav-links .nav-link::after {
+    bottom: 2px;
+  }
+
+  .nav-cta {
+    width: fit-content;
+    margin-top: 10px;
   }
 }
