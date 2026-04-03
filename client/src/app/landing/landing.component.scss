@@ -32,6 +32,8 @@ img {
   font-size: 4.6rem;
   font-weight: 900;
   line-height: 1.1;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: -1px;
 }
 
 .hero-text h3{
@@ -43,8 +45,9 @@ font-size: 1.7rem;     /* ⬆ was browser default */
 
 }
 .hero-text p {
-  
-font-size: 1.15rem;    /* ⬆ slightly bigger */
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1.15rem;    /* ⬆ slightly bigger */
   max-width: 520px;
 
 }
@@ -80,6 +83,7 @@ font-size: 1.15rem;    /* ⬆ slightly bigger */
   font-size: 1.7rem; /* match your hero sizing */
   min-height: 2.2rem; /* prevents layout jump when text changes */
   color: #ffffff;
+  font-family: 'Poppins', sans-serif;
 }
 
 .typewriter-text {

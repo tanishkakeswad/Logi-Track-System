@@ -9,6 +9,9 @@
   padding-top: 0;
   padding-bottom: 0;
 }
+.navbar{
+  font-family: 'Poppins', sans-serif;
+}
 
 /* Brand wrapper */
 .navbar-brand {
@@ -32,6 +35,7 @@
   color: #fff !important;
   margin-left: 1.4rem;
   letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .nav-links .nav-link:hover {
