@@ -4,7 +4,10 @@
 
     <div class="hero-text">
       <h1><span class="cargo text-shadow-wala fw-bolder">Cargo </span> <span class="wala text-shadow-wala fw-bolder">Wala</span></h1>
-      <h3 >Your Trusted Logistics Wala.</h3>
+      <h3 class="typewriter-line">
+        <span class="typewriter-text">{{ typedText }}</span>
+        <span class="cursor">|</span>
+      </h3>
       <p>Fast. Secure. Reliable doorstep logistics service across India.</p>
       <a routerLink="/login" class="btn btn-primary hero-btn">Get Started</a>
     </div>
@@ -88,26 +91,28 @@
 
 
 <!-- ✅ COMPANY FACTS -->
-<section class="facts">
+
+<section class="facts" #factsSection>
   <div class="container facts-container">
 
     <div class="fact-box">
-      <h2>2500+</h2>
+      <h2>{{ displayClients | number }}+</h2>
       <p>Clients Served</p>
     </div>
 
     <div class="fact-box">
-      <h2>12,000+</h2>
+      <h2>{{ displayOrders | number }}+</h2>
       <p>Orders Delivered</p>
     </div>
 
     <div class="fact-box">
-      <h2>98%</h2>
+      <h2>{{ displaySatisfaction }}%</h2>
       <p>Customer Satisfaction</p>
     </div>
 
   </div>
 </section>
+
 
 
 

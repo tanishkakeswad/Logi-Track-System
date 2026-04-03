@@ -1,55 +1,60 @@
-/* ✅ Solid Black Navbar */
-
-
+/* Fixed navbar height */
 .navbar.black-nav {
-  position: absolute;   /* ✅ overlay above page */
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;         /* ✅ sits above every component */
-  background-color: rgba(0, 0, 0, 0.05); /* translucent */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: #000;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  z-index: 1000;
+
+  height: 72px;           /* ✅ fixed navbar height */
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
+/* Brand wrapper */
+.navbar-brand {
+  height: 72px;           /* ✅ match navbar height */
+  display: flex;
+  align-items: center;
+  padding: 0;             /* remove bootstrap extra spacing */
+}
 
+/* ✅ Logo: bigger but controlled, never crops */
+.nav-logo {
+  max-height: 52px;       /* ✅ this controls visual size */
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
 
-/* ✅ Bold, White, Spaced Navbar Links */
+/* Links */
 .nav-links .nav-link {
   font-weight: 700;
-  color: #ffffff !important;
+  color: #fff !important;
   margin-left: 1.4rem;
-  font-size: 1rem;
   letter-spacing: 0.3px;
 }
 
-/* ✅ Hover Effect */
 .nav-links .nav-link:hover {
-  color: #ff8c42 !important;
+  color: #f77f00 !important;
   transition: 0.2s ease-in-out;
 }
 
-/* ✅ Active Route */
-.nav-links .nav-link.active {
-  color: #ffa463 !important;
-}
+/* Mobile */
+@media (max-width: 991px) {
+  .navbar.black-nav {
+    height: 64px;
+  }
 
-/* ✅ Logo scaling (without expanding navbar height) */
-.nav-logo {
-  height: 40px;
-  width: auto;
-  transform: scale(3.5);
-  transform-origin: left center;
-}
-
-/* ✅ Mobile Adjustments */
-@media (max-width: 767px) {
-  .nav-links .nav-link {
-    margin-left: 0.5rem;
-    margin-bottom: 0.4rem;
+  .navbar-brand {
+    height: 64px;
   }
 
   .nav-logo {
-    transform: scale(1.3);
+    max-height: 44px;     /* ✅ slightly smaller for mobile */
+  }
+
+  .nav-links .nav-link {
+    margin-left: 0;
+    padding: 0.6rem 0;
   }
 }

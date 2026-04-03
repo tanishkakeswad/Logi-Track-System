@@ -12,7 +12,7 @@ img {
    ✅ HERO SECTION
 ============================ */
 .hero {
-  padding: 140px 0;
+  padding: 160px 0;
   background:
     radial-gradient(circle at 10% 20%, rgba(255,170,91,0.20), transparent 60%),
     radial-gradient(circle at 80% 10%, rgba(0,116,255,0.18), transparent 60%),
@@ -29,13 +29,24 @@ img {
 }
 
 .hero-text h1 {
-  font-size: 4rem;
+  font-size: 4.6rem;
   font-weight: 900;
+  line-height: 1.1;
 }
 
-.hero-text h3,
+.hero-text h3{
+  
+font-size: 1.7rem;     /* ⬆ was browser default */
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-weight: 600;
+
+}
 .hero-text p {
-  padding-left: 2px;
+  
+font-size: 1.15rem;    /* ⬆ slightly bigger */
+  max-width: 520px;
+
 }
 
 .text-shadow-cargo {
@@ -58,13 +69,52 @@ img {
 }
 
 .hero-img img {
-  width: 420px;
+  width: 520px;
   max-width: 100%;
 }
+
+.typewriter-line {
+  margin-top: 14px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.7rem; /* match your hero sizing */
+  min-height: 2.2rem; /* prevents layout jump when text changes */
+  color: #ffffff;
+}
+
+.typewriter-text {
+  white-space: nowrap;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 6px;
+  color: #f77f00;
+  font-weight: 700;
+  animation: blink 0.9s infinite;
+  transform: translateY(-1px);
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
 
 
 /* ✅ HERO RESPONSIVE */
 @media (max-width: 992px) {
+  
+.typewriter-line {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  
+  .hero-text h3 {
+      font-size: 1.5rem;
+    }
+
   .hero-content {
     flex-direction: column;
     text-align: center;
@@ -79,13 +129,23 @@ img {
   }
 
   .hero-img img {
-    width: 350px;
+    width: 420px;
   }
 }
 
 @media (max-width: 576px) {
+    
+.typewriter-line {
+    font-size: 1.25rem;
+  }
+
+  
+.hero {
+    padding: 120px 0; /* smaller vertical space */
+  }
+
   .hero-text h1 {
-    font-size: 2.6rem;
+    font-size: 3rem;
   }
 
   .text-shadow-wala {
@@ -93,8 +153,13 @@ img {
   }
 
   .hero-img img {
-    width: 260px;
+    width: 300px;
   }
+  
+.hero-text h3 {
+    font-size: 1.3rem;
+  }
+
 }
 
 
@@ -153,33 +218,67 @@ img {
   padding: 80px 0;
 }
 
+
 .why-features {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
-  justify-content: center;
+  align-items: stretch; /* ✅ important */
 }
+
 
 .feature {
-  width: 260px;
-  max-width: 100%;
-  text-align: center;
-  padding: 20px;
-  border-radius: 12px;
   background: #ffffff;
+  border-radius: 16px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
+
+  padding: 24px 20px;
+
+  display: flex;              /* ✅ flex column */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  height: 100%;               /* ✅ equal height */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 
 .feature:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
-.feature img {
-  width: 140px;
-  max-width: 100%;
-  margin-bottom: 15px;
+
+.feature h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-height: 48px;            /* ✅ keeps titles aligned */
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #003049;
 }
+
+.feature p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #555;
+  min-height: 72px;            /* ✅ aligns card bottoms */
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+
+.feature img {
+  height: 120px;              /* ✅ fixed icon height */
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
 
 
 /* ✅ WHY RESPONSIVE */
@@ -197,26 +296,44 @@ img {
 /* ============================
    ✅ FACTS SECTION
 ============================ */
+
 .facts {
   background: #ffead4;
-  padding: 60px 0;
+  padding: 70px 0;
 }
+
+
+
 
 .facts-container {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 60px;
   flex-wrap: wrap;
+  text-align: center;
 }
+
+
 
 .fact-box {
   text-align: center;
 }
 
+
 .fact-box h2 {
-  font-size: 2.6rem;
-  font-weight: 800;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #003049;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
 }
+
+.fact-box p {
+  margin: 0;
+  color: #111;
+  font-weight: 500;
+}
+
 
 
 /* ============================
