@@ -1,101 +1,130 @@
-<div class="container mt-5">
-  <div class="card p-4 shadow-sm">
+<div class="view-status-page">
 
-    <h3 class="text-center mb-3">View Cargo Status</h3>
+  <div class="container">
 
-    <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-chip">Customer Console</div>
+      <h1>View <span>Cargo</span> Status</h1>
+      <p>Enter your A.W.B / Cargo ID to check the latest shipment status.</p>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Cargo ID</label>
-        <input type="number"
-               class="form-control"
-               formControlName="cargoId"
-               placeholder="Enter Cargo ID">
+    <!-- Main layout -->
+    <div class="content-grid">
 
-        <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
-             class="text-danger mt-1">
-          Cargo ID is required
+      <!-- Form Card -->
+      <div class="card glass-card form-card">
+        <h3>Track Shipment</h3>
+        <p class="muted">Enter Cargo ID and click “Get Status”.</p>
+
+        <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
+          <label class="form-label">Cargo ID</label>
+
+          <input type="number"
+                 class="form-control"
+                 formControlName="cargoId"
+                 placeholder="Enter Cargo ID">
+
+          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
+               class="field-error">
+            Cargo ID is required
+          </div>
+
+          <button class="btn primary-btn w-100 mt-3" type="submit">
+            Get Status
+          </button>
+        </form>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0">
+          {{ errorMessage }}
         </div>
       </div>
 
-      <button class="btn btn-dark w-100" type="submit">
-        Get Status
-      </button>
+      <!-- Result Card -->
+      <div class="card glass-card result-card" *ngIf="showResult && cargoData">
+        <h3>Status Result</h3>
+        <p class="muted">Latest shipment details retrieved from the system.</p>
 
-    </form>
+        <div class="result-row">
+          <span>Cargo ID</span>
+          <strong>{{ cargoData?.cargoId }}</strong>
+        </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-      {{ errorMessage }}
+        <div class="result-row">
+          <span>Status</span>
+          <strong class="status-text">{{ getDisplayStatus() }}</strong>
+        </div>
+
+        <div class="result-row">
+          <span>Source</span>
+          <strong>{{ cargoData?.source }}</strong>
+        </div>
+
+        <div class="result-row">
+          <span>Destination</span>
+          <strong>{{ cargoData?.destination }}</strong>
+        </div>
+
+        <button class="btn track-btn w-100 mt-3" type="button" (click)="openTracking()">
+          Open Tracking Timeline
+        </button>
+      </div>
+
     </div>
-
-    <div *ngIf="showResult && cargoData" class="alert alert-success mt-3">
-
-      <p><strong>Cargo ID:</strong> {{ cargoData?.cargoId }}</p>
-      <p><strong>Status:</strong> {{ cargoData?.status }}</p>
-      <p><strong>Source:</strong> {{ cargoData?.source }}</p>
-      <p><strong>Destination:</strong> {{ cargoData?.destination }}</p>
-
-      <button class="track-btn mt-2" (click)="openTracking()">
-        Live Tracking
-      </button>
-
-    </div>
-
-    <button class="btn btn-outline-danger mt-3 w-100" (click)="logout()">
-      Logout
-    </button>
 
   </div>
 </div>
 
 
-<!-- 🔥 TRACKING MODAL -->
+<!-- ✅ TRACKING MODAL OVERLAY -->
 <div class="tracking-overlay" *ngIf="showTracking && cargoData">
 
   <div class="tracking-card">
 
-    <h3>Live Cargo Tracking</h3>
+    <div class="tracking-head">
+      <h3>Tracking Timeline</h3>
+      <button class="x-btn" type="button" (click)="closeTracking()">×</button>
+    </div>
+
+    <p class="tracking-sub">
+      Shipment progress based on the latest status update.
+    </p>
 
     <div class="tracking-steps">
 
       <!-- CONFIRMED -->
-      <div class="step"
-           [class.active]="cargoData.status === 'CONFIRMED'">
-        <div class="circle">✔</div>
+      <div class="step" [class.active]="isStepActive('CONFIRMED')">
+        <div class="circle">✓</div>
         <p>Confirmed</p>
       </div>
 
-      <div class="line"></div>
-
-      <!-- OUT FOR DELIVERY -->
-      <div class="step"
-           [class.active]="cargoData.status === 'OUT_FOR_DELIVERY'">
-        <div class="circle">✔</div>
-        <p>Out for Delivery</p>
-      </div>
-
-      <div class="line"></div>
+      <div class="line" [class.active]="isLineActive('IN_TRANSIT')"></div>
 
       <!-- IN TRANSIT -->
-      <div class="step"
-           [class.active]="cargoData.status === 'IN_TRANSIT'">
-        <div class="circle">✔</div>
+      <div class="step" [class.active]="isStepActive('IN_TRANSIT')">
+        <div class="circle">✓</div>
         <p>In Transit</p>
       </div>
 
-      <div class="line"></div>
+      <div class="line" [class.active]="isLineActive('OUT_FOR_DELIVERY')"></div>
+
+      <!-- OUT FOR DELIVERY -->
+      <div class="step" [class.active]="isStepActive('OUT_FOR_DELIVERY')">
+        <div class="circle">✓</div>
+        <p>Out for Delivery</p>
+      </div>
+
+      <div class="line" [class.active]="isLineActive('ORDER_DELIVERED')"></div>
 
       <!-- DELIVERED -->
-      <div class="step"
-           [class.active]="cargoData.status === 'ORDER_DELIVERED'">
-        <div class="circle">✔</div>
+      <div class="step" [class.active]="isStepActive('ORDER_DELIVERED')">
+        <div class="circle">✓</div>
         <p>Delivered</p>
       </div>
 
     </div>
 
-    <button class="close-btn" (click)="closeTracking()">Close</button>
-
+    <button class="close-btn" type="button" (click)="closeTracking()">Close</button>
   </div>
 
 </div>

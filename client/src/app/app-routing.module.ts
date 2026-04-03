@@ -13,6 +13,7 @@ import { BusinessComponent } from './dashbaord/business/business.component';
 import { DriverComponent } from './dashbaord/driver/driver.component';
 import { CustomerComponent } from './dashbaord/customer/customer.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ContactComponent } from './contact/contact.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },          
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'assgin-cargo', component: AssginCargoComponent },
   { path: 'viewcargostatus', component: ViewcargostatusComponent },
   {path: 'about', component: AboutComponent},
+  {path:  'contact', component: ContactComponent},
   
 {
     path: 'dashboard/business',

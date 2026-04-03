@@ -1,186 +1,244 @@
 <div class="addcargo-page">
 
-  <!-- Page Header -->
-  <div class="page-header text-center">
-    <h1>Manage <span>Cargo</span></h1>
-    <p>Create, assign, and track cargos</p>
-  </div>
-
-  <!-- Add Cargo Card -->
+  <!-- Header -->
   <div class="container">
-    <div class="card addcargo-card">
-      <div class="card-header text-center">
-        Add New Cargo
-      </div>
-
-      <div class="card-body">
-
-        <!-- ✅ Uses Reactive Form only (NO ngModel inside controls) -->
-        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-          <div class="row g-3 justify-content-center">
-
-            <!-- Content -->
-            <div class="col-md-3">
-              <label class="form-label">Content</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Cargo content"
-                formControlName="content"
-              />
-              <div *ngIf="itemForm.get('content')?.invalid && itemForm.get('content')?.touched">
-                <span class="text-danger small">Please enter content</span>
-              </div>
-            </div>
-
-            <!-- Size -->
-            <div class="col-md-3">
-              <label class="form-label">Size</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Cargo size"
-                formControlName="size"
-              />
-              <div *ngIf="itemForm.get('size')?.invalid && itemForm.get('size')?.touched">
-                <span class="text-danger small">Please enter size</span>
-              </div>
-            </div>
-
-            <!-- Status -->
-            <div class="col-md-3">
-              <label class="form-label">Status</label>
-              <select class="form-select" formControlName="status">
-                <option [ngValue]="null">Choose Status</option>
-                <option value="Order Pending">PENDING</option>
-              </select>
-              <div *ngIf="itemForm.get('status')?.invalid && itemForm.get('status')?.touched">
-                <span class="text-danger small">Please select status</span>
-              </div>
-            </div>
-
-            <!-- ✅ File Upload Field (works with your TS: selectedFiles + onFileSelected) -->
-            <div class="col-md-4">
-              <label class="form-label">Cargo Documents</label>
-              <input
-                type="file"
-                class="form-control"
-                multiple
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                (change)="onFileSelected($event)"
-              />
-              <small class="text-muted">
-                Upload invoices, permits, or related documents
-              </small>
-
-              <!-- Show selected files -->
-              <div *ngIf="selectedFiles && selectedFiles.length > 0" class="mt-2">
-                <div class="small text-success">
-                  {{ selectedFiles.length }} file(s) selected
-                </div>
-                <ul class="small mb-0">
-                  <li *ngFor="let f of selectedFiles">{{ f.name }}</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Submit -->
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn primary-btn w-100" type="submit">
-                Submit
-              </button>
-            </div>
-
-          </div>
-        </form>
-
-        <!-- ✅ Error / Message UI matches your TS variables -->
-        <div *ngIf="showError" class="alert alert-danger mt-3">
-          {{ errorMessage }}
-        </div>
-
-        <div *ngIf="showMessage" class="alert alert-success mt-3">
-          {{ responseMessage }}
-        </div>
-
+    <div class="page-header">
+      <div>
+        <div class="page-chip">Business Console</div>
+        <h1>Manage <span>Cargo</span></h1>
+        <p>Create shipments, upload documents, and assign drivers seamlessly.</p>
       </div>
     </div>
   </div>
 
-  <!-- Search -->
-  <div class="container mt-5">
-    <div class="search-box">
-      <!-- ✅ Your TS uses cargoId with ngModel -->
-      <input class="form-control" type="text" [(ngModel)]="cargoId" name="cargoId" placeholder="Search A.W.B No." />
+  <!-- Top Grid: Add Cargo + Search -->
+  <div class="container">
+    <div class="top-grid">
 
-      <div class="search-actions mt-2 d-flex gap-2">
-        <button class="btn btn-outline-light" type="button" (click)="search()">Search</button>
-        <button class="btn btn-success" type="button" (click)="getCargo()">View Cargo List</button>
+      <!-- Add Cargo Card -->
+      <div class="card glass-card addcargo-card">
+        <div class="card-titlebar">
+          <div>
+            <h3>Add New Cargo</h3>
+            <p class="muted">Fill cargo details and optionally upload documents.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+
+              <!-- Content -->
+              <div class="col-12 col-md-4">
+                <label class="form-label">Content</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="e.g., Electronics, Furniture"
+                  formControlName="content"
+                />
+                <div class="field-error" *ngIf="itemForm.get('content')?.invalid && itemForm.get('content')?.touched">
+                  Please enter content
+                </div>
+              </div>
+
+              <!-- Size -->
+              <div class="col-12 col-md-4">
+                <label class="form-label">Size</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="e.g., 100, Medium, 12kg"
+                  formControlName="size"
+                />
+                <div class="field-error" *ngIf="itemForm.get('size')?.invalid && itemForm.get('size')?.touched">
+                  Please enter size
+                </div>
+              </div>
+
+              <!-- Status -->
+              <div class="col-12 col-md-4">
+                <label class="form-label">Status</label>
+                <select class="form-select" formControlName="status">
+                  <option [ngValue]="null">Choose Status</option>
+                  <option value="Order Pending">PENDING</option>
+                </select>
+                <div class="field-error" *ngIf="itemForm.get('status')?.invalid && itemForm.get('status')?.touched">
+                  Please select status
+                </div>
+              </div>
+
+              <!-- Documents -->
+              <div class="col-12">
+                <label class="form-label">Cargo Documents (optional)</label>
+
+                <div class="upload-box">
+                  <input
+                    type="file"
+                    class="form-control"
+                    multiple
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                    (change)="onFileSelected($event)"
+                  />
+                  <div class="upload-hint">
+                    Upload invoices, permits, or related documents (max 10MB per file).
+                  </div>
+
+                  <!-- Selected files -->
+                  <div *ngIf="selectedFiles && selectedFiles.length > 0" class="file-chips">
+                    <span class="file-chip" *ngFor="let f of selectedFiles">{{ f.name }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <div class="col-12 d-flex justify-content-end">
+                <button class="btn primary-btn px-4" type="submit">
+                  Submit Cargo
+                </button>
+              </div>
+
+            </div>
+          </form>
+
+          <!-- Error / Message -->
+          <div *ngIf="showError" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+
+          <div *ngIf="showMessage" class="alert alert-success mt-3">
+            {{ responseMessage }}
+          </div>
+
+        </div>
       </div>
+
+      <!-- Search Card -->
+      <div class="card glass-card search-card">
+        <div class="card-titlebar">
+          <div>
+            <h3>Search & View</h3>
+            <p class="muted">Search cargo by A.W.B number or load the full list.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <label class="form-label">A.W.B Number</label>
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="cargoId"
+            name="cargoId"
+            placeholder="Search A.W.B No."
+          />
+
+          <div class="search-actions">
+            <button class="btn btn-outline-light" type="button" (click)="search()">
+              Search
+            </button>
+            <button class="btn btn-success" type="button" (click)="getCargo()">
+              View Cargo List
+            </button>
+          </div>
+
+          <div class="search-tip">
+            Tip: Leave search empty and click “View Cargo List” to refresh all cargos.
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- Table -->
-  <div class="container mt-4 table-responsive">
-    <table class="table table-dark table-hover align-middle">
-      <thead>
-        <tr>
-          <th class="text-center">A.W.B No.</th>
-          <th>Content</th>
-          <th>Size</th>
-          <th>Status</th>
-          <th>Documents</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+  <div class="container mt-4">
+    <div class="card glass-card table-card">
+      <div class="table-titlebar">
+        <div>
+          <h3>Cargo Records</h3>
+          <p class="muted">Assign drivers only for cargos in pending status.</p>
+        </div>
+      </div>
 
-      <tbody>
-        <tr *ngFor="let cargo of cargoToShow">
-          <td class="text-center">{{ cargo.id }}</td>
-          <td>{{ cargo.content }}</td>
-          <td>{{ cargo.size }}</td>
-          <td>{{ cargo.status }}</td>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="text-center">A.W.B No.</th>
+              <th>Content</th>
+              <th>Size</th>
+              <th>Status</th>
+              <th>Documents</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
 
-          <!-- ✅ Documents list (NO viewDocument because TS doesn't have it) -->
-          <td>
-            <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs">
-              <ul class="list-unstyled mb-0">
-                <li *ngFor="let doc of cargo.documents">
-                  {{ doc.originalFileName }}
-                  <!-- If you want View button, you MUST add viewDocument() in TS + HttpService -->
-                </li>
-              </ul>
-            </div>
-            <ng-template #noDocs>
-              <span class="text-muted">No Documents</span>
-            </ng-template>
-          </td>
+          <tbody>
+            <tr *ngFor="let cargo of cargoToShow">
+              <td class="text-center fw-semibold">{{ cargo.id }}</td>
+              <td>{{ cargo.content }}</td>
+              <td>{{ cargo.size }}</td>
 
-          <td>
-            <!-- Assign Button -->
-            <button
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#driverModal"
-              type="button"
-              (click)="addDriver(cargo)"
-            >
-              Assign
-            </button>
+              <!-- status pill -->
+              <td>
+                <span class="status-pill"
+                  [ngClass]="{
+                    pending: cargo.status === 'Order Pending',
+                    assigned: cargo.status === 'Order Assigned',
+                    transit: cargo.status === 'Order In-transit',
+                    delivered: cargo.status === 'Order Delivered'
+                  }">
+                  {{ cargo.status }}
+                </span>
+              </td>
 
-            <button *ngIf="cargo.status !== 'Order Pending'" class="btn btn-secondary ms-2" disabled>
-              {{ cargo.status }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <!-- docs -->
+              <td>
+                <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs" class="docs-col">
+                  <div class="doc-line" *ngFor="let doc of cargo.documents">
+                    {{ doc.originalFileName }}
+                  </div>
+                </div>
+
+                <ng-template #noDocs>
+                  <span class="text-muted">No Documents</span>
+                </ng-template>
+              </td>
+
+              <!-- actions -->
+              <td class="text-center">
+                <button
+                  class="btn btn-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#driverModal"
+                  type="button"
+                  (click)="addDriver(cargo)"
+                  [disabled]="cargo.status !== 'Order Pending'"
+                >
+                  Assign
+                </button>
+
+                <button *ngIf="cargo.status !== 'Order Pending'" class="btn btn-secondary btn-sm ms-2" disabled>
+                  {{ cargo.status }}
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="!cargoToShow || cargoToShow.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                No cargo found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <!-- ✅ Driver Assign Modal (matches your TS: driverId, driverList, assignDriver()) -->
+  <!-- Assign Driver Modal -->
   <div class="modal fade" id="driverModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-light">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light modal-modern">
         <div class="modal-header">
           <h5 class="modal-title">Assign Driver</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -201,7 +259,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-success" (click)="assignDriver()">Assign</button>
         </div>
       </div>

@@ -1,20 +1,22 @@
-/* Transparent overlay navbar */
+
 .navbar.transparent-nav {
-  position: fixed;         /* overlays hero */
+  position: absolute;   /* ✅ overlays hero but scrolls away */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 20;
 
   height: 72px;
   padding-top: 0;
   padding-bottom: 0;
 
-  background: transparent; /* ✅ no black background */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border-bottom: none;
 
   font-family: 'Poppins', sans-serif;
 }
+
+
 
 /* Brand wrapper */
 .navbar-brand {

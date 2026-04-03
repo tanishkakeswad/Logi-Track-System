@@ -16,12 +16,15 @@ a {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
+  
   position: relative;
   display: flex;
 
   /* ✅ Add breathing room top/bottom so card doesn't stick */
-  padding: 40px 0;
+  
+  padding-top: 40px;
+  padding-bottom: 40px;
+
 }
 
 
@@ -53,7 +56,7 @@ a {
   margin-right: 2rem;
 
   /* ✅ top/bottom spacing */
-  margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 20px;
 }
 
