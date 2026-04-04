@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.edutech.logisticsmanagementandtrackingsystem.dto.CargoStatusResponse;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.CargoDocument;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
@@ -13,72 +15,102 @@ import com.edutech.logisticsmanagementandtrackingsystem.repository.DriverReposit
 
 import javax.persistence.EntityNotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
 @Transactional
 public class CargoService {
-    // implement service logic here
-    @Autowired
-    CargoRepository cargoRepository;
-    @Autowired
-    DriverRepository driverRepository;
-    @Autowired
-    private CargoDocumentRepository cargoDocumentRepository;
 
-    @Autowired
-    private DocumentStorageService documentStorageService;
+@Autowired
+private CargoRepository cargoRepository;
 
+@Autowired
+private DriverRepository driverRepository;
 
-    public Cargo addCargo(Cargo cargo) {
-        return cargoRepository.save(cargo);
-    }
+@Autowired
+private CargoDocumentRepository cargoDocumentRepository;
 
-    public List<Cargo> viewAllCargo() {
-        return cargoRepository.findAll();
-    }
+@Autowired
+private DocumentStorageService documentStorageService;
 
+// :white_check_mark: Add Cargo
+public Cargo addCargo(Cargo cargo) {
+return cargoRepository.save(cargo);
+}
 
+// :white_check_mark: View All Cargo
+public List<Cargo> viewAllCargo() {
+return cargoRepository.findAll();
+}
 
-    public boolean assignCargoToDriver(long cargoId, Long driverId) {
-        Cargo cargo = cargoRepository.findById(cargoId)
-                .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
-        Driver driver = driverRepository.findById(driverId)
-                .orElseThrow(() -> new EntityNotFoundException("Driver not found"));
+// :white_check_mark: Assign Driver
+public boolean assignCargoToDriver(long cargoId, Long driverId) {
+Cargo cargo = cargoRepository.findById(cargoId)
+.orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
-        cargo.setDriver(driver);
-        cargoRepository.save(cargo); 
-        return true;
-    }
+Driver driver = driverRepository.findById(driverId)
+.orElseThrow(() -> new EntityNotFoundException("Driver not found"));
 
-    public boolean updateCargoStatus(Long cargoId, String newStatus) {
+cargo.setDriver(driver);
+cargoRepository.save(cargo);
+return true;
+}
 
-    Cargo cargo = cargoRepository.findById(cargoId)
-    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+// :white_check_mark: Update Status
+public boolean updateCargoStatus(Long cargoId, String newStatus) {
+Cargo cargo = cargoRepository.findById(cargoId)
+.orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
-    cargo.setStatus(newStatus.toUpperCase()); 
-    cargoRepository.save(cargo);
+cargo.setStatus(newStatus.toUpperCase());
+cargoRepository.save(cargo);
+return true;
+}
 
-    return true;
-    }
-    public Cargo getCargoById(long cargoId) {
-        return cargoRepository.findById(cargoId).orElse(null);
-    }
+// :x: OLD (keep if used elsewhere)
+public Cargo getCargoById(long cargoId) {
+return cargoRepository.findById(cargoId).orElse(null);
+}
 
-    public Cargo createCargoWithDocuments(Cargo cargo, MultipartFile[] documents) {
-    Cargo savedCargo = cargoRepository.save(cargo);
+// :white_check_mark: :white_check_mark: NEW METHOD (IMPORTANT)
+public CargoStatusResponse getCargoDetails(Long cargoId) {
 
-    if (documents != null) {
-        for (MultipartFile file : documents) {
-            try {
-                CargoDocument doc = documentStorageService.storeFile(file, savedCargo);
-                cargoDocumentRepository.save(doc);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to upload document", e);
-            }
-        }
-    }
-    return savedCargo;
+Cargo cargo = cargoRepository.findById(cargoId)
+.orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+
+CargoStatusResponse dto = new CargoStatusResponse();
+
+dto.setCargoId(cargo.getId());
+dto.setStatus(cargo.getStatus());
+dto.setSource(cargo.getSource());
+
+dto.setCargoContent(cargo.getCargoContent());
+dto.setCargoSize(cargo.getCargoSize());
+
+// :white_check_mark: DRIVER FIX
+if (cargo.getDriver() != null) {
+dto.setDriverId(cargo.getDriver().getId());
+} else {
+dto.setDriverId(null);
+}
+
+return dto;
+}
+
+// :white_check_mark: Upload Documents
+public Cargo createCargoWithDocuments(Cargo cargo, MultipartFile[] documents) {
+
+Cargo savedCargo = cargoRepository.save(cargo);
+
+if (documents != null) {
+for (MultipartFile file : documents) {
+try {
+CargoDocument doc = documentStorageService.storeFile(file, savedCargo);
+cargoDocumentRepository.save(doc);
+} catch (Exception e) {
+throw new RuntimeException("Failed to upload document", e);
+}
+}
+}
+return savedCargo;
 }
 }

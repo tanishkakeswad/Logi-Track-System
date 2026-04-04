@@ -32,6 +32,15 @@ public class CustomerService {
     CargoStatusResponse response = new CargoStatusResponse();
     response.setCargoId(cargo.getId());  
     response.setStatus(cargo.getStatus());
+    response.setSource(cargo.getSource());
+    response.setCargoContent(cargo.getCargoContent());
+    response.setCargoSize(cargo.getCargoSize());
+
+    if(cargo.getDriver()!=null){
+        response.setDriverId(cargo.getDriver().getId());
+    }else{
+        response.setDriverId(null);
+    }
 
     return response;
 }

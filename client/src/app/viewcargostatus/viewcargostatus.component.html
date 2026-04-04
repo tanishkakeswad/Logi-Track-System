@@ -20,13 +20,9 @@
         <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
           <label class="form-label">Cargo ID</label>
 
-          <input type="number"
-                 class="form-control"
-                 formControlName="cargoId"
-                 placeholder="Enter Cargo ID">
+          <input type="number"  class="form-control"  formControlName="cargoId"  placeholder="Enter Cargo ID">
 
-          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"
-               class="field-error">
+          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"  class="field-error">
             Cargo ID is required
           </div>
 
@@ -40,7 +36,7 @@
         </div>
       </div>
 
-      <!-- Result Card -->
+      <!-- ✅ UPDATED RESULT CARD -->
       <div class="card glass-card result-card" *ngIf="showResult && cargoData">
         <h3>Status Result</h3>
         <p class="muted">Latest shipment details retrieved from the system.</p>
@@ -57,12 +53,27 @@
 
         <div class="result-row">
           <span>Source</span>
-          <strong>{{ cargoData?.source }}</strong>
+          <strong>Navi Mumbai</strong>
         </div>
 
+        <!-- ❌ REMOVED DESTINATION -->
+
+        <!-- ✅ NEW FIELD -->
         <div class="result-row">
-          <span>Destination</span>
-          <strong>{{ cargoData?.destination }}</strong>
+          <span>Driver ID</span>
+          <strong>{{ cargoData?.driverId || 'Not Assigned' }}</strong>
+        </div>
+
+        <!-- ✅ NEW FIELD -->
+        <div class="result-row">
+          <span>Cargo Content</span>
+          <strong>{{ cargoData?.cargoContent || 'N/A' }}</strong>
+        </div>
+
+        <!-- ✅ NEW FIELD -->
+        <div class="result-row">
+          <span>Cargo Size</span>
+          <strong>{{ cargoData?.cargoSize || 'N/A' }}</strong>
         </div>
 
         <button class="btn track-btn w-100 mt-3" type="button" (click)="openTracking()">
@@ -76,7 +87,8 @@
 </div>
 
 
-<!-- ✅ TRACKING MODAL OVERLAY -->
+
+<!-- TRACKING MODAL -->
 <div class="tracking-overlay" *ngIf="showTracking && cargoData">
 
   <div class="tracking-card">
@@ -92,7 +104,6 @@
 
     <div class="tracking-steps">
 
-      <!-- CONFIRMED -->
       <div class="step" [class.active]="isStepActive('CONFIRMED')">
         <div class="circle">✓</div>
         <p>Confirmed</p>
@@ -100,7 +111,6 @@
 
       <div class="line" [class.active]="isLineActive('IN_TRANSIT')"></div>
 
-      <!-- IN TRANSIT -->
       <div class="step" [class.active]="isStepActive('IN_TRANSIT')">
         <div class="circle">✓</div>
         <p>In Transit</p>
@@ -108,7 +118,6 @@
 
       <div class="line" [class.active]="isLineActive('OUT_FOR_DELIVERY')"></div>
 
-      <!-- OUT FOR DELIVERY -->
       <div class="step" [class.active]="isStepActive('OUT_FOR_DELIVERY')">
         <div class="circle">✓</div>
         <p>Out for Delivery</p>
@@ -116,7 +125,6 @@
 
       <div class="line" [class.active]="isLineActive('ORDER_DELIVERED')"></div>
 
-      <!-- DELIVERED -->
       <div class="step" [class.active]="isStepActive('ORDER_DELIVERED')">
         <div class="circle">✓</div>
         <p>Delivered</p>
