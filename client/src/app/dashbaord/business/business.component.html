@@ -24,6 +24,22 @@
 
     </div>
 
+    <!-- 🔥 TRACKING SECTION -->
+    <div class="tracking-section">
+
+      <h2>Driver Tracking</h2>
+
+      <div class="tracking-controls">
+        <input type="number" [(ngModel)]="selectedDriverId" placeholder="Enter Driver ID" />
+        <button (click)="trackOneDriver()">Track Driver</button>
+        <button (click)="showAllDrivers()">Show All</button>
+      </div>
+
+      <!-- 🔥 MAP -->
+      <div id="businessMap"></div>
+
+    </div>
+
   </div>
 
 </div>

@@ -21,6 +21,7 @@ import { AboutComponent } from './about/about.component';
 import { DriverComponent } from './dashbaord/driver/driver.component';
 import { BusinessComponent } from './dashbaord/business/business.component';
 import { CustomerComponent } from './dashbaord/customer/customer.component';
+// import { DriverTrackingComponent } from './driver-tracking/driver-tracking.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { CustomerComponent } from './dashbaord/customer/customer.component';
       AddcargoComponent,
       AssginCargoComponent,
       ViewcargostatusComponent,
-      AboutComponent
+      AboutComponent,
+      // DriverTrackingComponent
   ],
   imports: [
     BrowserModule,

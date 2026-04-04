@@ -1,16 +1,26 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Cargo Wala</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
+
 <body>
+
+  <!-- Your existing base path script (UNCHANGED) -->
   <script>
-    (function() {
+    (function () {
       var baseElement = document.querySelector('base');
       if (baseElement) {
         const pathname = window.location.pathname
@@ -18,7 +28,13 @@
         baseElement.setAttribute('href', match ? match[0] : '');
       }
     })();
-</script>
+  </script>
+
   <app-root></app-root>
+
+  <!-- Leaflet JS (ADD THIS AT BOTTOM) -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 </body>
+
 </html>

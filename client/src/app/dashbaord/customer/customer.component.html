@@ -18,7 +18,7 @@
 
     <div class="card-container single-card">
 
-      <!-- ONLY ONE CARD -->
+      <!-- EXISTING CARD -->
       <div class="card">
         <h3>View Cargo Status</h3>
         <p>Track your shipments and delivery status</p>
@@ -27,7 +27,18 @@
         </button>
       </div>
 
+      <!-- 🔥 NEW TRACKING CARD -->
+      <div class="card">
+        <h3>Track Your Driver</h3>
+        <p>Enter Driver ID to see live location</p>
+
+        <input type="number" [(ngModel)]="driverId" placeholder="Enter Driver ID" />
+        <button (click)="startTracking()">Track</button>
+
+        <div id="customerMap"></div>
+      </div>
+
     </div>
   </div>
 
-</div>  
+</div>

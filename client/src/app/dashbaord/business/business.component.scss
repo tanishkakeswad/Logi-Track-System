@@ -1,35 +1,20 @@
-/* ============================
-   ✅ PAGE WRAPPER
-============================ */
 .business-dashboard {
   min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    #003049 0%,
-    #000000 100%
-  );
-
-  padding-top: 120px;  /* ✅ prevents navbar overlap */
-  padding-bottom: 80px; /* ✅ prevents footer overlap */
-
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+  padding-top: 120px;
+  padding-bottom: 80px;
   display: flex;
   justify-content: center;
 }
 
-/* ============================
-   ✅ CONTAINER
-============================ */
 .dashboard-container {
   text-align: center;
-  color: #ffffff;
+  color: #FFFFFF;
   max-width: 900px;
   width: 100%;
   padding: 0 20px;
 }
 
-/* ============================
-   ✅ TITLES
-============================ */
 .dashboard-title {
   font-size: 3rem;
   font-weight: 800;
@@ -37,22 +22,19 @@
 }
 
 .dashboard-title span:first-child {
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 .dashboard-title span:last-child {
-  color: #f77f00;
+  color: #F77F00;
 }
 
 .dashboard-subtitle {
   font-size: 1.2rem;
-  color: #d1d1d1;
+  color: #D1D1D1;
   margin-bottom: 50px;
 }
 
-/* ============================
-   ✅ ACTION CARDS
-============================ */
 .dashboard-actions {
   display: flex;
   gap: 30px;
@@ -66,36 +48,49 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
   padding: 30px 20px;
-
-  color: #ffffff;
+  color: #FFFFFF;
   cursor: pointer;
   text-align: left;
-
   backdrop-filter: blur(6px);
   transition: all 0.25s ease;
 }
 
 .action-card h3 {
-  color: #f77f00;
+  color: #F77F00;
   font-size: 1.4rem;
   margin-bottom: 10px;
 }
 
 .action-card p {
   font-size: 0.95rem;
-  color: #e0e0e0;
+  color: #E0E0E0;
 }
 
-/* ✅ Hover Effects */
 .action-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  border-color: #f77f00;
+  border-color: #F77F00;
 }
 
-/* ============================
-   ✅ RESPONSIVE
-============================ */
+/* :fire: TRACKING SECTION */
+.tracking-section {
+  margin-top: 30px;
+}
+
+.tracking-controls {
+  margin-bottom: 15px;
+}
+
+/* :fire: MAP FIX (MOST IMPORTANT) */
+#businessMap {
+  height: 400px;
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .dashboard-title {
     font-size: 2.2rem;
