@@ -1,56 +1,199 @@
-<!-- ✅ HERO SECTION -->
-<section class="hero">
-  <div class="container hero-content">
+<!-- =========================
+     HERO (Modern)
+========================= -->
+<section class="hero hero-modern">
+  <!-- animated background blobs -->
+  <div class="bg-blobs">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
 
+  <div class="container hero-content">
     <div class="hero-text">
-      <h1><span class="cargo text-shadow-wala fw-bolder">Cargo </span> <span class="wala text-shadow-wala fw-bolder">Wala</span></h1>
-      <h3 >Your Trusted Logistics Wala.</h3>
-      <p>Fast. Secure. Reliable doorstep logistics service across India.</p>
-      <a routerLink="/login" class="btn btn-primary hero-btn">Get Started</a>
+      <div class="chip">
+        <span class="dot"></span>
+        Door-to-Door Logistics Platform
+      </div>
+
+      <h1 class="hero-title">
+        <span class="cargo fw-bolder">Cargo </span>
+        <span class="wala fw-bolder">Wala</span>
+      </h1>
+
+      <!-- Typewriter stays intact -->
+      <h3 class="typewriter-line">
+        <span class="typewriter-text">{{ typedText }}</span>
+        <span class="cursor">|</span>
+      </h3>
+
+      <p class="hero-subtext">
+        Fast, secure, and reliable shipping - from pickup to delivery with real-time tracking,
+        smart assignments, and customer-first support.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/login" class="btn hero-btn primary">
+          Get Started
+        </a>
+        <a routerLink="/viewcargostatus" class="btn hero-btn ghost">
+          Track Shipment
+        </a>
+      </div>
+
+      <!-- trust badges (NO emojis) -->
+      <div class="trust-row">
+        <div class="trust-pill">
+          <span class="trust-dot"></span>
+           Insured Shipments
+        </div>
+        <div class="trust-pill">
+          <span class="trust-dot"></span>
+           Live Tracking
+        </div>
+        <div class="trust-pill">
+          <span class="trust-dot"></span>
+           Fast Dispatch
+        </div>
+        <div class="trust-pill">
+          <span class="trust-dot"></span>
+           24/7 Support
+        </div>
+      </div>
     </div>
 
     <div class="hero-img">
-      <img src="assets/6.png" alt="Delivery Scooter" />
+      <div class="hero-img-wrap">
+        <img src="assets/6.png" alt="Delivery" />
+      </div>
     </div>
-
   </div>
+
+  <!-- subtle bottom fade -->
+  <div class="hero-fade"></div>
 </section>
 
 
-
-<!-- ✅ ABOUT US SECTION -->
-<section class="about">
+<!-- =========================
+     LOGO MARQUEE (Modern brands do this)
+========================= -->
+<section class="logo-strip">
   <div class="container">
-    <h2 class="section-title">About Us</h2>
+    <p class="strip-title">Trusted by teams moving goods every day</p>
 
-    <p class="about-text">
-      Growing day by day, Cargowala is setting its foot as a logistics company in India 
-      committed to delivering door-to-door shipping and transportation services. From packing 
-      and loading to unpacking your cargo or goods, you can trust the cutting-edge technology 
-      and professionals of Cargowala with your eyes closed.
-      <br><br>
-      With an aim to deliver the best customer services and satisfaction, we have bought a 
-      drastic alteration in the quality, servicing, and cost-cutting in the logistics 
-      operations. If you want a hassle-free shifting journey of your goods, then Cargowala can 
-      be a one-stop solution for you.
-    </p>
-
-    <div class="about-imgs">
-      <img src="assets/3.png" alt="Take Away Boxes" />
-      <img src="assets/7.png" alt="Pickup & Delivery" />
+    <div class="marquee">
+      <div class="marquee-track">
+        <span class="brand">Retail Partners</span>
+        <span class="brand">SME Businesses</span>
+        <span class="brand">E-Commerce Sellers</span>
+        <span class="brand">Warehouse Networks</span>
+        <span class="brand">Logistics Vendors</span>
+        <span class="brand">Retail Partners</span>
+        <span class="brand">SME Businesses</span>
+        <span class="brand">E-Commerce Sellers</span>
+        <span class="brand">Warehouse Networks</span>
+        <span class="brand">Logistics Vendors</span>
+      </div>
     </div>
   </div>
 </section>
 
 
+<!-- =========================
+     ABOUT (Two Column + Better typography)
+========================= -->
+<section class="about about-modern">
+  <div class="container about-grid">
+    <div class="about-left">
+      <h2 class="section-title">About CargoWala</h2>
 
-<!-- ✅ WHY CHOOSE US SECTION -->
-<section class="why">
+      <p class="about-text">
+        Growing day by day, Cargowala is expanding as a logistics platform committed to delivering
+        door-to-door shipping and transportation services. From packing and loading to unpacking your
+        cargo or goods, you can trust the cutting-edge technology and professionals of Cargowala.
+      </p>
+
+      <p class="about-text">
+        With an aim to deliver the best customer services and satisfaction, we have brought a
+        drastic alteration in the quality, servicing, and cost-cutting in logistics operations.
+        If you want a hassle-free shifting journey of your goods, then Cargowala can be a one-stop solution for you.
+      </p>
+
+      <div class="about-points">
+        <div class="point">
+          <span class="point-dot"></span>
+          Real-time tracking and updates
+        </div>
+        <div class="point">
+          <span class="point-dot"></span>
+          Secure handling from pickup to delivery
+        </div>
+        <div class="point">
+          <span class="point-dot"></span>
+          Transparent pricing and support
+        </div>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <div class="about-cards">
+        <div class="about-card">
+          <img src="assets/3.png" alt="Boxes" />
+          <h4>Smart Packing</h4>
+          <p>Safe packaging and professional handling for every shipment.</p>
+        </div>
+
+        <div class="about-card">
+          <img src="assets/7.png" alt="Pickup and Delivery" />
+          <h4>Doorstep Pickup</h4>
+          <p>Pickup and delivery designed to be effortless for customers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS (Modern stepper)
+========================= -->
+<section class="how">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">A smooth shipping journey in 3 simple steps.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Create & Assign</h4>
+        <p>Create cargo and assign a driver in seconds.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Track & Manage</h4>
+        <p>Monitor every movement with real-time status updates.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Delivered Securely</h4>
+        <p>Secure delivery with support and proof-based confirmation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================
+     WHY CHOOSE
+========================= -->
+<section class="why why-modern">
   <div class="container">
     <h2 class="section-title">Why Choose Cargo Wala?</h2>
+    <p class="section-subtitle">Modern logistics built for speed, trust and simplicity.</p>
 
     <div class="why-features">
-
       <div class="feature">
         <img src="assets/5.png" alt="Secure Delivery" />
         <h4>Secure Delivery</h4>
@@ -76,68 +219,93 @@
       </div>
 
       <div class="feature">
-        <img src="assets/8.png" alt="Best Support" />
+        <img src="assets/6.png" alt="Best Support" />
         <h4>Best Support</h4>
         <p>Dedicated support team available 24/7 for your assistance.</p>
       </div>
-
     </div>
   </div>
 </section>
 
 
+<!-- =========================
+     FACTS (Keep functional counters + modern styling)
+========================= -->
+<section class="facts facts-modern" #factsSection>
+  <div class="container">
+    <h2 class="section-title light">Company Facts</h2>
+    <p class="section-subtitle light">Numbers that reflect trust and scale.</p>
 
-<!-- ✅ COMPANY FACTS -->
-<section class="facts">
-  <div class="container facts-container">
+    <div class="facts-grid">
+      <div class="fact-box">
+        <div class="fact-number">{{ displayClients | number }}+</div>
+        <div class="fact-label">Clients Served</div>
+      </div>
 
-    <div class="fact-box">
-      <h2>2500+</h2>
-      <p>Clients Served</p>
+      <div class="fact-box">
+        <div class="fact-number">{{ displayOrders | number }}+</div>
+        <div class="fact-label">Orders Delivered</div>
+      </div>
+
+      <div class="fact-box">
+        <div class="fact-number">{{ displaySatisfaction }}%</div>
+        <div class="fact-label">Customer Satisfaction</div>
+      </div>
     </div>
-
-    <div class="fact-box">
-      <h2>12,000+</h2>
-      <p>Orders Delivered</p>
-    </div>
-
-    <div class="fact-box">
-      <h2>98%</h2>
-      <p>Customer Satisfaction</p>
-    </div>
-
   </div>
 </section>
 
 
-
-<!-- ✅ TESTIMONIALS -->
-<section class="testimonials">
+<!-- =========================
+     TESTIMONIALS (Snap carousel)
+========================= -->
+<section class="testimonials testimonials-modern">
   <div class="container">
     <h2 class="section-title">What Our Customers Say</h2>
+    <p class="section-subtitle">Real feedback from real people.</p>
 
     <div class="testimonial-scroll">
-
       <div class="testimonial-card">
-        <h4>Rohit Sharma ⭐⭐⭐⭐⭐</h4>
+        <div class="stars">★★★★★</div>
         <p>"Super fast delivery. Best logistics company I have ever used!"</p>
+        <div class="name">Rohit Sharma</div>
       </div>
 
       <div class="testimonial-card">
-        <h4>Anita Verma ⭐⭐⭐⭐</h4>
+        <div class="stars">★★★★☆</div>
         <p>"Great support and smooth tracking. Highly recommended!"</p>
+        <div class="name">Anita Verma</div>
       </div>
 
       <div class="testimonial-card">
-        <h4>Vikram Rao ⭐⭐⭐⭐⭐</h4>
+        <div class="stars">★★★★★</div>
         <p>"Very reliable and safe cargo handling. Trustworthy team!"</p>
+        <div class="name">Vikram Rao</div>
       </div>
 
       <div class="testimonial-card">
-        <h4>Kiran Desai ⭐⭐⭐⭐</h4>
+        <div class="stars">★★★★☆</div>
         <p>"Affordable and prompt service. Loved the experience."</p>
+        <div class="name">Kiran Desai</div>
       </div>
+    </div>
+  </div>
+</section>
 
+
+<!-- =========================
+     FINAL CTA
+========================= -->
+<section class="cta">
+  <div class="container cta-box">
+    <div class="cta-text">
+      <h2>Ready to ship smarter with CargoWala?</h2>
+      <p>Start now — create a shipment, assign drivers, and track deliveries effortlessly.</p>
+    </div>
+
+    <div class="cta-actions">
+      <a routerLink="/registration" class="btn hero-btn primary">Create Account</a>
+      <a routerLink="/login" class="btn hero-btn ghost">Login</a>
     </div>
   </div>
 </section>

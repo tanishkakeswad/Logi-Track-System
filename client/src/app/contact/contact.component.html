@@ -1,0 +1,131 @@
+<div class="contact-page">
+
+  <!-- Header -->
+  <div class="container">
+    
+<div class="contact-hero">
+  <h1>Contact Support</h1>
+  <p class="hero-subtitle">
+    Reach out using the details below, or raise a ticket and we’ll assist you as soon as possible.
+  </p>
+</div>
+
+  </div>
+
+  <div class="container contact-grid">
+
+    <!-- Support Info -->
+    <div class="support-card">
+      <h3>Support Details</h3>
+
+      <div class="support-item">
+        <div class="label">Support Email</div>
+        <div class="value">{{ supportEmail }}</div>
+      </div>
+
+      <div class="support-item">
+        <div class="label">Support Phone</div>
+        <div class="value">{{ supportPhone }}</div>
+      </div>
+
+      <div class="support-item">
+        <div class="label">Address</div>
+        <div class="value">
+          {{ supportAddressLine1 }}<br />
+          {{ supportAddressLine2 }}
+        </div>
+      </div>
+
+      <div class="support-note">
+        For faster resolution, include your cargo A.W.B number (if applicable).
+      </div>
+    </div>
+
+    <!-- Raise Ticket Form -->
+    <div class="ticket-card">
+      <h3>Raise a Ticket</h3>
+      <!-- <p class="muted">This will open your email client with a pre-filled ticket message.</p> -->
+
+      <form [formGroup]="ticketForm" (ngSubmit)="submitTicket()">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Full Name <span class="req">*</span></label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Your name">
+            <div class="error" *ngIf="submitted && f['name'].invalid">Please enter a valid name.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email <span class="req">*</span></label>
+            <input type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+            <div class="error" *ngIf="submitted && f['email'].invalid">Please enter a valid email.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Phone <span class="req">*</span></label>
+            <input type="text" class="form-control" formControlName="phone" placeholder="10–15 digits">
+            <div class="error" *ngIf="submitted && f['phone'].invalid">Please enter a valid phone number.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Cargo A.W.B No. (optional)</label>
+            <input type="text" class="form-control" formControlName="awb" placeholder="Enter AWB number">
+            <div class="error" *ngIf="submitted && f['awb'].invalid">AWB must be numeric.</div>
+          </div>
+
+          <div class="col-md-8">
+            <label class="form-label">Subject <span class="req">*</span></label>
+            <select class="form-select" formControlName="subject">
+              <option value="">Choose a subject</option>
+              <option *ngFor="let s of subjects" [value]="s">{{ s }}</option>
+            </select>
+            <div class="error" *ngIf="submitted && f['subject'].invalid">Please select a subject.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Priority <span class="req">*</span></label>
+            <select class="form-select" formControlName="priority">
+              <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+
+          <!-- Custom Subject -->
+          <div class="col-12" *ngIf="ticketForm.get('subject')?.value === 'Other'">
+            <label class="form-label">Custom Subject <span class="req">*</span></label>
+            <input type="text" class="form-control" formControlName="otherSubject" placeholder="Type your subject">
+            <div class="error" *ngIf="submitted && f['otherSubject'].invalid">Please enter a subject (min 3 chars).</div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Description <span class="req">*</span></label>
+            <textarea class="form-control" rows="5" formControlName="description"
+                      placeholder="Describe your issue in detail..."></textarea>
+            <div class="error" *ngIf="submitted && f['description'].invalid">Description must be at least 10 characters.</div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Attach Document (optional)</label>
+            <input type="file" class="form-control" (change)="onFileSelected($event)" accept=".pdf,.jpg,.jpeg,.png">
+            <div class="hint">
+              Allowed: PDF, JPG, PNG (max 5MB). Attachment must be added manually in email.
+            </div>
+
+            <div class="file-pill" *ngIf="selectedFile">
+              Selected: {{ selectedFile.name }}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-ticket w-100" type="submit">
+            Submit Ticket
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

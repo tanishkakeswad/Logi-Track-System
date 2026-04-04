@@ -1,33 +1,53 @@
-<div class="dashboard-container">
+<div class="customer-dashboard">
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">Cargo<span>Wala</span></div>
-    <div class="nav-links">
-      <a routerLink="/">Home</a>
-      <a routerLink="/about">About Us</a>
-      <a routerLink="/contact">Contact</a>
-      <a routerLink="/login">Login</a>
+  <div class="container">
+    <div class="dashboard-header">
+      <div class="page-chip">Customer Console</div>
+
+      <h1 class="dashboard-title">
+        Welcome to <span class="cargo">Cargo</span><span class="wala">Wala</span>
+      </h1>
+
+      <p class="dashboard-subtitle">
+        Track your shipments and monitor delivery progress in real time.
+      </p>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <div class="dashboard-content">
-    <h1>Welcome to <span>CargoWala</span></h1>
-    <p class="subtitle">Customer Dashboard</p>
+    <div class="dashboard-grid">
 
-    <div class="card-container single-card">
+      <!-- Main Card -->
+      <button class="dash-card primary-card" routerLink="/viewcargostatus" type="button">
+        <div class="card-top">
+          <h3>View Cargo Status</h3>
+          <span class="badge-pill">Tracking</span>
+        </div>
 
-      <!-- ONLY ONE CARD -->
-      <div class="card">
-        <h3>View Cargo Status</h3>
-        <p>Track your shipments and delivery status</p>
-        <button routerLink="/viewcargostatus">
-          View Status
-        </button>
+        <p>
+          Enter your A.W.B number and instantly view the latest shipment status, source and destination.
+        </p>
+
+        <div class="card-cta">
+          <span>Open Tracking</span>
+          <span class="arrow">→</span>
+        </div>
+      </button>
+
+      <!-- Secondary Info Card -->
+      <div class="dash-card info-card">
+        <h3>Quick Help</h3>
+
+        <ul class="tips">
+          <li>Use the A.W.B number provided after booking.</li>
+          <li>Status updates reflect driver and system events.</li>
+          <li>If you face issues, raise a ticket from Contact Support.</li>
+        </ul>
+
+        <div class="note">
+          For faster support, include your A.W.B number in the ticket.
+        </div>
       </div>
 
     </div>
   </div>
 
-</div>  
+</div>

@@ -54,6 +54,9 @@ export class HttpService {
       { headers: this.getHeaders() }
     );
   }
+  
+
+
 
   downloadDocument(documentId: number) {
   return this.http.get(

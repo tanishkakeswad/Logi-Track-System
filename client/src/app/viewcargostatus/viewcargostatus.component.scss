@@ -1,54 +1,238 @@
-.track-btn {
-  width: 100%;
-  padding: 10px;
-  border: none;
+.view-status-page {
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 80px;
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================
+   HEADER
+============================ */
+.page-header {
+  text-align: center;
+  margin-bottom: 28px;
+
+  .page-chip {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.88);
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 2.6rem;
+    margin: 0;
+
+    span {
+      color: #f77f00;
+    }
+  }
+
+  p {
+    margin-top: 10px;
+    color: rgba(255,255,255,0.80);
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+}
+
+/* ============================
+   LAYOUT
+============================ */
+.content-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+  }
+}
+
+/* ============================
+   GLASS CARDS
+============================ */
+.glass-card {
+  background: rgba(255,255,255,0.085);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+}
+
+.glass-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  margin: 0 0 6px;
+}
+
+.muted {
+  margin: 0 0 14px;
+  color: rgba(255,255,255,0.72);
+}
+
+.form-label {
+  font-weight: 650;
+  color: rgba(255,255,255,0.92);
+}
+
+.form-control {
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.field-error {
+  margin-top: 6px;
+  color: #ffb3b3;
+  font-size: 0.85rem;
+}
+
+/* ============================
+   BUTTONS
+============================ */
+.primary-btn {
   background: linear-gradient(to right, #ff4800, #fa6c2a);
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: 0 16px 34px rgba(250,108,42,0.22);
+}
+
+.track-btn {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 800;
+}
+
+.track-btn:hover {
+  border-color: rgba(247,127,0,0.35);
+}
+
+/* ============================
+   RESULT ROWS
+============================ */
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+
+  span {
+    color: rgba(255,255,255,0.72);
+  }
+
+  strong {
+    color: rgba(255,255,255,0.95);
+  }
+}
+
+.status-text {
+  color: #f77f00;
+}
+
+/* ============================
+   TRACKING OVERLAY
+============================ */
+.tracking-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 18px;
+}
+
+.tracking-card {
+  width: 100%;
+  max-width: 820px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+  padding: 22px;
   color: white;
-  border-radius: 6px;
+}
+
+.tracking-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    color: #f77f00;
+  }
+}
+
+/* Close "X" button */
+.x-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  font-size: 24px;
+  line-height: 1;
   cursor: pointer;
 }
 
-/* Overlay */
-.tracking-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 48, 73, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.tracking-sub {
+  margin: 10px 0 18px;
+  color: rgba(255,255,255,0.75);
 }
 
-/* Card */
-.tracking-card {
-  background: #012a3d;
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 700px;
-  text-align: center;
-  color: white;
-}
-
-.tracking-card h3 {
-  color: #f77f00;
-  margin-bottom: 20px;
-}
-
-/* Steps */
+/* ============================
+   ✅ TRACKING TIMELINE
+   - Horizontal on wide screens
+   - Shorter connector lines
+   - Vertical flow on smaller screens
+============================ */
 .tracking-steps {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
+  flex-wrap: nowrap;  /* ✅ prevents weird 2x2 wrap */
+  margin-top: 10px;
 }
 
+/* Step */
 .step {
+  width: 140px;
   text-align: center;
-  color: #888;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .step.active {
@@ -56,37 +240,76 @@
 }
 
 .circle {
-  width: 35px;
-  height: 35px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: #555;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.20);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  margin: 0 auto 8px;
+  font-weight: 900;
 }
 
 .step.active .circle {
-  background: #f77f00;
+  background: rgba(247,127,0,0.22);
+  border-color: rgba(247,127,0,0.45);
 }
 
+/* ✅ Short horizontal connector line */
 .line {
-  width: 50px;
   height: 3px;
-  background: #555;
+  width: 36px;            /* ✅ reduced size */
+  background: rgba(255,255,255,0.20);
+  border-radius: 999px;
+  margin-top: -18px;      /* ✅ aligns near circle center */
 }
 
 .line.active {
-  background: #f77f00;
+  background: rgba(247,127,0,0.75);
+}
+
+/* ✅ Vertical flow when width isn't enough */
+@media (max-width: 900px) {
+  .tracking-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step {
+    width: 220px;
+  }
+
+  /* Connector becomes vertical */
+  .line {
+    width: 4px;
+    height: 28px;
+    margin: 0;
+    background: rgba(255,255,255,0.20);
+  }
+
+  .line.active {
+    background: rgba(247,127,0,0.75);
+  }
+}
+
+@media (max-width: 520px) {
+  .step {
+    width: 100%;
+    max-width: 260px;
+  }
 }
 
 /* Close button */
 .close-btn {
-  margin-top: 20px;
-  padding: 8px 20px;
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px 18px;
   border: none;
-  background: #ff4800;
+  border-radius: 14px;
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
   color: white;
-  border-radius: 6px;
-  cursor: pointer;
+  font-weight: 900;
 }

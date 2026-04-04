@@ -1,107 +1,151 @@
-/* =============================
-   Driver Dashboard Container
-   ============================= */
 .driver-dashboard {
-  min-height: calc(100vh - 70px);
+  min-height: 100vh;
+  padding-top: 120px;  /* keeps space from navbar */
+  padding-bottom: 80px; /* keeps space from footer */
 
-  /* Gradient background */
-  background: linear-gradient(
-    to bottom,
-    #003049 0%,
-    #000000 100%
-  );
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+  color: #ffffff;
 
-  /* Offset for fixed navbar */
-  padding-top: 90px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 60px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  font-family: 'Inter', sans-serif;
 }
 
-/* =============================
-   Header Section
-   ============================= */
+/* Header */
 .dashboard-header {
   text-align: center;
-  margin-bottom: 45px;
+  margin-bottom: 35px;
+
+  .page-chip {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.88);
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
 
   h1 {
-    color: #ffffff;
-    font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    margin: 0;
+
+    span {
+      color: #f77f00;
+    }
   }
 
   p {
-    color: #f1f1f1;
-    font-size: 15px;
-    opacity: 0.9;
-  }
-}
-
-/* =============================
-   Content Wrapper
-   ============================= */
-.dashboard-content {
-  width: 100%;
-  max-width: 520px;
-}
-
-/* =============================
-   Dashboard Card
-   ============================= */
-.dashboard-card {
-  background-color: #ffffff;
-  border-radius: 14px;
-  padding: 32px 28px;
-  text-align: center;
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-
-  h3 {
-    color: #003049;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  p {
-    color: #666666;
-    font-size: 14px;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.80);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
     line-height: 1.6;
-    margin-bottom: 26px;
   }
 }
 
-/* =============================
-   Primary Action Button
-   ============================= */
-.primary-btn {
-  background-color: #f77f00;
+/* Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2.3rem;
+  }
+}
+
+/* Card base */
+.dash-card {
+  background: rgba(255,255,255,0.085);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dash-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(247,127,0,0.25);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+}
+
+.dash-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  margin: 0 0 10px;
   color: #ffffff;
+}
+
+/* Primary card */
+.primary-card .card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(247,127,0,0.14);
+  border: 1px solid rgba(247,127,0,0.25);
+  color: rgba(255,255,255,0.92);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.primary-card p {
+  color: rgba(255,255,255,0.84);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+/* Modern CTA button */
+.primary-btn {
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 900;
+  color: #fff;
+  width: 100%;
+  box-shadow: 0 16px 34px rgba(250,108,42,0.22);
 
-  padding: 12px 30px;
-  font-size: 14px;
-  font-weight: 600;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
 
-  cursor: pointer;
-  transition: all 0.25s ease;
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 46px rgba(250,108,42,0.30);
+}
 
-  &:hover {
-    background-color: #e06f00;
-    transform: translateY(-2px);
-  }
+/* Info card */
+.info-card .tips {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.7;
+}
 
-  &:active {
-    transform: translateY(0);
-  }
-
-  &:focus {
-    outline: none;
-  }
+.info-card .note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
 }

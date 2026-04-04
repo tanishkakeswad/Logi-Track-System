@@ -22,6 +22,7 @@ import { DriverComponent } from './dashbaord/driver/driver.component';
 import { BusinessComponent } from './dashbaord/business/business.component';
 import { CustomerComponent } from './dashbaord/customer/customer.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { ContactComponent } from './contact/contact.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
       AssginCargoComponent,
       ViewcargostatusComponent,
       AboutComponent,
-      ChatbotComponent
+      ChatbotComponent,
+      ContactComponent
   ],
   imports: [
     BrowserModule,
