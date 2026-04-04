@@ -58,9 +58,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/driver/update-cargo-status")
                 .hasAuthority("DRIVER")
 
+                
                 // CUSTOMER role endpoints
                 .antMatchers(HttpMethod.GET, "/api/customer/cargo-status")
                 .hasAuthority("CUSTOMER")
+
+                // CHATBOT endpoint
+                // ✅ Public Chatbot (works before login)
+                .antMatchers(HttpMethod.POST, "/api/chat/message").permitAll()
+
 
                 .antMatchers(HttpMethod.POST, "/api/business/cargo-with-documents")
                 .hasAuthority("BUSINESS")
