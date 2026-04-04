@@ -2,6 +2,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
 /* App layout wrapper */
@@ -14,7 +15,7 @@ html, body {
 /* Page content */
 .page-wrapper {
   flex: 1;             /* ✅ pushes footer to bottom */
-  padding-top: 80px;   /* ✅ keeps navbar spacing */
+  padding-top: 90px;   /* ✅ keeps navbar spacing */
   display: flex;
   flex-direction: column;
 }

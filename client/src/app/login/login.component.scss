@@ -1,20 +1,35 @@
-// ─── Existing styles (untouched) ────────────────────────────────
-
 a {
   cursor: pointer;
 }
 
+/* ✅ Make sure the login page never goes under navbar/footer */
+.page-wrapper {
+  padding-top: 120px;   /* adjust to your navbar height */
+  padding-bottom: 80px; /* adjust to your footer height */
+}
+
+
 .login-bg {
-  height: 100vh;
   width: 100%;
+  min-height: 100vh; /* keep full screen background */
   background-image: url('../../assets/login-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  
   position: relative;
   display: flex;
+
+  /* ✅ Add breathing room top/bottom so card doesn't stick */
+  
+  padding-top: 40px;
+  padding-bottom: 40px;
+
 }
 
+
+
+/* Overlay */
 .login-bg::before {
   content: "";
   position: absolute;
@@ -23,6 +38,7 @@ a {
   z-index: 1;
 }
 
+/* ✅ Card stays above overlay */
 .card {
   background: #ffffff;
   border-radius: 12px;
@@ -34,10 +50,16 @@ a {
   -webkit-backdrop-filter: none;
 }
 
+
 .login-card {
   max-width: 380px;
   margin-right: 2rem;
+
+  /* ✅ top/bottom spacing */
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
+
 
 .btn-custom-gradient {
   background-image: linear-gradient(to right, #ff4800, #fa6c2a);
@@ -45,21 +67,7 @@ a {
   border: none;
 }
 
-@media (max-width: 767px) {
-  .login-card {
-    margin: 0 1.2rem;
-  }
-  .login-bg::before {
-    background: rgba(0, 0, 0, 0.55);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .login-card {
-    margin: 0 auto;
-  }
-}
-
+/* Branding */
 .custom-cargo-color {
   color: #003049;
 }
@@ -68,8 +76,9 @@ a {
   color: #f77f00;
 }
 
-// ─── Image CAPTCHA styles ────────────────────────────────────────
-
+/* ============================
+   ✅ Image CAPTCHA styles
+============================ */
 .captcha-hint {
   font-size: 11px;
   font-weight: 400;
@@ -106,21 +115,52 @@ a {
   line-height: 1;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, transform 0.3s;
+}
 
-  &:hover {
-    background: #fff3e0;
-    border-color: #f77f00;
-    transform: rotate(45deg);
+.captcha-refresh:hover {
+  background: #fff3e0;
+  border-color: #f77f00;
+  transform: rotate(45deg);
+}
+
+.captcha-refresh:active {
+  transform: rotate(180deg);
+}
+
+/* ✅ Disabled button should not be clickable */
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none; /* FIX: don't allow clicks */
+}
+
+/* ✅ Responsive tweaks */
+@media (max-width: 767px) {
+  
+.login-bg {
+    padding: 60px 0; /* more space on small screens */
   }
 
-  &:active {
-    transform: rotate(180deg);
+  .login-card {
+    margin: 0 1.2rem; /* already present */
+  }
+
+  .page-wrapper {
+    padding-top: 140px;
+    padding-bottom: 100px;
+  }
+
+  .login-card {
+    margin: 0 1.2rem;
+  }
+
+  .login-bg::before {
+    background: rgba(0, 0, 0, 0.55);
   }
 }
 
-// Disable state — muted, no-pointer
-.btn:disabled {
-  opacity: 0.48;
-  cursor: not-allowed;
-  pointer-events: all !important;
+@media (min-width: 768px) and (max-width: 991px) {
+  .login-card {
+    margin: 0 auto;
+  }
 }

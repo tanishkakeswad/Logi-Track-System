@@ -2,25 +2,37 @@
 
   <div class="dashboard-container">
 
-    <h1 class="dashboard-title">
-      Welcome to <span>Cargo</span><span>Wala</span>
-    </h1>
+    <!-- Header -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">
+        Welcome to <span class="cargo-text">Cargo</span><span class="wala-text">Wala</span>
+      </h1>
+      <p class="dashboard-subtitle">
+        Business Control Panel
+      </p>
+    </div>
 
-    <p class="dashboard-subtitle">
-      Business Control Panel
-    </p>
-
+    <!-- Actions -->
     <div class="dashboard-actions">
 
-      <button class="action-card" routerLink="/addcargo">
-        <h3>Add Cargo</h3>
-        <p>Create and manage new cargo shipments</p>
+      <!-- Primary Action -->
+      <button class="action-card primary" routerLink="/addcargo">
+        <div class="card-icon">📦</div>
+        <h3>Add & Assign Cargo</h3>
+        <p>
+          Create new cargos and assign drivers seamlessly from a single place.
+        </p>
       </button>
 
-      <button class="action-card" routerLink="/assgin-cargo">
-        <h3>Assign Cargo</h3>
-        <p>Assign cargos to drivers efficiently</p>
-      </button>
+      <!-- Secondary (optional / future-ready) -->
+      <div class="action-card secondary disabled">
+        <div class="card-icon">📊</div>
+        <h3>Manage Shipments</h3>
+        <p>
+          Track, monitor and manage all your cargos in one dashboard.
+        </p>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
 
     </div>
 

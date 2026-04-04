@@ -1,107 +1,237 @@
-.dashboard-container {
-  height: 100vh;
-  width: 100%;
-  background: linear-gradient(to bottom, #003049, #000);
-  color: white;
-  font-family: 'Segoe UI', sans-serif;
+.customer-dashboard {
+  min-height: 100vh;
+  padding-top: 120px;   /* prevents overlap with global navbar */
+  padding-bottom: 80px; /* prevents overlap with footer */
+
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+  color: #ffffff;
+
+  font-family: 'Inter', sans-serif;
 }
 
-/* Navbar */
-.navbar {
+/* Header */
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 35px;
+
+  .page-chip {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+}
+
+.dashboard-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 2.8rem;
+  margin: 0;
+
+  .cargo { color: #ffffff; }
+  .wala  { color: #f77f00; }
+}
+
+.dashboard-subtitle {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.80);
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 22px;
+  align-items: start;
+}
+
+/* Card base */
+.dash-card {
+  background: rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  text-align: left;
+  color: #ffffff;
+
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dash-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(247, 127, 0, 0.25);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+}
+
+/* Primary card as button */
+.primary-card {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+}
+
+.primary-card:focus {
+  outline: none;
+}
+
+/* Card top row */
+.card-top {
   display: flex;
   justify-content: space-between;
-  padding: 20px 40px;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-#customerMap{
+.dash-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  margin: 0;
+}
+
+/* Badge pill */
+.badge-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(247, 127, 0, 0.14);
+  border: 1px solid rgba(247, 127, 0, 0.25);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Card description */
+.primary-card p {
+  color: rgba(255, 255, 255, 0.84);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+/* CTA row inside card */
+.card-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 14px;
+  border-radius: 14px;
+
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #ffffff;
+
+  font-weight: 900;
+  letter-spacing: 0.2px;
+
+  box-shadow: 0 16px 34px rgba(250, 108, 42, 0.22);
+}
+
+.card-cta .arrow {
+  font-size: 1.2rem;
+}
+
+/* Info card */
+.info-card .tips {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.7;
+}
+
+.note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-title {
+    font-size: 2.3rem;
+  }
+}
+
+/* =========================================================
+   ✅ ADDED FROM CURRENT CODE (FUNCTIONALITY)
+   Map container needed for driver tracking
+   (This DOES NOT change incoming UI – it only enables the map)
+========================================================= */
+#customerMap {
   height: 300px;
   width: 100%;
   margin-top: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35); /* safe fallback so blank map still looks good */
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-
-  span {
-    color: #f77f00;
-  }
-}
-
-.nav-links a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: #ccc;
-  transition: 0.3s;
-
-  &:hover {
-    color: #fff;
-  }
-}
-
-/* Content */
-.dashboard-content {
-  text-align: center;
-  margin-top: 80px;
-}
-
-.dashboard-content h1 {
-  font-size: 42px;
-}
-
-.dashboard-content span {
-  color: #f77f00;
-}
-
-.subtitle {
-  margin-top: 10px;
-  color: #ccc;
-}
-
-/* Cards */
-.card-container {
+/* =========================================================
+   ✅ EXTRA (for the new Track Driver card controls)
+   Matches incoming UI style (glass + orange CTA)
+========================================================= */
+.track-controls {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 50px;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
 }
 
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
+.track-input {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 12px;
   border-radius: 12px;
-  width: 260px;
-  transition: 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+  color: #ffffff;
 
-  &:hover {
-    transform: translateY(-8px);
-  }
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card h3 {
-  color: #f77f00;
+.track-input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.card p {
-  color: #ccc;
-  font-size: 14px;
+.track-input:focus {
+  border-color: rgba(247, 127, 0, 0.35);
+  box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.12);
 }
 
-/* Buttons */
-.card button {
-  margin-top: 15px;
-  padding: 10px 20px;
+.track-btn {
+  padding: 12px 16px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(to right, #ff4800, #fa6c2a);
-  color: white;
-  border-radius: 6px;
   cursor: pointer;
+  color: #ffffff;
+  font-weight: 900;
+
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  box-shadow: 0 16px 34px rgba(250, 108, 42, 0.18);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.single-card {
-  justify-content: center;
+.track-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 44px rgba(250, 108, 42, 0.24);
 }

@@ -1,152 +1,174 @@
 <div class="register-bg">
-  <div class="container h-100">
-    <div class="row h-100 justify-content-center align-items-center">
-      <div class="col-12 col-md-8 col-lg-5">
+  <div class="container">
 
-        <div class="card register-card shadow-sm border-0 rounded-3">
-          <div class="card-body p-4">
+    <!-- ✅ Removed min-vh-100 so footer can appear naturally -->
+    <div class="row justify-content-center py-4">
 
-            <!-- Header -->
-            <h3 class="fw-bold text-uppercase mb-1 text-center fs-1">
-              <span class="custom-cargo-color">Cargo</span>
-              <span class="custom-wala-color">Wala</span>
-            </h3>
+      <div class="col-12 col-md-8 col-lg-5">
+        <div class="card register-card shadow-sm border-0 rounded-3">
+          <div class="card-body p-4">
 
-            <p class="text-center text-muted mb-4">
-              Please enter your details here
-            </p>
+            <!-- Header -->
+            <h3 class="fw-bold text-uppercase mb-1 text-center fs-1">
+              <span class="custom-cargo-color">Cargo</span>
+              <span class="custom-wala-color">Wala</span>
+            </h3>
 
-            <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
+            <p class="text-center text-muted mb-4">
+              Please enter your details here
+            </p>
 
-              <!-- Username -->
-              <div class="mb-3">
-                <label class="form-label">Username <span class="text-danger">*</span></label>
+            <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
 
-                <input type="text" class="form-control"
-                       formControlName="username"
-                       placeholder="Enter username">
+              <!-- Username -->
+              <div class="mb-3">
+                <label class="form-label">
+                  Username <span class="text-danger">*</span>
+                </label>
 
-                <div *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched"
-                     class="text-danger small mt-1">
-                  Username is required / invalid format
-                </div>
-              </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="username"
+                  placeholder="Enter username" />
 
-              <!-- Email + OTP Button -->
-              <div class="mb-3">
-                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <div
+                  *ngIf="itemForm.get('username')?.invalid && itemForm.get('username')?.touched"
+                  class="text-danger small mt-1">
+                  Username is required / invalid format
+                </div>
+              </div>
 
-                <div class="d-flex gap-2">
-                  <input type="email"
-                         class="form-control"
-                         formControlName="email"
-                         placeholder="name@example.com">
+              <!-- Email + OTP Button -->
+              <div class="mb-3">
+                <label class="form-label">
+                  Email <span class="text-danger">*</span>
+                </label>
 
-                  <button type="button"
-                          class="btn btn-otp"
-                          (click)="sendOtp()"
-                          [disabled]="itemForm.get('email')?.invalid">
-                    Send OTP
-                  </button>
-                </div>
+                <div class="otp-row">
+                  <input
+                    type="email"
+                    class="form-control otp-email"
+                    formControlName="email"
+                    placeholder="name@example.com" />
 
-                <div *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched"
-                     class="text-danger small mt-1">
-                  Enter valid email
-                </div>
-              </div>
+                  <button
+                    type="button"
+                    class="btn btn-otp otp-btn"
+                    (click)="sendOtp()"
+                    [disabled]="itemForm.get('email')?.invalid">
+                    Send OTP
+                  </button>
+                </div>
 
-              <!-- OTP -->
-              <div class="mb-3">
-                <label class="form-label">OTP <span class="text-danger">*</span></label>
+                <div
+                  *ngIf="itemForm.get('email')?.invalid && itemForm.get('email')?.touched"
+                  class="text-danger small mt-1">
+                  Enter valid email
+                </div>
+              </div>
 
-                <input type="text"
-                       class="form-control"
-                       formControlName="otp"
-                       placeholder="Enter OTP">
+              <!-- OTP -->
+              <div class="mb-3">
+                <label class="form-label">
+                  OTP <span class="text-danger">*</span>
+                </label>
 
-                <div *ngIf="itemForm.get('otp')?.invalid && itemForm.get('otp')?.touched"
-                     class="text-danger small mt-1">
-                  OTP is required
-                </div>
-              </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="otp"
+                  placeholder="Enter OTP" />
 
-              <!-- Password -->
-              <div class="mb-3">
-                <label class="form-label">Password <span class="text-danger">*</span></label>
+                <div
+                  *ngIf="itemForm.get('otp')?.invalid && itemForm.get('otp')?.touched"
+                  class="text-danger small mt-1">
+                  OTP is required
+                </div>
+              </div>
 
-                <input [type]="passwordFieldType"
-                       class="form-control"
-                       formControlName="password"
-                       placeholder="•••••••">
-              </div>
+              <!-- Password -->
+              <div class="mb-3">
+                <label class="form-label">
+                  Password <span class="text-danger">*</span>
+                </label>
 
-              <!-- Confirm Password -->
-              <div class="mb-3">
-                <label class="form-label">Confirm Password</label>
+                <input
+                  [type]="passwordFieldType"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="•••••••" />
+              </div>
 
-                <input [type]="passwordFieldType"
-                       class="form-control"
-                       formControlName="retypepassword"
-                       placeholder="•••••••">
+              <!-- Confirm Password -->
+              <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
 
-                <div *ngIf="itemForm.errors?.['notMatch'] && itemForm.get('retypepassword')?.touched"
-                     class="text-danger small mt-1">
-                  Password doesn't match
-                </div>
+                <input
+                  [type]="passwordFieldType"
+                  class="form-control"
+                  formControlName="retypepassword"
+                  placeholder="•••••••" />
 
-                <div class="form-check form-switch mt-2">
-                  <input type="checkbox"
-                         class="form-check-input"
-                         (change)="togglePasswordVisibility()">
-                  <label class="form-check-label">
-                    Show Password
-                  </label>
-                </div>
-              </div>
+                <div
+                  *ngIf="itemForm.errors?.['notMatch'] && itemForm.get('retypepassword')?.touched"
+                  class="text-danger small mt-1">
+                  Password doesn't match
+                </div>
 
-              <!-- Role -->
-              <div class="mb-4">
-                <label class="form-label">Role <span class="text-danger">*</span></label>
+                <div class="form-check form-switch mt-2">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    (change)="togglePasswordVisibility()" />
+                  <label class="form-check-label">Show Password</label>
+                </div>
+              </div>
 
-                <select class="form-select" formControlName="role">
-                  <option value="">Choose user type</option>
-                  <option value="BUSINESS">Business</option>
-                  <option value="DRIVER">Driver</option>
-                  <option value="CUSTOMER">Customer</option>
-                </select>
-              </div>
+              <!-- Role -->
+              <div class="mb-4">
+                <label class="form-label">
+                  Role <span class="text-danger">*</span>
+                </label>
 
-              <!-- Submit -->
-              <button type="submit"
-                      class="btn btn-custom-gradient w-100"
-                      [disabled]="itemForm.invalid">
-                Register
-              </button>
+                <select class="form-select" formControlName="role">
+                  <option value="">Choose user type</option>
+                  <option value="BUSINESS">Business</option>
+                  <option value="DRIVER">Driver</option>
+                  <option value="CUSTOMER">Customer</option>
+                </select>
+              </div>
 
-            </form>
+              <!-- Submit -->
+              <button
+                type="submit"
+                class="btn btn-custom-gradient w-100"
+                [disabled]="itemForm.invalid">
+                Register
+              </button>
 
-            <!-- Login -->
-            <p class="text-center mt-3 mb-0">
-              <a routerLink="/login"
-                 class="fw-bold custom-cargo-color text-decoration-none">
-                Go to Login
-              </a>
-            </p>
+            </form>
 
-            <!-- Messages -->
-            <div *ngIf="showMessage" class="alert alert-success mt-3">
-              {{ responseMessage }}
-            </div>
+            <!-- Login -->
+            <p class="text-center mt-3 mb-0">
+              <a routerLink="/login" class="fw-bold custom-cargo-color text-decoration-none">
+                Go to Login
+              </a>
+            </p>
 
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-              {{ responseMessage }}
-            </div>
+            <!-- Messages -->
+            <div *ngIf="showMessage" class="alert alert-success mt-3">
+              {{ responseMessage }}
+            </div>
 
-          </div>
-        </div>
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+              {{ responseMessage }}
+            </div>
 
-      </div>
-    </div>
-  </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

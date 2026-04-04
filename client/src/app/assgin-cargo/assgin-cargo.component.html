@@ -1,76 +1,122 @@
-<div class="container mt-4">
+<div class="assigned-page">
 
-  <h2 class="text-center mb-4">Manage Cargo</h2>
-
-  <!-- DEBUG -->
-  <p class="text-center">Total Cargo: {{ cargList.length }}</p>
-
-  <!-- ERROR -->
-  <div *ngIf="showError" class="alert alert-danger text-center">
-    {{ errorMessage }}
+  <!-- Header -->
+  <div class="container">
+    <div class="page-header">
+      <div class="page-chip">Driver Console</div>
+      <h1>Assigned <span>Cargo</span></h1>
+      <p>View your assigned shipments, open documents, and update delivery status.</p>
+    </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="table-responsive" *ngIf="cargList.length > 0">
-    <table class="table table-dark table-hover text-center">
-      <thead>
-        <tr>
-          <th>A.W.B No.</th>
-          <th>Content</th>
-          <th>Size</th>
-          <th>Status</th>
-          <th>Documents</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+  <div class="container">
 
-      <tbody>
-        <tr *ngFor="let cargo of cargList">
-          <td>{{ cargo.id }}</td>
-          <td>{{ cargo.content }}</td>
-          <td>{{ cargo.size }}</td>
-          <td>{{ cargo.status }}</td>
-          <td>
-            <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs">
-              <ul class="list-unstyled mb-0">
-                <li *ngFor="let doc of cargo.documents">
-                  {{ doc.originalFileName }}
-                  <button class="btn btn-sm btn-link" (click)="viewDocument(doc.id)">
-                    View
-                  </button>
-                </li>
-              </ul>
-            </div>
+    <!-- Error banner -->
+    <div *ngIf="showError" class="alert alert-danger text-center mb-4">
+      {{ errorMessage }}
+    </div>
 
-            <ng-template #noDocs>
-              <span class="text-muted">No Documents</span>
-            </ng-template>
-          </td>
-          <td>
-            <button class="btn btn-primary" [disabled]="cargo.status === 'Order Delivered'" (click)="addStatus(cargo)"
-              data-bs-toggle="modal" data-bs-target="#driverModal">
-              Update Status
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Empty state -->
+    <div *ngIf="!showError && cargList.length === 0" class="empty-state">
+      <h3>No Assigned Cargo</h3>
+      <p>Once a business assigns cargos to you, they’ll appear here.</p>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card glass-card table-card" *ngIf="cargList.length > 0">
+      <div class="table-titlebar">
+        <div>
+          <h3>Cargo List</h3>
+          <p class="muted">Update status only when the cargo moves to the next stage.</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0 cargo-table">
+          <thead>
+            <tr>
+              <th class="text-center">A.W.B No.</th>
+              <th>Content</th>
+              <th>Size</th>
+              <th>Status</th>
+              <th>Documents</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let cargo of cargList">
+              <td class="text-center fw-semibold">{{ cargo.id }}</td>
+              <td>{{ cargo.content }}</td>
+              <td>{{ cargo.size }}</td>
+
+              <!-- Status pill -->
+              <td>
+                <span class="status-pill"
+                  [ngClass]="{
+                    pending: cargo.status === 'Order Pending',
+                    assigned: cargo.status === 'Order Assigned',
+                    transit: cargo.status === 'Order In-transit',
+                    delivered: cargo.status === 'Order Delivered'
+                  }">
+                  {{ cargo.status }}
+                </span>
+              </td>
+
+              <!-- Documents -->
+              <td>
+                <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs" class="docs-col">
+                  <div class="doc-line" *ngFor="let doc of cargo.documents">
+                    <span class="doc-name">{{ doc.originalFileName }}</span>
+                    <button
+                      class="btn btn-sm btn-link doc-btn"
+                      type="button"
+                      (click)="viewDocument(doc.id)">
+                      View
+                    </button>
+                  </div>
+                </div>
+
+                <ng-template #noDocs>
+                  <span class="text-muted">No Documents</span>
+                </ng-template>
+              </td>
+
+              <!-- Action -->
+              <td class="text-center">
+                <button
+                  class="btn btn-primary btn-sm"
+                  [disabled]="cargo.status === 'Order Delivered'"
+                  (click)="addStatus(cargo)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#driverModal">
+                  Update Status
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL -->
-  <div class="modal fade" id="driverModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
+  <div class="modal fade" id="driverModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light modal-modern">
 
         <div class="modal-header">
-          <h5 class="modal-title">Update Status</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">Update Cargo Status</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
+          <label class="form-label">Choose Status</label>
 
-          <select [(ngModel)]="statusModel.newStatus" class="form-control">
+          <select [(ngModel)]="statusModel.newStatus" class="form-select">
             <option [ngValue]="null">Choose Status</option>
+            <option value="Order Assigned">Order Assigned</option>
             <option value="Order In-transit">Order In-transit</option>
             <option value="Order Delivered">Order Delivered</option>
           </select>
@@ -82,21 +128,15 @@
           <div *ngIf="showError" class="alert alert-danger mt-3">
             {{ errorMessage }}
           </div>
-
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class="btn btn-primary" (click)="assignDriver()">Save</button>
+          <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-success" (click)="assignDriver()">Save</button>
         </div>
 
       </div>
     </div>
   </div>
-
-  <!-- LOGOUT -->
-  <button class="btn btn-danger w-100 mt-3" (click)="logout()">
-    Logout
-  </button>
 
 </div>

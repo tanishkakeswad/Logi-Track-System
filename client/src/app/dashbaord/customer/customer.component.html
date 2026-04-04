@@ -1,40 +1,77 @@
-<div class="dashboard-container">
+<div class="customer-dashboard">
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">Cargo<span>Wala</span></div>
-    <div class="nav-links">
-      <a routerLink="/">Home</a>
-      <a routerLink="/about">About Us</a>
-      <a routerLink="/contact">Contact</a>
-      <a routerLink="/login">Login</a>
+  <div class="container">
+    <div class="dashboard-header">
+      <div class="page-chip">Customer Console</div>
+
+      <h1 class="dashboard-title">
+        Welcome to <span class="cargo">Cargo</span><span class="wala">Wala</span>
+      </h1>
+
+      <p class="dashboard-subtitle">
+        Track your shipments and monitor delivery progress in real time.
+      </p>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <div class="dashboard-content">
-    <h1>Welcome to <span>CargoWala</span></h1>
-    <p class="subtitle">Customer Dashboard</p>
+    <div class="dashboard-grid">
 
-    <div class="card-container single-card">
+      <!-- ✅ Main Card (Incoming code - unchanged) -->
+      <button class="dash-card primary-card" routerLink="/viewcargostatus" type="button">
+        <div class="card-top">
+          <h3>View Cargo Status</h3>
+          <span class="badge-pill">Tracking</span>
+        </div>
 
-      <!-- EXISTING CARD -->
-      <div class="card">
-        <h3>View Cargo Status</h3>
-        <p>Track your shipments and delivery status</p>
-        <button routerLink="/viewcargostatus">
-          View Status
-        </button>
+        <p>
+          Enter your A.W.B number and instantly view the latest shipment status, source and destination.
+        </p>
+
+        <div class="card-cta">
+          <span>Open Tracking</span>
+          <span class="arrow">→</span>
+        </div>
+      </button>
+
+      <!-- ✅ Secondary Info Card (Incoming code - unchanged) -->
+      <div class="dash-card info-card">
+        <h3>Quick Help</h3>
+
+        <ul class="tips">
+          <li>Use the A.W.B number provided after booking.</li>
+          <li>Status updates reflect driver and system events.</li>
+          <li>If you face issues, raise a ticket from Contact Support.</li>
+        </ul>
+
+        <div class="note">
+          For faster support, include your A.W.B number in the ticket.
+        </div>
       </div>
 
-      <!-- 🔥 NEW TRACKING CARD -->
-      <div class="card">
-        <h3>Track Your Driver</h3>
-        <p>Enter Driver ID to see live location</p>
+      <!-- ✅ NEW: Track Driver Card (Functionality added from current code) -->
+      <div class="dash-card track-card">
+        <div class="card-top">
+          <h3>Track Your Driver</h3>
+          <span class="badge-pill">Live</span>
+        </div>
 
-        <input type="number" [(ngModel)]="driverId" placeholder="Enter Driver ID" />
-        <button (click)="startTracking()">Track</button>
+        <p>
+          Enter Driver ID to see live location on the map in real time.
+        </p>
 
+        <div class="track-controls">
+          <input
+            type="number"
+            [(ngModel)]="driverId"
+            placeholder="Enter Driver ID"
+            class="track-input"
+          />
+
+          <button type="button" (click)="startTracking()" class="track-btn">
+            Track
+          </button>
+        </div>
+
+        <!-- Map container (same id as current code for your JS/TS logic) -->
         <div id="customerMap"></div>
       </div>
 

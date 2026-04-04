@@ -1,55 +1,139 @@
-/* ✅ Solid Black Navbar */
 
-
-.navbar.black-nav {
-  position: absolute;   /* ✅ overlay above page */
+.navbar.transparent-nav {
+  position: absolute;   /* ✅ overlays hero but scrolls away */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 9999;         /* ✅ sits above every component */
-  background-color: rgba(0, 0, 0, 0.05); /* translucent */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  z-index: 20;
+
+  height: 72px;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  background: transparent;
+  border-bottom: none;
+
+  font-family: 'Poppins', sans-serif;
 }
 
 
 
-/* ✅ Bold, White, Spaced Navbar Links */
-.nav-links .nav-link {
-  font-weight: 700;
-  color: #ffffff !important;
-  margin-left: 1.4rem;
-  font-size: 1rem;
-  letter-spacing: 0.3px;
+/* Brand wrapper */
+.navbar-brand {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0;
 }
 
-/* ✅ Hover Effect */
-.nav-links .nav-link:hover {
-  color: #ff8c42 !important;
-  transition: 0.2s ease-in-out;
-}
-
-/* ✅ Active Route */
-.nav-links .nav-link.active {
-  color: #ffa463 !important;
-}
-
-/* ✅ Logo scaling (without expanding navbar height) */
+/* Logo */
 .nav-logo {
-  height: 40px;
+  max-height: 54px;
   width: auto;
-  transform: scale(3.5);
-  transform-origin: left center;
+  object-fit: contain;
+  display: block;
 }
 
-/* ✅ Mobile Adjustments */
-@media (max-width: 767px) {
-  .nav-links .nav-link {
-    margin-left: 0.5rem;
-    margin-bottom: 0.4rem;
+/* Links */
+.nav-links .nav-link {
+  position: relative;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92) !important;
+  margin-left: 1.25rem;
+  letter-spacing: 0.3px;
+  padding: 0.5rem 0.2rem;
+  text-transform: none;
+}
+
+/* underline hover */
+.nav-links .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: #f77f00;
+  transition: width 0.22s ease;
+  border-radius: 2px;
+}
+
+.nav-links .nav-link:hover {
+  color: #ffffff !important;
+}
+
+.nav-links .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Active route */
+.nav-links .nav-link.active {
+  color: #ffffff !important;
+}
+
+.nav-links .nav-link.active::after {
+  width: 100%;
+}
+
+/* CTA pill */
+.nav-cta {
+  padding: 10px 16px !important;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 24px rgba(250, 108, 42, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-cta::after {
+  display: none;
+}
+
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(250, 108, 42, 0.35);
+}
+
+/* Toggler polish */
+.navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* Mobile */
+@media (max-width: 991px) {
+  .navbar.transparent-nav {
+    height: auto;           /* allow expanded menu */
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.65); /* ✅ ONLY on mobile for readability */
+    backdrop-filter: blur(10px);
+  }
+
+  .navbar-brand {
+    height: auto;
   }
 
   .nav-logo {
-    transform: scale(1.3);
+    max-height: 46px;
+  }
+
+  .nav-links .nav-link {
+    margin-left: 0;
+    padding: 0.75rem 0;
+  }
+
+  .nav-links .nav-link::after {
+    bottom: 2px;
+  }
+
+  .nav-cta {
+    width: fit-content;
+    margin-top: 10px;
   }
 }

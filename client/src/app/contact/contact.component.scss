@@ -1,0 +1,211 @@
+.contact-page {
+  min-height: 100vh;
+
+  /* ✅ more breathing room (top especially) */
+  padding: 70px 0 50px;
+
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+  color: #ffffff;
+}
+
+/* ✅ header spacing + hierarchy */
+.contact-hero {
+  text-align: center;
+  margin-top: 20px;         /* ✅ pushes content down a bit */
+  margin-bottom: 34px;
+
+  h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    color: #f77f00;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 820px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+  }
+}
+
+/* ✅ grid spacing */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 26px;                 /* ✅ slightly more gap */
+  align-items: start;
+}
+
+/* ✅ premium glass cards */
+.support-card,
+.ticket-card {
+  background: rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* ✅ subtle hover lift */
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.support-card:hover,
+.ticket-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(247, 127, 0, 0.25);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.support-card h3,
+.ticket-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.muted {
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 18px;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+/* ✅ support items look cleaner */
+.support-item {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+
+  .label {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.68);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 4px;
+  }
+
+  .value {
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.support-note {
+  margin-top: 16px;
+  padding: 14px 14px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+/* ✅ form labels */
+.form-label {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 650;
+  font-family: 'Inter', sans-serif;
+}
+
+.req {
+  color: #f77f00;
+}
+
+/* ✅ modern inputs */
+.form-control,
+.form-select {
+  background: rgba(255, 255, 255, 0.93);
+  border: 1px solid rgba(0, 48, 73, 0.08);
+  border-radius: 14px;
+  padding: 11px 12px;
+  font-family: 'Inter', sans-serif;
+
+  transition: box-shadow 0.2s ease, transform 0.12s ease, border-color 0.2s ease;
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: rgba(247, 127, 0, 0.25);
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  border-color: rgba(247, 127, 0, 0.5);
+  box-shadow: 0 0 0 4px rgba(247, 127, 0, 0.22);
+}
+
+/* ✅ textarea */
+textarea.form-control {
+  resize: vertical;
+}
+
+/* validation errors */
+.error {
+  margin-top: 6px;
+  color: #ffb3b3;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ✅ file pill improved */
+.file-pill {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(247, 127, 0, 0.10);
+  border: 1px solid rgba(247, 127, 0, 0.25);
+  color: rgba(255, 255, 255, 0.92);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ✅ submit button (stronger + premium) */
+.btn-ticket {
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  border: none;
+  border-radius: 16px;
+  padding: 13px 18px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(250, 108, 42, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.btn-ticket:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(250, 108, 42, 0.36);
+  opacity: 0.98;
+}
+
+/* ✅ responsive */
+@media (max-width: 992px) {
+  .contact-page {
+    padding: 90px 0 60px; /* more top space for mobile nav */
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .support-card,
+  .ticket-card {
+    padding: 22px;
+  }
+}
