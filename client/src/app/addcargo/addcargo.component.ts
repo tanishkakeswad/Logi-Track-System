@@ -42,18 +42,29 @@ export class AddcargoComponent {
     this.driverId = null;
   }
   getCargo() {
-    this.cargList = [];
-    this.httpService.getCargo().subscribe((data: any) => {
+  this.cargList = [];
+
+  this.httpService.getCargo().subscribe({
+    next: (data: any) => {
       this.cargList = data;
       this.cargoToShow = this.cargList;
-    }, error => {
-      // Handle error
+
+      // ✅ Attach payment info to each cargo
+      this.cargoToShow.forEach(cargo => {
+        this.httpService.getPaymentByCargoId(cargo.id).subscribe({
+          next: (payment) => {
+            cargo.payment = payment; // null OR payment object
+          }
+        });
+      });
+    },
+    error: (error) => {
       this.showError = true;
       this.errorMessage = "Cannot fetch cargo. Please try again later.";
       console.error('Error:', error);
-    });;
-  }
-
+    }
+  });
+}
   getDrivers() {
     this.driverList = [];
     this.httpService.getDrivers().subscribe((data: any) => {
@@ -149,7 +160,7 @@ export class AddcargoComponent {
       this.httpService.assignDriver(this.assignModel.driverId, this.assignModel.cargoId).subscribe((data: any) => {
         this.showMessage = true;
         this.responseMessage = data.message;
-        window.location.reload();
+        this.getCargo();
       }, error => {
 
         this.showError = true;
@@ -167,7 +178,22 @@ export class AddcargoComponent {
     // Navigate to login (change route if yours differs)
     this.router.navigate(['/login']);
   }
+  payNow(cargo: any) {
+  // ✅ Payment allowed only after driver assignment
+  if (!cargo?.driver?.id) {
+    this.showError = true;
+    this.errorMessage = 'Assign a driver before payment.';
+    return;
+  }
 
+  // ✅ Navigate to payment page with cargoId + driverId autofilled
+  this.router.navigate(['/payment'], {
+    queryParams: {
+      cargoId: cargo.id,
+      driverId: cargo.driver.id
+    }
+  });
+}
 }
 
 

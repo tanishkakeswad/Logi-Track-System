@@ -44,13 +44,15 @@
 
               <!-- Size -->
               <div class="col-12 col-md-4">
-                <label class="form-label">Size</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g., 100, Medium, 12kg"
-                  formControlName="size"
-                />
+                <label class="form-label">Weight (KG)</label>
+                
+<input
+  type="number"
+  class="form-control"
+  placeholder="e.g., 12 or 250"
+  formControlName="size"
+/>
+
                 <div class="field-error" *ngIf="itemForm.get('size')?.invalid && itemForm.get('size')?.touched">
                   Please enter size
                 </div>
@@ -169,6 +171,7 @@
               <th>Size</th>
               <th>Status</th>
               <th>Documents</th>
+              <th class="text-center">Payment</th>
               <th class="text-center">Action</th>
             </tr>
           </thead>
@@ -192,18 +195,44 @@
                 </span>
               </td>
 
-              <!-- docs -->
-              <td>
-                <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs" class="docs-col">
-                  <div class="doc-line" *ngFor="let doc of cargo.documents">
-                    {{ doc.originalFileName }}
-                  </div>
-                </div>
+              <!-- documents -->
+<td>
+  <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs" class="docs-col">
+    <div class="doc-line" *ngFor="let doc of cargo.documents">
+      {{ doc.originalFileName }}
+    </div>
+  </div>
 
-                <ng-template #noDocs>
-                  <span class="text-muted">No Documents</span>
-                </ng-template>
-              </td>
+  <ng-template #noDocs>
+    <span class="text-muted">No Documents</span>
+  </ng-template>
+</td>
+
+<!-- payment -->
+<td class="text-center">
+
+  <!-- ✅ PAID badge -->
+  <span *ngIf="cargo.payment?.status === 'PAID'"
+        class="badge bg-success">
+    PAID
+  </span>
+
+  <!-- ✅ Pay button only if NOT paid -->
+  <button
+    *ngIf="!cargo.payment"
+    class="btn btn-warning btn-sm"
+    type="button"
+    (click)="payNow(cargo)"
+    [disabled]="!cargo.driver || !cargo.driver.id">
+    Pay
+  </button>
+
+  <div *ngIf="!cargo.driver && !cargo.payment"
+       class="text-muted small mt-1">
+    Assign driver first
+  </div>
+
+</td>
 
               <!-- actions -->
               <td class="text-center">
