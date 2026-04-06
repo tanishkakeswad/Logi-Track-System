@@ -74,9 +74,15 @@ http
 .antMatchers(HttpMethod.PUT, "/api/driver/update-cargo-status")
 .hasAuthority("DRIVER")
 
-// :bust_in_silhouette: CUSTOMER ROLE
-.antMatchers(HttpMethod.GET, "/api/customer/cargo-status")
-.hasAuthority("CUSTOMER")
+                
+                // CUSTOMER role endpoints
+                .antMatchers(HttpMethod.GET, "/api/customer/cargo-status")
+                .hasAuthority("CUSTOMER")
+
+                // CHATBOT endpoint
+                // ✅ Public Chatbot (works before login)
+                .antMatchers(HttpMethod.POST, "/api/chat/message").permitAll()
+
 
 // :page_facing_up: DOCUMENT ACCESS
 .antMatchers(HttpMethod.GET, "/api/documents/**")
