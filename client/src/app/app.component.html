@@ -1,9 +1,11 @@
-
 <div class="app-layout">
   <app-navbar></app-navbar>
 
   <div class="page-wrapper">
     <router-outlet></router-outlet>
+
+    <!-- ✅ Chatbot (global: visible even before login) -->
+    <app-chatbot></app-chatbot>
   </div>
 
   <app-footer></app-footer>

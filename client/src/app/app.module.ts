@@ -26,6 +26,8 @@ import { DriverComponent } from './dashbaord/driver/driver.component';
 import { BusinessComponent } from './dashbaord/business/business.component';
 import { CustomerComponent } from './dashbaord/customer/customer.component';
 
+import { ChatbotComponent } from './chatbot/chatbot.component';
+
 // If you need it later, uncomment these two lines
 // import { DriverTrackingComponent } from './driver-tracking/driver-tracking.component';
 
@@ -35,16 +37,21 @@ import { CustomerComponent } from './dashbaord/customer/customer.component';
     LandingComponent,
     NavbarComponent,
     FooterComponent,
+
     LoginComponent,
     RegistrationComponent,
+
     DriverComponent,
     BusinessComponent,
     CustomerComponent,
+
     AddcargoComponent,
     AssginCargoComponent,
     ViewcargostatusComponent,
+
     AboutComponent,
     ContactComponent,
+    ChatbotComponent,
 
     // DriverTrackingComponent
   ],

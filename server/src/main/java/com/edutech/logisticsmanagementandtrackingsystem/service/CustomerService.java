@@ -52,7 +52,7 @@ public class CustomerService {
     }
 
     // =========================
-    // VIEW CARGO STATUS
+    // VIEW CARGO STATUS (FULL DETAILS)
     // =========================
     public CargoStatusResponse viewCargoStatus(Long cargoId) {
 
@@ -74,8 +74,18 @@ public class CustomerService {
             CargoStatusResponse response = new CargoStatusResponse();
             response.setCargoId(cargo.getId());
             response.setStatus(cargo.getStatus());
+            response.setSource(cargo.getSource());
+            response.setCargoContent(cargo.getCargoContent());
+            response.setCargoSize(cargo.getCargoSize());
 
-            logger.info("CUSTOMER-SERVICE: Cargo status returned | cargoId={} | status={}",
+            // ✅ DRIVER NULL SAFE
+            if (cargo.getDriver() != null) {
+                response.setDriverId(cargo.getDriver().getId());
+            } else {
+                response.setDriverId(null);
+            }
+
+            logger.info("CUSTOMER-SERVICE: Cargo status returned successfully | cargoId={} | status={}",
                     cargo.getId(), cargo.getStatus());
 
             return response;

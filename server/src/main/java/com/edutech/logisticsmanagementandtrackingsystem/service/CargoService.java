@@ -1,5 +1,9 @@
 package com.edutech.logisticsmanagementandtrackingsystem.service;
 
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,17 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.edutech.logisticsmanagementandtrackingsystem.dto.CargoStatusResponse;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.CargoDocument;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
-
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoDocumentRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.CargoRepository;
 import com.edutech.logisticsmanagementandtrackingsystem.repository.DriverRepository;
-
-import javax.persistence.EntityNotFoundException;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -27,10 +27,10 @@ public class CargoService {
     private static final Logger logger = LoggerFactory.getLogger(CargoService.class);
 
     @Autowired
-    CargoRepository cargoRepository;
+    private CargoRepository cargoRepository;
 
     @Autowired
-    DriverRepository driverRepository;
+    private DriverRepository driverRepository;
 
     @Autowired
     private CargoDocumentRepository cargoDocumentRepository;
@@ -133,8 +133,7 @@ public class CargoService {
             String oldStatus = cargo.getStatus();
             String normalizedStatus = newStatus.trim().toUpperCase();
 
-            // OPTIONAL validation for common statuses:
-            // If you want strict validation, uncomment below.
+            // OPTIONAL strict validation (enable if needed):
             /*
             if (!(normalizedStatus.equals("PENDING") || normalizedStatus.equals("IN_TRANSIT") || normalizedStatus.equals("DELIVERED"))) {
                 logger.warn("CARGO-SERVICE: Invalid status update attempted | cargoId={} | oldStatus={} | newStatus={}",
@@ -149,7 +148,7 @@ public class CargoService {
             logger.info("CARGO-SERVICE: Cargo status changed | cargoId={} | oldStatus={} | newStatus={}",
                     cargoId, oldStatus, normalizedStatus);
 
-            // Special business event log:
+            // Business event logs
             if ("DELIVERED".equalsIgnoreCase(normalizedStatus)) {
                 logger.info("✅ DELIVERY EVENT: Cargo delivered successfully | cargoId={}", cargoId);
             } else if ("IN_TRANSIT".equalsIgnoreCase(normalizedStatus)) {
@@ -173,7 +172,7 @@ public class CargoService {
     }
 
     // =========================
-    // GET CARGO BY ID
+    // GET CARGO BY ID (OLD - keep if used)
     // =========================
     public Cargo getCargoById(long cargoId) {
         logger.info("CARGO-SERVICE: Get cargo by id request | cargoId={}", cargoId);
@@ -191,6 +190,51 @@ public class CargoService {
 
         } catch (Exception ex) {
             logger.error("CARGO-SERVICE: Error fetching cargo | cargoId={} | Reason={}", cargoId, ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
+    // =========================
+    // ✅ NEW IMPORTANT METHOD
+    // GET CARGO DETAILS (DTO RESPONSE)
+    // =========================
+    public CargoStatusResponse getCargoDetails(Long cargoId) {
+
+        logger.info("CARGO-SERVICE: Get cargo details request | cargoId={}", cargoId);
+
+        try {
+            Cargo cargo = cargoRepository.findById(cargoId)
+                    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+
+            CargoStatusResponse dto = new CargoStatusResponse();
+
+            dto.setCargoId(cargo.getId());
+            dto.setStatus(cargo.getStatus());
+            dto.setSource(cargo.getSource());
+
+            dto.setCargoContent(cargo.getCargoContent());
+            dto.setCargoSize(cargo.getCargoSize());
+
+            // ✅ DRIVER FIX (null-safe)
+            if (cargo.getDriver() != null) {
+                dto.setDriverId(cargo.getDriver().getId());
+            } else {
+                dto.setDriverId(null);
+            }
+
+            logger.info("CARGO-SERVICE: Cargo details built successfully | cargoId={} | status={}",
+                    cargoId, cargo.getStatus());
+
+            return dto;
+
+        } catch (EntityNotFoundException ex) {
+            logger.warn("CARGO-SERVICE: Cargo details failed (not found) | cargoId={} | Reason={}",
+                    cargoId, ex.getMessage());
+            throw ex;
+
+        } catch (Exception ex) {
+            logger.error("CARGO-SERVICE: Error building cargo details | cargoId={} | Reason={}",
+                    cargoId, ex.getMessage(), ex);
             throw ex;
         }
     }
@@ -243,4 +287,6 @@ public class CargoService {
 
         return savedCargo;
     }
+
+    
 }

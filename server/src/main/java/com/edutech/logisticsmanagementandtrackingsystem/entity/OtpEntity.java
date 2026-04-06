@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Table(name = "otp_table")
 public class OtpEntity {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +26,9 @@ public class OtpEntity {
 
     @Column(nullable = false)
     private LocalDateTime expiryTime;
+
+    private int attempts =0;
+    private static final int MAX_ATTEMPTS = 5;
 
     // Getters and Setters
     public Long getId() {
@@ -57,5 +61,17 @@ public class OtpEntity {
 
     public void setExpiryTime(LocalDateTime expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public int getAttempts(){
+        return attempts;
+    }
+
+    public void setAttempts(int attempts){
+        this.attempts = attempts;
+    }
+
+    public int getMaxAttempts(){
+        return MAX_ATTEMPTS;
     }
 }

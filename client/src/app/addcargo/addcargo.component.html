@@ -70,7 +70,7 @@
 
               <!-- Documents -->
               <div class="col-12">
-                <label class="form-label">Cargo Documents (optional)</label>
+                <label class="form-label">Cargo Documents (required)</label>
 
                 <div class="upload-box">
                   <input
@@ -164,6 +164,9 @@
         <table class="table table-dark table-hover align-middle mb-0">
           <thead>
             <tr>
+              <!-- ✅ NEW: Serial Number -->
+              <th class="text-center">S.No.</th>
+
               <th class="text-center">A.W.B No.</th>
               <th>Content</th>
               <th>Size</th>
@@ -174,20 +177,27 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let cargo of cargoToShow">
+            <!-- ✅ NEW: let i = index -->
+            <tr *ngFor="let cargo of cargoToShow; let i = index">
+
+              <!-- ✅ NEW: Serial Number cell -->
+              <td class="text-center fw-semibold">{{ i + 1 }}</td>
+
               <td class="text-center fw-semibold">{{ cargo.id }}</td>
               <td>{{ cargo.content }}</td>
               <td>{{ cargo.size }}</td>
 
               <!-- status pill -->
               <td>
-                <span class="status-pill"
+                <span
+                  class="status-pill"
                   [ngClass]="{
                     pending: cargo.status === 'Order Pending',
                     assigned: cargo.status === 'Order Assigned',
                     transit: cargo.status === 'Order In-transit',
                     delivered: cargo.status === 'Order Delivered'
-                  }">
+                  }"
+                >
                   {{ cargo.status }}
                 </span>
               </td>
@@ -224,8 +234,9 @@
               </td>
             </tr>
 
+            <!-- ✅ IMPORTANT: colspan updated from 6 to 7 -->
             <tr *ngIf="!cargoToShow || cargoToShow.length === 0">
-              <td colspan="6" class="text-center text-muted py-4">
+              <td colspan="7" class="text-center text-muted py-4">
                 No cargo found.
               </td>
             </tr>

@@ -36,8 +36,8 @@ public class OtpService {
         }
 
         try {
-            // ✅ Do NOT log OTP
-            String otp = String.valueOf((int)(Math.random() * 900000) + 100000);
+            // ✅ Do NOT log OTP in production
+            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
 
             Optional<OtpEntity> existing = otpRepository.findByEmail(email);
             OtpEntity entity = existing.orElse(new OtpEntity());
@@ -52,11 +52,14 @@ public class OtpService {
             entity.setOtp(otp);
             entity.setExpiryTime(LocalDateTime.now().plusMinutes(5));
 
+            // ✅ Reset attempts on new OTP generation
+            entity.setAttempts(0);
+
             otpRepository.save(entity);
 
             logger.info("OTP-SERVICE: OTP saved successfully (expires in 5 minutes) | email={}", email);
 
-            // Email sending will be logged inside EmailService too
+            // Email sending will be logged in EmailService too
             emailService.sendOtp(email, otp);
 
             logger.info("OTP-SERVICE: OTP send process completed | email={}", email);
@@ -70,43 +73,66 @@ public class OtpService {
 
     // =========================
     // VERIFY OTP
+    // Returns: OTP_NOT_FOUND / OTP_EXPIRED / MAX_ATTEMPTS_EXCEEDED /
+    //          INVALID_<remaining> / SUCCESS
     // =========================
-    public boolean verifyOtp(String email, String otp) {
+    public String verifyOtp(String email, String otp) {
 
         logger.info("OTP-SERVICE: Verify OTP request received | email={}", email);
 
         if (email == null || email.trim().isEmpty()) {
             logger.warn("OTP-SERVICE: OTP verification blocked - email is null/empty");
-            return false;
+            return "OTP_NOT_FOUND";
         }
 
         if (otp == null || otp.trim().isEmpty()) {
             logger.warn("OTP-SERVICE: OTP verification blocked - otp is null/empty | email={}", email);
-            return false;
+            return "INVALID_0";
         }
 
         try {
             Optional<OtpEntity> optional = otpRepository.findByEmail(email);
 
-            if (optional.isPresent()) {
-                OtpEntity entity = optional.get();
-
-                boolean otpMatch = entity.getOtp() != null && entity.getOtp().equals(otp);
-                boolean notExpired = entity.getExpiryTime() != null && entity.getExpiryTime().isAfter(LocalDateTime.now());
-
-                if (!otpMatch) {
-                    logger.warn("OTP-SERVICE: OTP verification failed (wrong OTP) | email={}", email);
-                } else if (!notExpired) {
-                    logger.warn("OTP-SERVICE: OTP verification failed (expired OTP) | email={}", email);
-                } else {
-                    logger.info("OTP-SERVICE: OTP verification success | email={}", email);
-                }
-
-                return otpMatch && notExpired;
+            if (optional.isEmpty()) {
+                logger.warn("OTP-SERVICE: OTP verification failed (no record found) | email={}", email);
+                return "OTP_NOT_FOUND";
             }
 
-            logger.warn("OTP-SERVICE: OTP verification failed (no record found) | email={}", email);
-            return false;
+            OtpEntity entity = optional.get();
+
+            // Check expiry
+            if (entity.getExpiryTime() == null || entity.getExpiryTime().isBefore(LocalDateTime.now())) {
+                logger.warn("OTP-SERVICE: OTP verification failed (expired OTP) | email={}", email);
+                return "OTP_EXPIRED";
+            }
+
+            // Check max attempts
+            if (entity.getAttempts() >= entity.getMaxAttempts()) {
+                logger.warn("OTP-SERVICE: OTP verification blocked (max attempts exceeded) | email={} | attempts={}",
+                        email, entity.getAttempts());
+                return "MAX_ATTEMPTS_EXCEEDED";
+            }
+
+            // Wrong OTP
+            if (entity.getOtp() == null || !entity.getOtp().equals(otp)) {
+
+                entity.setAttempts(entity.getAttempts() + 1);
+                otpRepository.save(entity);
+
+                int remaining = entity.getMaxAttempts() - entity.getAttempts();
+
+                logger.warn("OTP-SERVICE: OTP verification failed (wrong OTP) | email={} | attempts={} | remaining={}",
+                        email, entity.getAttempts(), remaining);
+
+                return "INVALID_" + remaining;
+            }
+
+            // Correct OTP
+            otpRepository.delete(entity);
+
+            logger.info("OTP-SERVICE: OTP verification SUCCESS | email={}", email);
+
+            return "SUCCESS";
 
         } catch (Exception ex) {
             logger.error("OTP-SERVICE: Error during OTP verification | email={} | Reason={}",
