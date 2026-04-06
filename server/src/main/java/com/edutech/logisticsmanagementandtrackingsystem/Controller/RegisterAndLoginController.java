@@ -50,9 +50,24 @@ public class RegisterAndLoginController {
         String otp = (String) request.get("otp");
 
         //  OTP VALIDATION
-        if (!otpService.verifyOtp(email, otp)) {
-            return ResponseEntity.badRequest().body("Invalid or expired OTP");
-        }
+        String result = otpService.verifyOtp(email, otp);
+
+if (result.equals("SUCCESS")) {
+// continue registration
+} 
+else if (result.equals("OTP_EXPIRED")) {
+return ResponseEntity.badRequest().body("OTP expired");
+} 
+else if (result.equals("MAX_ATTEMPTS_EXCEEDED")) {
+return ResponseEntity.badRequest().body("Maximum attempts reached. Please request new OTP");
+} 
+else if (result.startsWith("INVALID_")) {
+int remaining = Integer.parseInt(result.split("_")[1]);
+return ResponseEntity.badRequest().body("Invalid OTP. Attempts left: " + remaining);
+} 
+else {
+return ResponseEntity.badRequest().body("OTP not found");
+}
 
         // Convert request → User object
         User user = new User();

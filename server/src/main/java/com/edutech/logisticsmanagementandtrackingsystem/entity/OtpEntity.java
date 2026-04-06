@@ -62,4 +62,16 @@ public class OtpEntity {
     public void setExpiryTime(LocalDateTime expiryTime) {
         this.expiryTime = expiryTime;
     }
+
+    public int getAttempts(){
+        return attempts;
+    }
+
+    public void setAttempts(int attempts){
+        this.attempts = attempts;
+    }
+
+    public int getMaxAttempts(){
+        return MAX_ATTEMPTS;
+    }
 }
