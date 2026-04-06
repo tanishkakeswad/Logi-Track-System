@@ -15,7 +15,7 @@
 
     <div class="dashboard-grid">
 
-      <!-- Main Card -->
+      <!-- ✅ Main Card (Incoming code - unchanged) -->
       <button class="dash-card primary-card" routerLink="/viewcargostatus" type="button">
         <div class="card-top">
           <h3>View Cargo Status</h3>
@@ -32,7 +32,7 @@
         </div>
       </button>
 
-      <!-- Secondary Info Card -->
+      <!-- ✅ Secondary Info Card (Incoming code - unchanged) -->
       <div class="dash-card info-card">
         <h3>Quick Help</h3>
 
@@ -45,6 +45,34 @@
         <div class="note">
           For faster support, include your A.W.B number in the ticket.
         </div>
+      </div>
+
+      <!-- ✅ NEW: Track Driver Card (Functionality added from current code) -->
+      <div class="dash-card track-card">
+        <div class="card-top">
+          <h3>Track Your Driver</h3>
+          <span class="badge-pill">Live</span>
+        </div>
+
+        <p>
+          Enter Driver ID to see live location on the map in real time.
+        </p>
+
+        <div class="track-controls">
+          <input
+            type="number"
+            [(ngModel)]="driverId"
+            placeholder="Enter Driver ID"
+            class="track-input"
+          />
+
+          <button type="button" (click)="startTracking()" class="track-btn">
+            Track
+          </button>
+        </div>
+
+        <!-- Map container (same id as current code for your JS/TS logic) -->
+        <div id="customerMap"></div>
       </div>
 
     </div>

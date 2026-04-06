@@ -19,44 +19,60 @@ import com.edutech.logisticsmanagementandtrackingsystem.jwt.JwtRequestFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-    private final JwtRequestFilter jwtRequestFilter;
-    private final PasswordEncoder passwordEncoder;
+private final UserDetailsService userDetailsService;
+private final JwtRequestFilter jwtRequestFilter;
+private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter,
-            PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.jwtRequestFilter = jwtRequestFilter;
-        this.passwordEncoder = passwordEncoder;
-    }
+public SecurityConfig(UserDetailsService userDetailsService,
+JwtRequestFilter jwtRequestFilter,
+PasswordEncoder passwordEncoder) {
+this.userDetailsService = userDetailsService;
+this.jwtRequestFilter = jwtRequestFilter;
+this.passwordEncoder = passwordEncoder;
+}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+@Override
+protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
+http
+.cors().and() // :white_check_mark: enable CORS
+.csrf().disable() // :white_check_mark: disable CSRF for REST APIs
 
-                //  PUBLIC ENDPOINTS (UPDATED)
-                .antMatchers(HttpMethod.POST,
-                        "/api/register",
-                        "/api/login",
-                        "/api/send-otp"   //  ADDED THIS
-                ).permitAll()
+.sessionManagement()
+.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+.and()
 
-                // BUSINESS role endpoints
-                .antMatchers(HttpMethod.POST, "/api/business/cargo", "/api/business/assign-cargo")
-                .hasAuthority("BUSINESS")
-                .antMatchers(HttpMethod.GET, "/api/business/drivers", "/api/business/cargo", "/api/business/cargo-id")
-                .hasAuthority("BUSINESS")
+.authorizeRequests()
 
-                // DRIVER role endpoints
-                .antMatchers(HttpMethod.GET, "/api/driver/cargo")
-                .hasAuthority("DRIVER")
-                .antMatchers(HttpMethod.PUT, "/api/driver/update-cargo-status")
-                .hasAuthority("DRIVER")
+// :unlock: PUBLIC ENDPOINTS
+.antMatchers(HttpMethod.POST,
+"/api/register",
+"/api/login",
+"/api/send-otp"
+).permitAll()
+
+// :fire: GPS TRACKING APIs (VERY IMPORTANT)
+.antMatchers("/api/location/**").permitAll()
+
+// :office: BUSINESS ROLE
+.antMatchers(HttpMethod.POST,
+"/api/business/cargo",
+"/api/business/assign-cargo",
+"/api/business/cargo-with-documents"
+).hasAuthority("BUSINESS")
+
+.antMatchers(HttpMethod.GET,
+"/api/business/drivers",
+"/api/business/cargo",
+"/api/business/cargo-id"
+).hasAuthority("BUSINESS")
+
+// :truck: DRIVER ROLE
+.antMatchers(HttpMethod.GET, "/api/driver/cargo")
+.hasAuthority("DRIVER")
+
+.antMatchers(HttpMethod.PUT, "/api/driver/update-cargo-status")
+.hasAuthority("DRIVER")
 
                 
                 // CUSTOMER role endpoints
@@ -68,29 +84,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/chat/message").permitAll()
 
 
-                .antMatchers(HttpMethod.POST, "/api/business/cargo-with-documents")
-                .hasAuthority("BUSINESS")
+// :page_facing_up: DOCUMENT ACCESS
+.antMatchers(HttpMethod.GET, "/api/documents/**")
+.hasAnyAuthority("BUSINESS", "DRIVER")
 
-                .antMatchers(HttpMethod.GET, "/api/documents/**")
-                .hasAnyAuthority("BUSINESS", "DRIVER")
-                // All other requests must be authenticated
-                .anyRequest().authenticated()
+// :closed_lock_with_key: ALL OTHER REQUESTS REQUIRE AUTH
+.anyRequest().authenticated()
 
-                .and()
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+.and()
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder);
-    }
+// :closed_lock_with_key: JWT FILTER
+.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 }
 
+@Override
+@Bean
+public AuthenticationManager authenticationManagerBean() throws Exception {
+return super.authenticationManagerBean();
+}
+
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+auth
+.userDetailsService(userDetailsService)
+.passwordEncoder(passwordEncoder);
+}
+}
