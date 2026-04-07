@@ -146,13 +146,144 @@
 /* ============================
    ✅ TRACKING SECTION (FROM CURRENT CODE)
 ============================ */
+/* ============================
+   ✅ TRACK DRIVER – MODERN CARD
+============================ */
 .tracking-section {
-  margin-top: 40px;
+  margin-top: 80px;
+  padding: 32px 28px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  text-align: left;
 }
 
-.tracking-controls {
-  margin-bottom: 15px;
+/* Header */
+.tracking-header {
+  margin-bottom: 24px;
 }
+
+.tracking-header h2 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.tracking-header p {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ============================
+   CONTROLS BAR
+============================ */
+.tracking-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+/* Input */
+.tracking-controls input {
+  flex: 1;
+  min-width: 160px;
+  padding: 12px 14px;
+
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.tracking-controls input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.tracking-controls input:focus {
+  outline: none;
+  border-color: #f77f00;
+}
+
+/* ============================
+   BUTTONS
+============================ */
+.primary-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(250, 108, 42, 0.45);
+}
+
+.secondary-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ============================
+   MAP AREA
+============================ */
+.map-wrapper {
+  margin-top: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#businessMap {
+  height: 420px;
+  width: 100%;
+  background: #000; /* fallback */
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 768px) {
+  .tracking-header h2 {
+    font-size: 1.5rem;
+  }
+
+  #businessMap {
+    height: 300px;
+  }
+}
+
 
 /* ✅ MAP FIX – REQUIRED FOR FUNCTIONALITY */
 #businessMap {

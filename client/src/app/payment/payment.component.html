@@ -1,61 +1,113 @@
-<div class="container mt-4">
-  <h2 class="text-center mb-4">Payment</h2>
+<div class="payment-page">
 
-  <div class="alert alert-info" *ngIf="previewAmountInPaise !== null">
-  Estimated Amount: ₹ {{ (previewAmountInPaise! / 100) }}
-</div>
+  <div class="container">
 
-  <div class="alert alert-danger" *ngIf="message && message.startsWith('❌')">
-    {{ message }}
-  </div>
+    <!-- Header -->
+    <div class="payment-header">
+      <div class="page-chip">Secure Checkout</div>
+      <h1>Payment</h1>
+      <p>Finalize shipment payment securely and continue operations.</p>
+    </div>
 
-  <div class="alert alert-success" *ngIf="message && message.startsWith('✅')">
-    {{ message }}
-  </div>
+    <!-- Estimated Price -->
+    <div class="alert alert-info" *ngIf="previewAmountInPaise !== null">
+      Estimated Amount:
+      <strong>₹ {{ (previewAmountInPaise / 100) }}</strong>
+    </div>
 
-  <form [formGroup]="paymentForm" (ngSubmit)="pay()">
+    <!-- Error -->
+    <div class="alert alert-danger" *ngIf="message && message.startsWith('❌')">
+      {{ message }}
+    </div>
 
-    <div class="row g-3">
+    <!-- Success -->
+    <div class="alert alert-success" *ngIf="message && message.startsWith('✅')">
+      {{ message }}
+    </div>
 
-      <div class="col-md-6">
-        <label class="form-label">Source City</label>
-        <select class="form-select" formControlName="sourceCity">
-          <option value="">Choose</option>
-          <option *ngFor="let c of supportedCities" [value]="c">{{ c }}</option>
-        </select>
-      </div>
+    <!-- ✅ RETURN CTA (ONLY AFTER SUCCESS) -->
+    <div class="text-center mt-4" *ngIf="paymentCompleted">
+      <button class="btn primary-btn px-4"
+              (click)="goBackToCargo()">
+        Return to Cargo Dashboard
+      </button>
+    </div>
 
-      <div class="col-md-6">
-        <label class="form-label">Destination City</label>
-        <select class="form-select" formControlName="destinationCity">
-          <option value="">Choose</option>
-          <option *ngFor="let c of supportedCities" [value]="c">{{ c }}</option>
-        </select>
-      </div>
+    <!-- Card -->
+    <div class="card glass-card payment-card" *ngIf="!paymentCompleted">
 
-      <div class="col-md-6">
-        <label class="form-label">Weight (KG)</label>
-        <input type="number" class="form-control" formControlName="size" min="1" max="10000" placeholder="Enter weight in KG">
-        <small class="text-danger" *ngIf="paymentForm.get('size')?.touched && paymentForm.get('size')?.invalid">
-          Weight must be between 1 and 10000 KG
-        </small>
-      </div>
+      <form [formGroup]="paymentForm" (ngSubmit)="pay()">
 
-      <div class="col-md-3">
-        <label class="form-label">Driver ID</label>
-        <input type="number" class="form-control" formControlName="driverId" placeholder="Driver ID" readonly>
-      </div>
+        <div class="row g-4">
 
-      <div class="col-md-3">
-        <label class="form-label">Cargo ID</label>
-        <input type="number" class="form-control" formControlName="cargoId" placeholder="Cargo ID" readonly>
-      </div>
+          <!-- Source -->
+          <div class="col-md-6">
+            <label class="form-label">Source City</label>
+            <select class="form-select" formControlName="sourceCity">
+              <option value="">Choose</option>
+              <option *ngFor="let c of supportedCities" [value]="c">
+                {{ c }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Destination -->
+          <div class="col-md-6">
+            <label class="form-label">Destination City</label>
+            <select class="form-select" formControlName="destinationCity">
+              <option value="">Choose</option>
+              <option *ngFor="let c of supportedCities" [value]="c">
+                {{ c }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Weight -->
+          <div class="col-md-6">
+            <label class="form-label">Weight (KG)</label>
+            <input type="number"
+                   class="form-control"
+                   formControlName="size"
+                   min="1"
+                   max="10000"
+                   placeholder="Enter cargo weight" />
+            <small class="field-error"
+              *ngIf="paymentForm.get('size')?.touched && paymentForm.get('size')?.invalid">
+              Weight must be between 1 and 10000 KG
+            </small>
+          </div>
+
+          <!-- Driver -->
+          <div class="col-md-3">
+            <label class="form-label">Driver ID</label>
+            <input type="number"
+                   class="form-control readonly"
+                   formControlName="driverId"
+                   readonly />
+          </div>
+
+          <!-- Cargo -->
+          <div class="col-md-3">
+            <label class="form-label">Cargo ID</label>
+            <input type="number"
+                   class="form-control readonly"
+                   formControlName="cargoId"
+                   readonly />
+          </div>
+
+        </div>
+
+        <!-- Action -->
+        <button
+          class="btn primary-btn w-100 mt-4"
+          type="submit"
+          [disabled]="loading || paymentCompleted">
+          {{ loading ? 'Processing...' : 'Calculate & Pay' }}
+        </button>
+
+      </form>
 
     </div>
 
-    <button class="btn btn-primary w-100 mt-4" type="submit" [disabled]="loading">
-      {{ loading ? 'Processing...' : 'Calculate / Pay' }}
-    </button>
-
-  </form>
+  </div>
 </div>

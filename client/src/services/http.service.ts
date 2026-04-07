@@ -136,9 +136,11 @@ export class HttpService {
   );
 }
 
-  sendOtp(email:string){
-    return this.http.post(`${this.serverName}/api/send-otp?email=${email}`,{})
-  }
+  sendOtp(email: string) {
+  return this.http.post(`${this.serverName}/api/send-otp?email=${email}`, { 
+    responseType: 'text' // <--- Add this line
+  });
+}
 
   sendChatMessage(payload: any): Observable<any> {
   return this.http.post<any>(

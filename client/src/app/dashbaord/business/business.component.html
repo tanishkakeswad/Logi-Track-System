@@ -37,20 +37,37 @@
     </div>
 
     <!-- 🔥 TRACKING SECTION -->
-    <div class="tracking-section">
+    <!-- 🔥 DRIVER TRACKING SECTION -->
+    <div class="tracking-section glass-card">
 
-      <h2>Driver Tracking</h2>
-
-      <div class="tracking-controls">
-        <input type="number" [(ngModel)]="selectedDriverId" placeholder="Enter Driver ID" />
-        <button (click)="trackOneDriver()">Track Driver</button>
-        <button (click)="showAllDrivers()">Show All</button>
+      <!-- Header -->
+      <div class="tracking-header">
+        <div>
+          <h2>Track Drivers</h2>
+          <p>Monitor real-time driver locations on the map.</p>
+        </div>
       </div>
 
-      <!-- 🔥 MAP -->
-      <div id="businessMap"></div>
+      <!-- Controls -->
+      <div class="tracking-controls">
+        <input type="number" [(ngModel)]="selectedDriverId" placeholder="Enter Driver ID" />
+
+        <button class="primary-btn" (click)="trackOneDriver()">
+          Track Driver
+        </button>
+
+        <button class="secondary-btn" (click)="showAllDrivers()">
+          Show All
+        </button>
+      </div>
+
+      <!-- Map -->
+      <div class="map-wrapper">
+        <div id="businessMap"></div>
+      </div>
 
     </div>
+
 
   </div>
 

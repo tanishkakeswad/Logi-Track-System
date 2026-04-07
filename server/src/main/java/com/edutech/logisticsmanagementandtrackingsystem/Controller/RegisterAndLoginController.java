@@ -27,7 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -50,21 +50,21 @@ public class RegisterAndLoginController {
     //  SEND OTP
     // =========================
     @PostMapping("/send-otp")
-    public ResponseEntity<?> sendOtp(@RequestParam String email) {
-
-        logger.info("SEND-OTP request received | email={}", email);
-
-        try {
-            otpService.generateAndSendOtp(email);
-            logger.info("SEND-OTP success | email={}", email);
-            return ResponseEntity.ok("OTP sent successfully");
-
-        } catch (Exception ex) {
-            logger.error("SEND-OTP failed | email={} | reason={}", email, ex.getMessage(), ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to send OTP. Please try again.");
-        }
+public ResponseEntity<?> sendOtp(@RequestParam String email) {
+    try {
+        otpService.generateAndSendOtp(email);
+        
+        // Return a Map (which Jackson converts to JSON: {"message": "..."})
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "OTP sent successfully");
+        
+        return ResponseEntity.ok(response); 
+    } catch (Exception ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Failed to send OTP");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+}
 
     // =========================
     //  REGISTER WITH OTP

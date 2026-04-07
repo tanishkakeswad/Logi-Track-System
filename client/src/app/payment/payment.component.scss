@@ -1,3 +1,166 @@
-.container {
+/* ============================
+   PAGE BACKGROUND
+============================ */
+.payment-page {
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 80px;
+
+  background: linear-gradient(to bottom, #003049 0%, #000000 100%);
+
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================
+   HEADER
+============================ */
+.payment-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-chip {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.14);
+  margin-bottom: 12px;
+}
+
+.payment-header h1 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  font-family: 'Poppins', sans-serif;
+}
+
+.payment-header p {
+  margin-top: 8px;
+  color: rgba(255,255,255,0.75);
+}
+
+/* ============================
+   CARD
+============================ */
+.payment-card {
   max-width: 900px;
+  margin: 0 auto;
+  padding: 34px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 22px;
+
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ============================
+   FORM ELEMENTS
+============================ */
+.form-label {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.form-control::placeholder {
+  color: rgba(255,255,255,0.55);
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #f77f00;
+  box-shadow: none;
+}
+
+.readonly {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+/* ============================
+   ERROR TEXT
+============================ */
+.field-error {
+  display: block;
+  margin-top: 6px;
+  color: #ff9b9b;
+  font-size: 0.8rem;
+}
+
+/* ============================
+   BUTTON
+============================ */
+.primary-btn {
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+
+  border-radius: 14px;
+  background: linear-gradient(to right, #ff4800, #fa6c2a);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.15);
+
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 35px rgba(250,108,42,0.45);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================
+   ALERT OVERRIDES
+============================ */
+.alert {
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.alert-info {
+  background: rgba(13,110,253,0.15);
+  border: 1px solid rgba(13,110,253,0.4);
+  color: #cfe2ff;
+}
+
+.alert-success {
+  background: rgba(25,135,84,0.15);
+  border: 1px solid rgba(25,135,84,0.4);
+}
+
+.alert-danger {
+  background: rgba(220,53,69,0.15);
+  border: 1px solid rgba(220,53,69,0.4);
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 768px) {
+  .payment-header h1 {
+    font-size: 2.1rem;
+  }
+
+  .payment-card {
+    padding: 24px;
+  }
 }

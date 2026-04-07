@@ -14,36 +14,30 @@ declare const bootstrap: any;
 export class AddcargoComponent implements OnInit {
 
   itemForm: FormGroup;
-  itemForm1: FormGroup;
-  formModel: any = { status: null };
 
-  showError: boolean = false;
-  errorMessage: any;
-
-  cargList: any = [];
+  cargList: any[] = [];
   cargoToShow: any[] = [];
 
-  assignModel: any = {};
-  driverList: any = [];
-  driverId: any;
+  driverList: any[] = [];
+  driverId: number | null = null;
 
-  cargoId: any;
+  cargoId: string = '';
   selectedFiles: File[] = [];
 
-  addSuccess: boolean = false;
-  addMessage: string = '';
-  addError: boolean = false;
-  addErrorMessage: string = '';
+  addSuccess = false;
+  addMessage = '';
+  addError = false;
+  addErrorMessage = '';
 
-  assignSuccess: boolean = false;
-  assignMessage: string = '';
-  assignError: boolean = false;
-  assignErrorMessage: string = '';
+  assignSuccess = false;
+  assignMessage = '';
+  assignError = false;
+  assignErrorMessage = '';
 
-  // ✅ Remember assigned driver per cargo even if backend doesn't return cargo.driver
+  showError = false;
+  errorMessage = '';
+
   private assignedDriverMap: Record<number, number> = {};
-
-  // ✅ Persist map so it survives navigation (pay later)
   private readonly ASSIGN_MAP_KEY = 'assignedDriverMap';
 
   constructor(
@@ -53,26 +47,24 @@ export class AddcargoComponent implements OnInit {
     private authService: AuthService
   ) {
     this.itemForm = this.formBuilder.group({
-      content: [this.formModel.content, [Validators.required]],
-      size: [this.formModel.size, [Validators.required]],
-      status: [this.formModel.status, [Validators.required]]
-    });
-
-    this.itemForm1 = this.formBuilder.group({
-      driver: [this.formModel.driver]
+      content: ['', Validators.required],
+      size: ['', Validators.required],
+      status: [null, Validators.required]
     });
   }
 
+  // =====================================================
+  // INIT
+  // =====================================================
   ngOnInit(): void {
-    // ✅ Load persisted assigned-driver map
     this.loadAssignMap();
-
     this.getCargo();
     this.getDrivers();
-    this.driverId = null;
   }
 
-  // ✅ Load map from localStorage
+  // =====================================================
+  // LOCAL STORAGE (ASSIGNED DRIVER)
+  // =====================================================
   private loadAssignMap(): void {
     try {
       const raw = localStorage.getItem(this.ASSIGN_MAP_KEY);
@@ -82,172 +74,147 @@ export class AddcargoComponent implements OnInit {
     }
   }
 
-  // ✅ Save map to localStorage
   private saveAssignMap(): void {
     localStorage.setItem(this.ASSIGN_MAP_KEY, JSON.stringify(this.assignedDriverMap));
   }
 
-  getCargo() {
-    this.cargList = [];
+  // =====================================================
+  // FETCH CARGO
+  // =====================================================
+  getCargo(): void {
     this.showError = false;
 
     this.httpService.getCargo().subscribe({
-      next: (data: any) => {
+      next: (data: any[]) => {
         this.cargList = data || [];
-        this.cargoToShow = this.cargList;
+        this.cargoToShow = [...this.cargList];
 
-        // ✅ Re-attach driver info from local map so Pay stays enabled
         this.cargoToShow.forEach(cargo => {
           const cid = Number(cargo?.id);
           if (!cid) return;
 
+          // restore assigned driver
           if (this.assignedDriverMap[cid]) {
             cargo.driver = cargo.driver || {};
             cargo.driver.id = this.assignedDriverMap[cid];
 
-            // Optional: bump status visually if backend still says Pending
             if (cargo.status === 'Order Pending') {
               cargo.status = 'Order Assigned';
             }
           }
 
-          // ✅ Attach payment info
-          // @ts-ignore
+          // attach payment info
           this.httpService.getPaymentByCargoId(cid).subscribe({
-            next: (payment: any) => {
-              cargo.payment = payment;
-            },
-            error: () => {
-              cargo.payment = null;
-            }
+            next: (payment: any) => cargo.payment = payment,
+            error: () => cargo.payment = null
           });
         });
       },
-      error: (error) => {
+      error: () => {
         this.showError = true;
-        this.errorMessage = "Cannot fetch cargo. Please try again later.";
-        console.error('Error:', error);
+        this.errorMessage = 'Cannot fetch cargo. Please try again later.';
       }
     });
   }
 
-  getDrivers() {
-    this.driverList = [];
-    this.httpService.getDrivers().subscribe(
-      (data: any) => {
-        this.driverList = data || [];
-      },
-      error => {
+  // =====================================================
+  // FETCH DRIVERS
+  // =====================================================
+  getDrivers(): void {
+    this.httpService.getDrivers().subscribe({
+      next: (data: any[]) => this.driverList = data || [],
+      error: () => {
         this.showError = true;
-        this.errorMessage = "Cannot get Drivers. Please try again later.";
-        console.error('Error:', error);
+        this.errorMessage = 'Cannot fetch drivers.';
       }
-    );
+    });
   }
 
-  // Replace ONLY your search() method with this:
+  // =====================================================
+  // SEARCH
+  // =====================================================
+  search(): void {
+    this.showError = false;
 
-search() {
-  this.showError = false;
+    const value = (this.cargoId || '').trim();
 
-  const raw = (this.cargoId ?? '').toString().trim();
-
-  // if empty -> show all
-  if (!raw) {
-    this.cargoToShow = this.cargList;
-    return;
-  }
-
-  // ✅ If 11 digits -> treat as AWB
-  const isAwb = /^[0-9]{11}$/.test(raw);
-
-  if (isAwb) {
-    this.httpService.getCargoByAwb(raw).subscribe(
-      (data: any) => {
-        this.cargoToShow = data ? [data] : [];
-      },
-      () => {
-        this.showError = true;
-        this.errorMessage = "No Record found with entered A.W.B number";
-      }
-    );
-    return;
-  }
-
-  // ✅ Otherwise treat as cargoId
-  this.httpService.getCargoById(raw).subscribe(
-    (data: any) => {
-      this.cargoToShow = data ? [data] : [];
-    },
-    () => {
-      this.showError = true;
-      this.errorMessage = "No Record found with entered Cargo ID";
+    if (!value) {
+      this.cargoToShow = [...this.cargList];
+      return;
     }
-  );
-}
-onSubmit() {
-  this.addSuccess = false;
-  this.addError = false;
-  this.addMessage = '';
-  this.addErrorMessage = '';
 
-  // ✅ documents mandatory
-  if (!this.selectedFiles || this.selectedFiles.length === 0) {
-    this.addError = true;
-    this.addErrorMessage = 'Please upload at least one document to submit cargo.';
-    return;
+    if (/^\d{11}$/.test(value)) {
+      this.httpService.getCargoByAwb(value).subscribe({
+        next: (data: any) => this.cargoToShow = data ? [data] : [],
+        error: () => {
+          this.showError = true;
+          this.errorMessage = 'No record found with entered A.W.B number';
+        }
+      });
+      return;
+    }
+
+    this.httpService.getCargoById(value).subscribe({
+      next: (data: any) => this.cargoToShow = data ? [data] : [],
+      error: () => {
+        this.showError = true;
+        this.errorMessage = 'No record found with entered Cargo ID';
+      }
+    });
   }
 
-  if (this.itemForm.valid) {
-    const formData = new FormData();
+  // =====================================================
+  // ADD CARGO
+  // =====================================================
+  onSubmit(): void {
+    this.addSuccess = false;
+    this.addError = false;
 
-    // ✅ keep old working way (Cargo binds from JSON blob)
+    if (!this.selectedFiles.length) {
+      this.addError = true;
+      this.addErrorMessage = 'Please upload at least one document.';
+      return;
+    }
+
+    if (this.itemForm.invalid) {
+      this.itemForm.markAllAsTouched();
+      return;
+    }
+
+    const formData = new FormData();
     formData.append(
       'cargo',
       new Blob([JSON.stringify(this.itemForm.value)], { type: 'application/json' })
     );
 
-    this.selectedFiles.forEach(file => {
-      formData.append('documents', file, file.name);
-    });
+    this.selectedFiles.forEach(file =>
+      formData.append('documents', file, file.name)
+    );
 
-    this.httpService.addCargoWithDocuments(formData).subscribe(
-      () => {
+    this.httpService.addCargoWithDocuments(formData).subscribe({
+      next: () => {
         this.addSuccess = true;
         this.addMessage = 'Cargo added successfully';
         this.itemForm.reset();
         this.selectedFiles = [];
         this.getCargo();
       },
-      (error) => {
+      error: () => {
         this.addError = true;
-        if (error?.status === 400) {
-          this.addErrorMessage = 'Documents are required. Please upload at least one file.';
-        } else {
-          this.addErrorMessage = 'Failed to add cargo with documents';
-        }
-        console.error(error);
+        this.addErrorMessage = 'Failed to add cargo with documents';
       }
-    );
-  } else {
-    this.itemForm.markAllAsTouched();
-  }
-}
-
-  addDriver(value: any) {
-    this.assignModel.cargoId = value.id;
-    this.assignError = false;
-    this.assignErrorMessage = '';
-    this.driverId = null;
+    });
   }
 
-  onFileSelected(event: any) {
-    const files: File[] = Array.from(event.target.files);
+  // =====================================================
+  // FILE UPLOAD
+  // =====================================================
+  onFileSelected(event: any): void {
+    const files: File[] = Array.from(event.target.files || []);
 
     for (const file of files) {
       if (file.size > 10 * 1024 * 1024) {
         alert('File size must be less than 10 MB');
-        event.target.value = '';
         this.selectedFiles = [];
         return;
       }
@@ -256,72 +223,50 @@ onSubmit() {
     this.selectedFiles = files;
   }
 
-  assignDriver() {
-    this.assignModel.driverId = this.driverId;
-
-    this.assignSuccess = false;
+  // =====================================================
+  // ASSIGN DRIVER
+  // =====================================================
+  addDriver(cargo: any): void {
+    this.driverId = null;
+    cargo._selected = true;
     this.assignError = false;
-    this.assignMessage = '';
-    this.assignErrorMessage = '';
-
-    if (this.assignModel.driverId != null) {
-      this.httpService.assignDriver(this.assignModel.driverId, this.assignModel.cargoId).subscribe(
-        (data: any) => {
-          this.assignSuccess = true;
-          this.assignMessage = data.message || 'Driver assigned successfully';
-
-          // ✅ bring alert into view
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-
-          // ✅ store assignment so Pay stays enabled even after navigation
-          const cid = Number(this.assignModel.cargoId);
-          const did = Number(this.assignModel.driverId);
-          if (cid && did) {
-            this.assignedDriverMap[cid] = did;
-            this.saveAssignMap(); // ✅ persist
-          }
-
-          // ✅ update current row immediately (instant UI)
-          const updated = this.cargoToShow.find(c => Number(c.id) === cid);
-          if (updated) {
-            updated.driver = updated.driver || {};
-            updated.driver.id = did;
-
-            if (updated.status === 'Order Pending') {
-              updated.status = 'Order Assigned';
-            }
-          }
-
-          // ✅ refresh list (safe: driver is reattached from map)
-          this.getCargo();
-
-          // close modal
-          const modalEl = document.getElementById('driverModal');
-          if (modalEl) {
-            const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-            modalInstance.hide();
-          }
-
-          this.driverId = null;
-
-          setTimeout(() => {
-            this.assignSuccess = false;
-            this.assignMessage = '';
-          }, 5000);
-        },
-        error => {
-          this.assignError = true;
-          this.assignErrorMessage = "An error occurred while assigning driver. Please try again later.";
-          console.error('Error:', error);
-        }
-      );
-    } else {
-      this.assignError = true;
-      this.assignErrorMessage = "Please select a driver before assigning.";
-    }
   }
 
-  payNow(cargo: any) {
+  assignDriver(): void {
+    if (!this.driverId) {
+      this.assignError = true;
+      this.assignErrorMessage = 'Please select a driver before assigning.';
+      return;
+    }
+
+    const cargo = this.cargoToShow.find(c => c._selected);
+    if (!cargo) return;
+
+    const cid = Number(cargo.id);
+
+    this.httpService.assignDriver(this.driverId, cid).subscribe({
+      next: (data: any) => {
+        this.assignSuccess = true;
+        this.assignMessage = data.message || 'Driver assigned successfully';
+
+        this.assignedDriverMap[cid] = this.driverId!;
+        this.saveAssignMap();
+        this.getCargo();
+
+        const modalEl = document.getElementById('driverModal');
+        bootstrap.Modal.getInstance(modalEl)?.hide();
+      },
+      error: () => {
+        this.assignError = true;
+        this.assignErrorMessage = 'An error occurred while assigning driver.';
+      }
+    });
+  }
+
+  // =====================================================
+  // PAYMENT
+  // =====================================================
+  payNow(cargo: any): void {
     if (!cargo?.driver?.id) {
       this.showError = true;
       this.errorMessage = 'Assign a driver before payment.';
@@ -336,6 +281,9 @@ onSubmit() {
     });
   }
 
+  // =====================================================
+  // LOGOUT
+  // =====================================================
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
