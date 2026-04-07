@@ -53,13 +53,13 @@
                 </div>
               </div>
 
-              <!-- Size -->
+              <!-- Weight -->
               <div class="col-12 col-md-4">
-                <label class="form-label">Size</label>
+                <label class="form-label">Weight (KG)</label>
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
-                  placeholder="e.g., 100, Medium, 12kg"
+                  placeholder="e.g., 12 or 250"
                   formControlName="size"
                 />
                 <div class="field-error" *ngIf="itemForm.get('size')?.invalid && itemForm.get('size')?.touched">
@@ -81,7 +81,7 @@
 
               <!-- Documents -->
               <div class="col-12">
-                <label class="form-label">Cargo Documents (required)</label>
+                <label class="form-label">Cargo Documents (optional)</label>
 
                 <div class="upload-box">
                   <input
@@ -111,7 +111,7 @@
             </div>
           </form>
 
-          <!-- ✅ Add Cargo Alerts (only for onSubmit) -->
+          <!-- ✅ Add Cargo Alerts -->
           <div *ngIf="addError" class="alert alert-danger mt-3">
             {{ addErrorMessage }}
           </div>
@@ -166,7 +166,7 @@
       <div class="table-titlebar">
         <div>
           <h3>Cargo Records</h3>
-          <p class="muted">Assign drivers only for cargos in pending status.</p>
+          <p class="muted">Assign drivers only for cargos in pending status. Pay after driver assignment.</p>
         </div>
       </div>
 
@@ -174,25 +174,20 @@
         <table class="table table-dark table-hover align-middle mb-0">
           <thead>
             <tr>
-              <!-- ✅ NEW: Serial Number -->
               <th class="text-center">S.No.</th>
-
               <th class="text-center">A.W.B No.</th>
               <th>Content</th>
               <th>Size</th>
               <th>Status</th>
               <th>Documents</th>
+              <th class="text-center">Payment</th>
               <th class="text-center">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <!-- ✅ NEW: let i = index -->
             <tr *ngFor="let cargo of cargoToShow; let i = index">
-
-              <!-- ✅ NEW: Serial Number cell -->
               <td class="text-center fw-semibold">{{ i + 1 }}</td>
-
               <td class="text-center fw-semibold">{{ cargo.id }}</td>
               <td>{{ cargo.content }}</td>
               <td>{{ cargo.size }}</td>
@@ -223,6 +218,34 @@
                 </ng-template>
               </td>
 
+              <!-- ✅ Payment: tooltip shows only on hover for disabled pay -->
+              <td class="text-center">
+                <span *ngIf="cargo.payment?.status === 'PAID'" class="badge bg-success">
+                  PAID
+                </span>
+
+                <span
+                  *ngIf="!cargo.payment"
+                  class="pay-wrapper"
+                  [class.is-disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'"
+                >
+                  <button
+                    class="btn btn-warning btn-sm"
+                    type="button"
+                    (click)="payNow(cargo)"
+                    [disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'"
+                  >
+                    Pay
+                  </button>
+
+                  <!-- Tooltip only exists when disabled -->
+                  <span class="pay-tooltip" *ngIf="!cargo?.driver?.id || cargo?.status === 'Order Pending'">
+                    {{ !cargo?.driver?.id ? 'Assign driver first' : 'Available after assignment' }}
+                  </span>
+                </span>
+              </td>
+
+              <!-- ✅ Action: only Assign button (no extra status button under it) -->
               <td class="text-center">
                 <button
                   class="btn btn-primary btn-sm"
@@ -234,19 +257,15 @@
                 >
                   Assign
                 </button>
-
-                <button *ngIf="cargo.status !== 'Order Pending'" class="btn btn-secondary btn-sm ms-2" disabled>
-                  {{ cargo.status }}
-                </button>
               </td>
             </tr>
 
-            <!-- ✅ IMPORTANT: colspan updated from 6 to 7 -->
             <tr *ngIf="!cargoToShow || cargoToShow.length === 0">
-              <td colspan="7" class="text-center text-muted py-4">
+              <td colspan="8" class="text-center text-muted py-4">
                 No cargo found.
               </td>
             </tr>
+
           </tbody>
         </table>
       </div>
@@ -271,7 +290,6 @@
             </option>
           </select>
 
-          <!-- ✅ Modal-specific error -->
           <div *ngIf="assignError" class="text-danger small mt-2">
             {{ assignErrorMessage }}
           </div>
@@ -284,4 +302,5 @@
       </div>
     </div>
   </div>
+
 </div>

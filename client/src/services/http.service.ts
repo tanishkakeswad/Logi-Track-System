@@ -147,4 +147,27 @@ export class HttpService {
     { headers: this.getHeaders() }
   );
 }
+
+createOrder(payload: any) {
+  return this.http.post<any>(
+    `${this.serverName}/api/payment/create-order`,
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
+
+verifyPayment(payload: any) {
+  return this.http.post<any>(
+    `${this.serverName}/api/payment/verify`,
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
+
+getPaymentByCargoId(cargoId: number) {
+  return this.http.get<any>(
+    `${this.serverName}/api/payment/by-cargo/${cargoId}`,
+    { headers: this.getHeaders() }
+  );
+}
 }

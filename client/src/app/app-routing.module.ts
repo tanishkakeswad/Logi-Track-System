@@ -14,6 +14,7 @@ import { DriverComponent } from './dashbaord/driver/driver.component';
 import { CustomerComponent } from './dashbaord/customer/customer.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ContactComponent } from './contact/contact.component';
+import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },          
@@ -41,7 +42,10 @@ const routes: Routes = [
     component: CustomerComponent,
     canActivate: [AuthGuard]
   },
-
+  { path: 'payment', 
+    component: PaymentComponent,
+    canActivate:[AuthGuard]
+  },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }   
 ];

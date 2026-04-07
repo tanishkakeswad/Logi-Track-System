@@ -1,3 +1,7 @@
+/* =========================================================
+   Cargo Page — Sleek Modern UI (Uniform + Premium)
+========================================================= */
+
 .addcargo-page {
   min-height: 100vh;
   padding-top: 120px;
@@ -9,28 +13,29 @@
 
 /* Header */
 .page-header {
-  margin-bottom: 26px;
-  display: flex;
-  justify-content: center;
   text-align: center;
+  margin-bottom: 22px;
 }
 
 .page-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.88);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .page-header h1 {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.8rem;
+  font-size: 2.7rem;
   font-weight: 900;
   margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .page-header h1 span {
@@ -39,14 +44,18 @@
 
 .page-header p {
   margin-top: 8px;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.55;
 }
 
-/* Layout grid */
+/* Layout Grid */
 .top-grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  gap: 22px;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 18px;
   align-items: start;
 }
 
@@ -56,19 +65,20 @@
   }
 }
 
-/* Glass cards */
+/* Glass Cards */
 .glass-card {
-  background: rgba(255,255,255,0.085);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(12px);
   border-radius: 18px;
-  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
 }
 
 .card-titlebar,
 .table-titlebar {
-  padding: 18px 18px 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.10);
+  padding: 18px 18px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .card-titlebar h3,
@@ -76,13 +86,14 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 900;
   margin: 0;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .muted {
   margin: 6px 0 0;
-  color: rgba(255,255,255,0.72);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .addcargo-card .card-body,
@@ -92,15 +103,24 @@
 
 /* Form */
 .form-label {
-  color: rgba(255,255,255,0.92);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 650;
+  margin-bottom: 6px;
 }
 
 .form-control,
 .form-select {
   border-radius: 14px;
-  padding: 10px 12px;
-  border: 1px solid rgba(0,0,0,0.08);
+  padding: 11px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(247, 127, 0, 0.22);
+  border-color: rgba(247, 127, 0, 0.45);
 }
 
 .field-error {
@@ -113,13 +133,13 @@
 .upload-box {
   padding: 14px;
   border-radius: 16px;
-  background: rgba(0,0,0,0.25);
-  border: 1px dashed rgba(255,255,255,0.18);
+  background: rgba(0, 0, 0, 0.26);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
 }
 
 .upload-hint {
   margin-top: 8px;
-  color: rgba(255,255,255,0.70);
+  color: rgba(255, 255, 255, 0.70);
   font-size: 0.88rem;
 }
 
@@ -131,12 +151,12 @@
 }
 
 .file-chip {
-  padding: 8px 12px;
+  padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(247,127,0,0.12);
-  border: 1px solid rgba(247,127,0,0.25);
-  color: rgba(255,255,255,0.92);
-  font-size: 0.9rem;
+  background: rgba(247, 127, 0, 0.12);
+  border: 1px solid rgba(247, 127, 0, 0.25);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.88rem;
 }
 
 /* Buttons */
@@ -147,16 +167,15 @@
   font-weight: 900;
   border-radius: 14px;
   padding: 12px 18px;
-  box-shadow: 0 16px 34px rgba(250,108,42,0.22);
+  box-shadow: 0 16px 34px rgba(250, 108, 42, 0.22);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 22px 46px rgba(250,108,42,0.30);
+  box-shadow: 0 22px 46px rgba(250, 108, 42, 0.30);
 }
 
-/* Search */
 .search-actions {
   display: flex;
   gap: 10px;
@@ -166,7 +185,7 @@
 
 .search-tip {
   margin-top: 10px;
-  color: rgba(255,255,255,0.70);
+  color: rgba(255, 255, 255, 0.68);
   font-size: 0.88rem;
 }
 
@@ -176,12 +195,28 @@
 }
 
 .table-dark thead {
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .table-dark th {
-  font-weight: 800;
-  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.table-dark tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table-dark td {
+  color: rgba(255, 255, 255, 0.88);
+  vertical-align: middle;
+}
+
+.table-dark tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .docs-col .doc-line {
@@ -189,25 +224,106 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-/* Status pills */
+/* Status Pills */
 .status-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 130px;
   padding: 6px 12px;
   border-radius: 999px;
-  font-weight: 800;
-  font-size: 0.85rem;
-  border: 1px solid rgba(255,255,255,0.14);
+  font-weight: 900;
+  font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
 }
 
-.status-pill.pending { background: rgba(108,117,125,0.25); }
-.status-pill.assigned { background: rgba(13,110,253,0.25); }
-.status-pill.transit { background: rgba(255,193,7,0.22); }
-.status-pill.delivered { background: rgba(25,135,84,0.25); }
+.status-pill.pending { background: rgba(108, 117, 125, 0.25); }
+.status-pill.assigned { background: rgba(13, 110, 253, 0.25); }
+.status-pill.transit { background: rgba(255, 193, 7, 0.22); }
+.status-pill.delivered { background: rgba(25, 135, 84, 0.25); }
+
+/* Uniform small buttons */
+.btn.btn-primary.btn-sm,
+.btn.btn-warning.btn-sm {
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-weight: 800;
+  min-width: 70px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ✅ Pay Tooltip (only shows on hover) */
+.pay-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.pay-wrapper.is-disabled:hover .pay-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+  visibility: visible;
+}
+
+.pay-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 110%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.18s ease;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pay-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}
 
 /* Modal */
 .modal-modern {
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.modal-modern .modal-header,
+.modal-modern .modal-footer {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .status-pill {
+    min-width: 110px;
+  }
+
+  .docs-col .doc-line {
+    max-width: 180px;
+  }
 }

@@ -12,23 +12,24 @@ declare const bootstrap: any;
   styleUrls: ['./addcargo.component.scss']
 })
 export class AddcargoComponent implements OnInit {
+
   itemForm: FormGroup;
   itemForm1: FormGroup;
   formModel: any = { status: null };
 
-  // ✅ Keep existing ones (used elsewhere)
   showError: boolean = false;
   errorMessage: any;
 
   cargList: any = [];
+  cargoToShow: any[] = [];
+
   assignModel: any = {};
   driverList: any = [];
   driverId: any;
+
   cargoId: any;
-  cargoToShow: any[] = [];
   selectedFiles: File[] = [];
 
-  // ✅ NEW: separate messages
   addSuccess: boolean = false;
   addMessage: string = '';
   addError: boolean = false;
@@ -38,6 +39,12 @@ export class AddcargoComponent implements OnInit {
   assignMessage: string = '';
   assignError: boolean = false;
   assignErrorMessage: string = '';
+
+  // ✅ Remember assigned driver per cargo even if backend doesn't return cargo.driver
+  private assignedDriverMap: Record<number, number> = {};
+
+  // ✅ Persist map so it survives navigation (pay later)
+  private readonly ASSIGN_MAP_KEY = 'assignedDriverMap';
 
   constructor(
     public router: Router,
@@ -57,31 +64,78 @@ export class AddcargoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // ✅ Load persisted assigned-driver map
+    this.loadAssignMap();
+
     this.getCargo();
     this.getDrivers();
     this.driverId = null;
   }
 
+  // ✅ Load map from localStorage
+  private loadAssignMap(): void {
+    try {
+      const raw = localStorage.getItem(this.ASSIGN_MAP_KEY);
+      this.assignedDriverMap = raw ? JSON.parse(raw) : {};
+    } catch {
+      this.assignedDriverMap = {};
+    }
+  }
+
+  // ✅ Save map to localStorage
+  private saveAssignMap(): void {
+    localStorage.setItem(this.ASSIGN_MAP_KEY, JSON.stringify(this.assignedDriverMap));
+  }
+
   getCargo() {
     this.cargList = [];
-    this.httpService.getCargo().subscribe(
-      (data: any) => {
-        this.cargList = data;
+    this.showError = false;
+
+    this.httpService.getCargo().subscribe({
+      next: (data: any) => {
+        this.cargList = data || [];
         this.cargoToShow = this.cargList;
+
+        // ✅ Re-attach driver info from local map so Pay stays enabled
+        this.cargoToShow.forEach(cargo => {
+          const cid = Number(cargo?.id);
+          if (!cid) return;
+
+          if (this.assignedDriverMap[cid]) {
+            cargo.driver = cargo.driver || {};
+            cargo.driver.id = this.assignedDriverMap[cid];
+
+            // Optional: bump status visually if backend still says Pending
+            if (cargo.status === 'Order Pending') {
+              cargo.status = 'Order Assigned';
+            }
+          }
+
+          // ✅ Attach payment info
+          // @ts-ignore
+          this.httpService.getPaymentByCargoId(cid).subscribe({
+            next: (payment: any) => {
+              cargo.payment = payment;
+            },
+            error: () => {
+              cargo.payment = null;
+            }
+          });
+        });
       },
-      error => {
+      error: (error) => {
         this.showError = true;
         this.errorMessage = "Cannot fetch cargo. Please try again later.";
         console.error('Error:', error);
       }
-    );
+    });
   }
 
   getDrivers() {
     this.driverList = [];
     this.httpService.getDrivers().subscribe(
       (data: any) => {
-        this.driverList = data;
+        this.driverList = data || [];
       },
       error => {
         this.showError = true;
@@ -93,10 +147,33 @@ export class AddcargoComponent implements OnInit {
 
   search() {
     this.showError = false;
+
     if (this.cargoId) {
       this.httpService.getCargoById(this.cargoId).subscribe(
         (data: any) => {
-          this.cargoToShow = [data];
+          this.cargoToShow = data ? [data] : [];
+
+          // ✅ If searched cargo was assigned earlier, re-attach driver
+          const cargo = this.cargoToShow[0];
+          const cid = Number(cargo?.id);
+
+          if (cid && this.assignedDriverMap[cid]) {
+            cargo.driver = cargo.driver || {};
+            cargo.driver.id = this.assignedDriverMap[cid];
+
+            if (cargo.status === 'Order Pending') {
+              cargo.status = 'Order Assigned';
+            }
+          }
+
+          // ✅ Attach payment for searched cargo
+          if (cid) {
+            // @ts-ignore
+            this.httpService.getPaymentByCargoId(cid).subscribe({
+              next: (payment: any) => cargo.payment = payment,
+              error: () => cargo.payment = null
+            });
+          }
         },
         error => {
           this.showError = true;
@@ -110,13 +187,6 @@ export class AddcargoComponent implements OnInit {
   }
 
   onSubmit() {
-    // reset assign alerts (optional)
-    this.assignSuccess = false;
-    this.assignError = false;
-    this.assignMessage = '';
-    this.assignErrorMessage = '';
-
-    // reset add alerts
     this.addSuccess = false;
     this.addError = false;
     this.addMessage = '';
@@ -156,11 +226,7 @@ export class AddcargoComponent implements OnInit {
 
   addDriver(value: any) {
     this.assignModel.cargoId = value.id;
-
-    // reset assign messages when opening modal
-    this.assignSuccess = false;
     this.assignError = false;
-    this.assignMessage = '';
     this.assignErrorMessage = '';
     this.driverId = null;
   }
@@ -183,7 +249,6 @@ export class AddcargoComponent implements OnInit {
   assignDriver() {
     this.assignModel.driverId = this.driverId;
 
-    // reset assign alerts
     this.assignSuccess = false;
     this.assignError = false;
     this.assignMessage = '';
@@ -193,9 +258,31 @@ export class AddcargoComponent implements OnInit {
       this.httpService.assignDriver(this.assignModel.driverId, this.assignModel.cargoId).subscribe(
         (data: any) => {
           this.assignSuccess = true;
-          this.assignMessage = data.message || 'Cargo assigned successfully';
+          this.assignMessage = data.message || 'Driver assigned successfully';
 
-          // refresh list without reloading
+          // ✅ bring alert into view
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          // ✅ store assignment so Pay stays enabled even after navigation
+          const cid = Number(this.assignModel.cargoId);
+          const did = Number(this.assignModel.driverId);
+          if (cid && did) {
+            this.assignedDriverMap[cid] = did;
+            this.saveAssignMap(); // ✅ persist
+          }
+
+          // ✅ update current row immediately (instant UI)
+          const updated = this.cargoToShow.find(c => Number(c.id) === cid);
+          if (updated) {
+            updated.driver = updated.driver || {};
+            updated.driver.id = did;
+
+            if (updated.status === 'Order Pending') {
+              updated.status = 'Order Assigned';
+            }
+          }
+
+          // ✅ refresh list (safe: driver is reattached from map)
           this.getCargo();
 
           // close modal
@@ -207,11 +294,10 @@ export class AddcargoComponent implements OnInit {
 
           this.driverId = null;
 
-          // auto-hide success after 3 seconds (optional)
           setTimeout(() => {
             this.assignSuccess = false;
             this.assignMessage = '';
-          }, 3000);
+          }, 5000);
         },
         error => {
           this.assignError = true;
@@ -223,6 +309,21 @@ export class AddcargoComponent implements OnInit {
       this.assignError = true;
       this.assignErrorMessage = "Please select a driver before assigning.";
     }
+  }
+
+  payNow(cargo: any) {
+    if (!cargo?.driver?.id) {
+      this.showError = true;
+      this.errorMessage = 'Assign a driver before payment.';
+      return;
+    }
+
+    this.router.navigate(['/payment'], {
+      queryParams: {
+        cargoId: cargo.id,
+        driverId: cargo.driver.id
+      }
+    });
   }
 
   logout(): void {

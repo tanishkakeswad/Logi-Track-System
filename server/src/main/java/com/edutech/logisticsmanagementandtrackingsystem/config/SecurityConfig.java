@@ -88,6 +88,9 @@ http
 .antMatchers(HttpMethod.GET, "/api/documents/**")
 .hasAnyAuthority("BUSINESS", "DRIVER")
 
+.antMatchers(HttpMethod.POST, "/api/payment/create-order", "/api/payment/verify")
+.hasAuthority("BUSINESS")
+
 // :closed_lock_with_key: ALL OTHER REQUESTS REQUIRE AUTH
 .anyRequest().authenticated()
 

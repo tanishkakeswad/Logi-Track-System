@@ -15,14 +15,18 @@ export class ChatbotComponent {
   loading = false;
 
   messages: ChatMsg[] = [
-    { from: 'bot', text: "Hi! 👋 I'm LogiBot. Ask me about cargo, documents, tracking, or driver updates.", time: new Date() }
+    {
+      from: 'bot',
+      text: "Hello! I’m CargoWala Assistant. Ask me about cargo creation, documents, tracking, driver updates, or payments.",
+      time: new Date()
+    }
   ];
 
   constructor(private httpService: HttpService) {}
 
   toggle() {
-    console.log('✅ Chatbot clicked');
     this.isOpen = !this.isOpen;
+    if (this.isOpen) this.scrollToBottom();
   }
 
   close() {
@@ -36,12 +40,13 @@ export class ChatbotComponent {
     this.messages.push({ from: 'user', text: msg, time: new Date() });
     this.input = '';
     this.loading = true;
+    this.scrollToBottom();
 
     this.httpService.sendChatMessage({ message: msg }).subscribe({
       next: (res: any) => {
         this.messages.push({
           from: 'bot',
-          text: res?.reply ?? 'Sorry, I could not respond.',
+          text: res?.reply ?? 'Sorry, I could not respond right now.',
           time: new Date()
         });
         this.loading = false;
@@ -50,15 +55,13 @@ export class ChatbotComponent {
       error: () => {
         this.messages.push({
           from: 'bot',
-          text: '⚠️ Chat service error. Please try again.',
+          text: 'Chat service error. Please try again.',
           time: new Date()
         });
         this.loading = false;
         this.scrollToBottom();
       }
     });
-
-    this.scrollToBottom();
   }
 
   onEnter(e: KeyboardEvent) {
@@ -72,7 +75,6 @@ export class ChatbotComponent {
     setTimeout(() => {
       const box = document.getElementById('chatScrollBox');
       if (box) box.scrollTop = box.scrollHeight;
-    }, 50);
+    }, 60);
   }
-
 }
