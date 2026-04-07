@@ -3,6 +3,7 @@ package com.edutech.logisticsmanagementandtrackingsystem.dto;
 public class CargoStatusResponse {
 
     private Long cargoId;
+    private String awb; // ✅ NEW
     private String status;
     private String source;
     private Long driverId;
@@ -15,6 +16,14 @@ public class CargoStatusResponse {
 
     public void setCargoId(Long cargoId) {
         this.cargoId = cargoId;
+    }
+
+    public String getAwb() {
+        return awb;
+    }
+
+    public void setAwb(String awb) {
+        this.awb = awb;
     }
 
     public String getStatus() {

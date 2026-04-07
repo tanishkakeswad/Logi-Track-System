@@ -42,12 +42,8 @@
               <!-- Content -->
               <div class="col-12 col-md-4">
                 <label class="form-label">Content</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g., Electronics, Furniture"
-                  formControlName="content"
-                />
+                <input type="text" class="form-control" placeholder="e.g., Electronics, Furniture"
+                  formControlName="content" />
                 <div class="field-error" *ngIf="itemForm.get('content')?.invalid && itemForm.get('content')?.touched">
                   Please enter content
                 </div>
@@ -56,12 +52,7 @@
               <!-- Weight -->
               <div class="col-12 col-md-4">
                 <label class="form-label">Weight (KG)</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  placeholder="e.g., 12 or 250"
-                  formControlName="size"
-                />
+                <input type="number" class="form-control" placeholder="e.g., 12 or 250" formControlName="size" />
                 <div class="field-error" *ngIf="itemForm.get('size')?.invalid && itemForm.get('size')?.touched">
                   Please enter size
                 </div>
@@ -81,18 +72,13 @@
 
               <!-- Documents -->
               <div class="col-12">
-                <label class="form-label">Cargo Documents (optional)</label>
+                <label class="form-label">Cargo Documents <span class="text-danger">*</span></label>
 
                 <div class="upload-box">
-                  <input
-                    type="file"
-                    class="form-control"
-                    multiple
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                    (change)="onFileSelected($event)"
-                  />
+                  <input type="file" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                    (change)="onFileSelected($event)" />
                   <div class="upload-hint">
-                    Upload invoices, permits, or related documents (max 10MB per file).
+                    Upload at least one document (invoice/permit). Max 10MB per file.
                   </div>
 
                   <div *ngIf="selectedFiles && selectedFiles.length > 0" class="file-chips">
@@ -134,13 +120,7 @@
 
         <div class="card-body">
           <label class="form-label">A.W.B Number</label>
-          <input
-            class="form-control"
-            type="text"
-            [(ngModel)]="cargoId"
-            name="cargoId"
-            placeholder="Search A.W.B No."
-          />
+          <input class="form-control" type="text" [(ngModel)]="cargoId" name="cargoId" placeholder="Search A.W.B No." />
 
           <div class="search-actions">
             <button class="btn btn-outline-light" type="button" (click)="search()">
@@ -188,20 +168,17 @@
           <tbody>
             <tr *ngFor="let cargo of cargoToShow; let i = index">
               <td class="text-center fw-semibold">{{ i + 1 }}</td>
-              <td class="text-center fw-semibold">{{ cargo.id }}</td>
+              <td class="text-center fw-semibold">{{ cargo.awb || cargo.id }}</td>
               <td>{{ cargo.content }}</td>
               <td>{{ cargo.size }}</td>
 
               <td>
-                <span
-                  class="status-pill"
-                  [ngClass]="{
+                <span class="status-pill" [ngClass]="{
                     pending: cargo.status === 'Order Pending',
                     assigned: cargo.status === 'Order Assigned',
                     transit: cargo.status === 'Order In-transit',
                     delivered: cargo.status === 'Order Delivered'
-                  }"
-                >
+                  }">
                   {{ cargo.status }}
                 </span>
               </td>
@@ -224,17 +201,10 @@
                   PAID
                 </span>
 
-                <span
-                  *ngIf="!cargo.payment"
-                  class="pay-wrapper"
-                  [class.is-disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'"
-                >
-                  <button
-                    class="btn btn-warning btn-sm"
-                    type="button"
-                    (click)="payNow(cargo)"
-                    [disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'"
-                  >
+                <span *ngIf="!cargo.payment" class="pay-wrapper"
+                  [class.is-disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'">
+                  <button class="btn btn-warning btn-sm" type="button" (click)="payNow(cargo)"
+                    [disabled]="!cargo?.driver?.id || cargo?.status === 'Order Pending'">
                     Pay
                   </button>
 
@@ -247,14 +217,8 @@
 
               <!-- ✅ Action: only Assign button (no extra status button under it) -->
               <td class="text-center">
-                <button
-                  class="btn btn-primary btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#driverModal"
-                  type="button"
-                  (click)="addDriver(cargo)"
-                  [disabled]="cargo.status !== 'Order Pending'"
-                >
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#driverModal"
+                  type="button" (click)="addDriver(cargo)" [disabled]="cargo.status !== 'Order Pending'">
                   Assign
                 </button>
               </td>

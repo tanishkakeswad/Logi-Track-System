@@ -2,6 +2,7 @@ package com.edutech.logisticsmanagementandtrackingsystem.Controller;
 
 import com.edutech.logisticsmanagementandtrackingsystem.dto.CargoStatusResponse;
 import com.edutech.logisticsmanagementandtrackingsystem.service.CustomerService;
+import com.edutech.logisticsmanagementandtrackingsystem.service.CargoService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,11 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    // get cargo status and return it with status code 200
+    // ✅ NEW injection (does not break existing)
+    @Autowired
+    private CargoService cargoService;
+
+    // ✅ Existing endpoint kept exactly
     @GetMapping("/cargo-status")
     public ResponseEntity<CargoStatusResponse> viewCargoStatus(@RequestParam Long cargoId) {
         logger.info("Customer requested cargo status. cargoId={}", cargoId);
@@ -36,5 +41,18 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    // if cargo status is not found, return 404 status code
+
+    // ✅ NEW endpoint: search by AWB
+    @GetMapping("/cargo-status-awb")
+    public ResponseEntity<CargoStatusResponse> viewCargoStatusByAwb(@RequestParam String awb) {
+        logger.info("Customer requested cargo status by AWB. awb={}", awb);
+
+        try {
+            CargoStatusResponse resp = cargoService.getCargoDetailsByAwb(awb);
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        } catch (Exception ex) {
+            logger.warn("Cargo status NOT found by AWB. awb={} | reason={}", awb, ex.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

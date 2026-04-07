@@ -1,5 +1,6 @@
 package com.edutech.logisticsmanagementandtrackingsystem.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,6 +39,12 @@ public class CargoService {
     @Autowired
     private DocumentStorageService documentStorageService;
 
+    // ✅ 11-digit AWB from id (keeps leading zeros)
+    private String generateAwbFromId(Long id) {
+        if (id == null) return null;
+        return String.format("%011d", id);
+    }
+
     // =========================
     // ADD CARGO
     // =========================
@@ -50,15 +57,19 @@ public class CargoService {
 
         logger.info("CARGO-SERVICE: Creating cargo request received");
 
-        try {
-            Cargo saved = cargoRepository.save(cargo);
-            logger.info("CARGO-SERVICE: Cargo created successfully | cargoId={}",
-                    saved != null ? saved.getId() : null);
-            return saved;
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Failed to create cargo | Reason={}", ex.getMessage(), ex);
-            throw ex;
+        Cargo saved = cargoRepository.save(cargo);
+
+        // ✅ Set AWB after ID is generated
+        if (saved != null && (saved.getAwb() == null || saved.getAwb().trim().isEmpty())) {
+            saved.setAwb(generateAwbFromId(saved.getId()));
+            saved = cargoRepository.save(saved);
         }
+
+        logger.info("CARGO-SERVICE: Cargo created successfully | cargoId={} | awb={}",
+                saved != null ? saved.getId() : null,
+                saved != null ? saved.getAwb() : null);
+
+        return saved;
     }
 
     // =========================
@@ -66,14 +77,7 @@ public class CargoService {
     // =========================
     public List<Cargo> viewAllCargo() {
         logger.info("CARGO-SERVICE: Fetch all cargo request received");
-        try {
-            List<Cargo> list = cargoRepository.findAll();
-            logger.info("CARGO-SERVICE: Cargo fetched successfully | count={}", list != null ? list.size() : 0);
-            return list;
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Failed to fetch cargo list | Reason={}", ex.getMessage(), ex);
-            throw ex;
-        }
+        return cargoRepository.findAll();
     }
 
     // =========================
@@ -83,210 +87,153 @@ public class CargoService {
 
         logger.info("CARGO-SERVICE: Assign cargo request | cargoId={} | driverId={}", cargoId, driverId);
 
-        try {
-            Cargo cargo = cargoRepository.findById(cargoId)
-                    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+        Cargo cargo = cargoRepository.findById(cargoId)
+                .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
-            Driver driver = driverRepository.findById(driverId)
-                    .orElseThrow(() -> new EntityNotFoundException("Driver not found"));
+        Driver driver = driverRepository.findById(driverId)
+                .orElseThrow(() -> new EntityNotFoundException("Driver not found"));
 
-            Long oldDriverId = (cargo.getDriver() != null) ? cargo.getDriver().getId() : null;
+        cargo.setDriver(driver);
 
-            cargo.setDriver(driver);
-            cargoRepository.save(cargo);
-
-            logger.info("CARGO-SERVICE: Cargo assigned successfully | cargoId={} | oldDriverId={} | newDriverId={}",
-                    cargoId, oldDriverId, driverId);
-
-            return true;
-
-        } catch (EntityNotFoundException ex) {
-            logger.warn("CARGO-SERVICE: Assign cargo failed | cargoId={} | driverId={} | Reason={}",
-                    cargoId, driverId, ex.getMessage());
-            throw ex;
-
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Error assigning cargo | cargoId={} | driverId={} | Reason={}",
-                    cargoId, driverId, ex.getMessage(), ex);
-            throw ex;
+        // ✅ Optional: update status from pending to assigned
+        if (cargo.getStatus() != null && cargo.getStatus().equalsIgnoreCase("Order Pending")) {
+            cargo.setStatus("Order Assigned");
         }
+
+        cargoRepository.save(cargo);
+
+        logger.info("CARGO-SERVICE: Cargo assigned successfully | cargoId={} | awb={} | driverId={}",
+                cargo.getId(), cargo.getAwb(), driverId);
+
+        return true;
     }
 
     // =========================
     // UPDATE CARGO STATUS
-    // (Pending / Transit / Delivered)
     // =========================
     public boolean updateCargoStatus(Long cargoId, String newStatus) {
 
-        logger.info("CARGO-SERVICE: Update status request | cargoId={} | newStatus={}", cargoId, newStatus);
+        logger.info("CARGO-SERVICE: Update cargo status | cargoId={} | newStatus={}", cargoId, newStatus);
 
         if (cargoId == null || newStatus == null || newStatus.trim().isEmpty()) {
-            logger.warn("CARGO-SERVICE: Update status blocked due to invalid input | cargoId={} | newStatus={}",
-                    cargoId, newStatus);
+            logger.warn("CARGO-SERVICE: updateCargoStatus blocked due to invalid inputs");
             return false;
         }
 
-        try {
-            Cargo cargo = cargoRepository.findById(cargoId)
-                    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+        Cargo cargo = cargoRepository.findById(cargoId)
+                .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
-            String oldStatus = cargo.getStatus();
-            String normalizedStatus = newStatus.trim().toUpperCase();
+        cargo.setStatus(newStatus.trim());
+        cargoRepository.save(cargo);
 
-            // OPTIONAL strict validation (enable if needed):
-            /*
-            if (!(normalizedStatus.equals("PENDING") || normalizedStatus.equals("IN_TRANSIT") || normalizedStatus.equals("DELIVERED"))) {
-                logger.warn("CARGO-SERVICE: Invalid status update attempted | cargoId={} | oldStatus={} | newStatus={}",
-                        cargoId, oldStatus, normalizedStatus);
-                return false;
-            }
-            */
-
-            cargo.setStatus(normalizedStatus);
-            cargoRepository.save(cargo);
-
-            logger.info("CARGO-SERVICE: Cargo status changed | cargoId={} | oldStatus={} | newStatus={}",
-                    cargoId, oldStatus, normalizedStatus);
-
-            // Business event logs
-            if ("DELIVERED".equalsIgnoreCase(normalizedStatus)) {
-                logger.info("✅ DELIVERY EVENT: Cargo delivered successfully | cargoId={}", cargoId);
-            } else if ("IN_TRANSIT".equalsIgnoreCase(normalizedStatus)) {
-                logger.info("🚚 TRANSIT EVENT: Cargo is now in transit | cargoId={}", cargoId);
-            } else if ("PENDING".equalsIgnoreCase(normalizedStatus)) {
-                logger.info("🕒 PENDING EVENT: Cargo marked as pending | cargoId={}", cargoId);
-            }
-
-            return true;
-
-        } catch (EntityNotFoundException ex) {
-            logger.warn("CARGO-SERVICE: Update status failed (not found) | cargoId={} | Reason={}",
-                    cargoId, ex.getMessage());
-            throw ex;
-
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Error updating status | cargoId={} | newStatus={} | Reason={}",
-                    cargoId, newStatus, ex.getMessage(), ex);
-            throw ex;
-        }
+        return true;
     }
 
     // =========================
-    // GET CARGO BY ID (OLD - keep if used)
+    // GET CARGO BY ID
     // =========================
     public Cargo getCargoById(long cargoId) {
-        logger.info("CARGO-SERVICE: Get cargo by id request | cargoId={}", cargoId);
-
-        try {
-            Cargo cargo = cargoRepository.findById(cargoId).orElse(null);
-
-            if (cargo == null) {
-                logger.warn("CARGO-SERVICE: Cargo not found | cargoId={}", cargoId);
-            } else {
-                logger.info("CARGO-SERVICE: Cargo found | cargoId={} | status={}", cargoId, cargo.getStatus());
-            }
-
-            return cargo;
-
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Error fetching cargo | cargoId={} | Reason={}", cargoId, ex.getMessage(), ex);
-            throw ex;
-        }
+        return cargoRepository.findById(cargoId).orElse(null);
     }
 
     // =========================
-    // ✅ NEW IMPORTANT METHOD
-    // GET CARGO DETAILS (DTO RESPONSE)
+    // ✅ GET CARGO BY AWB
+    // =========================
+    public Cargo getCargoByAwb(String awb) {
+        if (awb == null || awb.trim().isEmpty()) return null;
+        return cargoRepository.findByAwb(awb.trim()).orElse(null);
+    }
+
+    // =========================
+    // GET CARGO DETAILS (DTO) BY ID
     // =========================
     public CargoStatusResponse getCargoDetails(Long cargoId) {
 
-        logger.info("CARGO-SERVICE: Get cargo details request | cargoId={}", cargoId);
+        Cargo cargo = cargoRepository.findById(cargoId)
+                .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
 
-        try {
-            Cargo cargo = cargoRepository.findById(cargoId)
-                    .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+        CargoStatusResponse dto = new CargoStatusResponse();
+        dto.setCargoId(cargo.getId());
+        dto.setStatus(cargo.getStatus());
+        dto.setSource(cargo.getSource());
+        dto.setCargoContent(cargo.getCargoContent());
+        dto.setCargoSize(cargo.getCargoSize());
+        dto.setDriverId(cargo.getDriver() != null ? cargo.getDriver().getId() : null);
 
-            CargoStatusResponse dto = new CargoStatusResponse();
-
-            dto.setCargoId(cargo.getId());
-            dto.setStatus(cargo.getStatus());
-            dto.setSource(cargo.getSource());
-
-            dto.setCargoContent(cargo.getCargoContent());
-            dto.setCargoSize(cargo.getCargoSize());
-
-            // ✅ DRIVER FIX (null-safe)
-            if (cargo.getDriver() != null) {
-                dto.setDriverId(cargo.getDriver().getId());
-            } else {
-                dto.setDriverId(null);
-            }
-
-            logger.info("CARGO-SERVICE: Cargo details built successfully | cargoId={} | status={}",
-                    cargoId, cargo.getStatus());
-
-            return dto;
-
-        } catch (EntityNotFoundException ex) {
-            logger.warn("CARGO-SERVICE: Cargo details failed (not found) | cargoId={} | Reason={}",
-                    cargoId, ex.getMessage());
-            throw ex;
-
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Error building cargo details | cargoId={} | Reason={}",
-                    cargoId, ex.getMessage(), ex);
-            throw ex;
-        }
+        return dto;
     }
 
     // =========================
-    // CREATE CARGO WITH DOCUMENTS
+    // ✅ GET CARGO DETAILS (DTO) BY AWB
+    // =========================
+    public CargoStatusResponse getCargoDetailsByAwb(String awb) {
+
+        logger.info("CARGO-SERVICE: Get cargo details by AWB | awb={}", awb);
+
+        if (awb == null || awb.trim().isEmpty()) {
+            throw new EntityNotFoundException("Cargo not found");
+        }
+
+        Cargo cargo = cargoRepository.findByAwb(awb.trim())
+                .orElseThrow(() -> new EntityNotFoundException("Cargo not found"));
+
+        CargoStatusResponse dto = new CargoStatusResponse();
+        dto.setCargoId(cargo.getId());
+        dto.setStatus(cargo.getStatus());
+        dto.setSource(cargo.getSource());
+        dto.setCargoContent(cargo.getCargoContent());
+        dto.setCargoSize(cargo.getCargoSize());
+        dto.setDriverId(cargo.getDriver() != null ? cargo.getDriver().getId() : null);
+
+        return dto;
+    }
+
+    // =========================
+    // CREATE CARGO WITH DOCUMENTS (✅ DOCS MANDATORY)
     // =========================
     public Cargo createCargoWithDocuments(Cargo cargo, MultipartFile[] documents) {
 
         if (cargo == null) {
             logger.warn("CARGO-SERVICE: createCargoWithDocuments called with null cargo");
-            return null;
+            throw new RuntimeException("Cargo is required");
         }
 
-        int docCount = (documents != null) ? documents.length : 0;
-        logger.info("CARGO-SERVICE: Create cargo with documents request | docsCount={}", docCount);
-
-        Cargo savedCargo;
-        try {
-            savedCargo = cargoRepository.save(cargo);
-            logger.info("CARGO-SERVICE: Cargo saved (for documents) | cargoId={}", savedCargo.getId());
-        } catch (Exception ex) {
-            logger.error("CARGO-SERVICE: Failed to save cargo before uploading documents | Reason={}",
-                    ex.getMessage(), ex);
-            throw ex;
+        // ✅ mandatory documents
+        if (documents == null || documents.length == 0) {
+            logger.warn("CARGO-SERVICE: createCargoWithDocuments blocked - documents missing");
+            throw new RuntimeException("Documents are required");
         }
 
-        if (documents != null) {
-            for (MultipartFile file : documents) {
-                try {
-                    String originalName = (file != null) ? file.getOriginalFilename() : null;
-                    logger.info("CARGO-SERVICE: Uploading document | cargoId={} | fileName={}",
-                            savedCargo.getId(), originalName);
+        logger.info("CARGO-SERVICE: Create cargo with documents | docsCount={}", documents.length);
 
-                    CargoDocument doc = documentStorageService.storeFile(file, savedCargo);
-                    cargoDocumentRepository.save(doc);
+        Cargo savedCargo = cargoRepository.save(cargo);
 
-                    logger.info("CARGO-SERVICE: Document saved successfully | cargoId={} | documentId={} | fileName={}",
-                            savedCargo.getId(), doc != null ? doc.getId() : null, originalName);
+        // ✅ Set AWB after insert
+        if (savedCargo.getAwb() == null || savedCargo.getAwb().trim().isEmpty()) {
+            savedCargo.setAwb(generateAwbFromId(savedCargo.getId()));
+            savedCargo = cargoRepository.save(savedCargo);
+        }
 
-                } catch (Exception ex) {
-                    logger.error("CARGO-SERVICE: Document upload failed | cargoId={} | Reason={}",
-                            savedCargo.getId(), ex.getMessage(), ex);
-                    throw new RuntimeException("Failed to upload document", ex);
-                }
+        for (MultipartFile file : documents) {
+            if (file == null || file.isEmpty()) {
+                logger.warn("CARGO-SERVICE: Empty file skipped | cargoId={}", savedCargo.getId());
+                continue;
             }
-        } else {
-            logger.info("CARGO-SERVICE: No documents provided | cargoId={}", savedCargo.getId());
+
+            try {
+                CargoDocument doc = documentStorageService.storeFile(file, savedCargo);
+                cargoDocumentRepository.save(doc);
+
+                logger.info("CARGO-SERVICE: Document saved | cargoId={} | awb={} | fileName={}",
+                        savedCargo.getId(), savedCargo.getAwb(), file.getOriginalFilename());
+
+            } catch (IOException ex) {
+                logger.error("CARGO-SERVICE: Document upload failed | cargoId={} | Reason={}",
+                        savedCargo.getId(), ex.getMessage(), ex);
+                throw new RuntimeException("Failed to upload cargo document", ex);
+            }
         }
 
         return savedCargo;
     }
-
-    
 }

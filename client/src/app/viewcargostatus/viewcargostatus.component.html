@@ -18,13 +18,18 @@
         <p class="muted">Enter Cargo ID and click “Get Status”.</p>
 
         <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
-          <label class="form-label">Cargo ID</label>
 
-          <input type="number"  class="form-control"  formControlName="cargoId"  placeholder="Enter Cargo ID">
+          <label class="form-label">A.W.B No. / Cargo ID</label>
 
-          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched"  class="field-error">
-            Cargo ID is required
+          <input type="text" class="form-control" formControlName="cargoId"
+            placeholder="Enter 11-digit A.W.B or Cargo ID" />
+
+
+
+          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched" class="field-error">
+            A.W.B / Cargo ID is required
           </div>
+
 
           <button class="btn primary-btn w-100 mt-3" type="submit">
             Get Status
@@ -41,10 +46,12 @@
         <h3>Status Result</h3>
         <p class="muted">Latest shipment details retrieved from the system.</p>
 
+
         <div class="result-row">
-          <span>Cargo ID</span>
-          <strong>{{ cargoData?.cargoId }}</strong>
+          <span>A.W.B No.</span>
+          <strong>{{ cargoData?.awb || cargoData?.cargoId }}</strong>
         </div>
+
 
         <div class="result-row">
           <span>Status</span>

@@ -145,84 +145,94 @@ export class AddcargoComponent implements OnInit {
     );
   }
 
-  search() {
-    this.showError = false;
+  // Replace ONLY your search() method with this:
 
-    if (this.cargoId) {
-      this.httpService.getCargoById(this.cargoId).subscribe(
-        (data: any) => {
-          this.cargoToShow = data ? [data] : [];
+search() {
+  this.showError = false;
 
-          // ✅ If searched cargo was assigned earlier, re-attach driver
-          const cargo = this.cargoToShow[0];
-          const cid = Number(cargo?.id);
+  const raw = (this.cargoId ?? '').toString().trim();
 
-          if (cid && this.assignedDriverMap[cid]) {
-            cargo.driver = cargo.driver || {};
-            cargo.driver.id = this.assignedDriverMap[cid];
-
-            if (cargo.status === 'Order Pending') {
-              cargo.status = 'Order Assigned';
-            }
-          }
-
-          // ✅ Attach payment for searched cargo
-          if (cid) {
-            // @ts-ignore
-            this.httpService.getPaymentByCargoId(cid).subscribe({
-              next: (payment: any) => cargo.payment = payment,
-              error: () => cargo.payment = null
-            });
-          }
-        },
-        error => {
-          this.showError = true;
-          this.errorMessage = "No Record found with entered search ID";
-          console.error('Search error:', error);
-        }
-      );
-    } else {
-      this.cargoToShow = this.cargList;
-    }
+  // if empty -> show all
+  if (!raw) {
+    this.cargoToShow = this.cargList;
+    return;
   }
 
-  onSubmit() {
-    this.addSuccess = false;
-    this.addError = false;
-    this.addMessage = '';
-    this.addErrorMessage = '';
+  // ✅ If 11 digits -> treat as AWB
+  const isAwb = /^[0-9]{11}$/.test(raw);
 
-    if (this.itemForm.valid) {
-      const formData = new FormData();
+  if (isAwb) {
+    this.httpService.getCargoByAwb(raw).subscribe(
+      (data: any) => {
+        this.cargoToShow = data ? [data] : [];
+      },
+      () => {
+        this.showError = true;
+        this.errorMessage = "No Record found with entered A.W.B number";
+      }
+    );
+    return;
+  }
 
-      formData.append(
-        'cargo',
-        new Blob([JSON.stringify(this.itemForm.value)], { type: 'application/json' })
-      );
+  // ✅ Otherwise treat as cargoId
+  this.httpService.getCargoById(raw).subscribe(
+    (data: any) => {
+      this.cargoToShow = data ? [data] : [];
+    },
+    () => {
+      this.showError = true;
+      this.errorMessage = "No Record found with entered Cargo ID";
+    }
+  );
+}
+onSubmit() {
+  this.addSuccess = false;
+  this.addError = false;
+  this.addMessage = '';
+  this.addErrorMessage = '';
 
-      this.selectedFiles.forEach(file => {
-        formData.append('documents', file, file.name);
-      });
+  // ✅ documents mandatory
+  if (!this.selectedFiles || this.selectedFiles.length === 0) {
+    this.addError = true;
+    this.addErrorMessage = 'Please upload at least one document to submit cargo.';
+    return;
+  }
 
-      this.httpService.addCargoWithDocuments(formData).subscribe(
-        () => {
-          this.addSuccess = true;
-          this.addMessage = 'Cargo added successfully';
+  if (this.itemForm.valid) {
+    const formData = new FormData();
 
-          this.itemForm.reset();
-          this.selectedFiles = [];
-          this.getCargo();
-        },
-        error => {
-          this.addError = true;
+    // ✅ keep old working way (Cargo binds from JSON blob)
+    formData.append(
+      'cargo',
+      new Blob([JSON.stringify(this.itemForm.value)], { type: 'application/json' })
+    );
+
+    this.selectedFiles.forEach(file => {
+      formData.append('documents', file, file.name);
+    });
+
+    this.httpService.addCargoWithDocuments(formData).subscribe(
+      () => {
+        this.addSuccess = true;
+        this.addMessage = 'Cargo added successfully';
+        this.itemForm.reset();
+        this.selectedFiles = [];
+        this.getCargo();
+      },
+      (error) => {
+        this.addError = true;
+        if (error?.status === 400) {
+          this.addErrorMessage = 'Documents are required. Please upload at least one file.';
+        } else {
           this.addErrorMessage = 'Failed to add cargo with documents';
-          console.error(error);
         }
-      );
-    } else {
-      this.itemForm.markAllAsTouched();
-    }
+        console.error(error);
+      }
+    );
+  } else {
+    this.itemForm.markAllAsTouched();
   }
+}
 
   addDriver(value: any) {
     this.assignModel.cargoId = value.id;

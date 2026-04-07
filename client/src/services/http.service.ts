@@ -170,4 +170,18 @@ getPaymentByCargoId(cargoId: number) {
     { headers: this.getHeaders() }
   );
 }
+
+getCargoByAwb(awb: string) {
+  return this.http.get<any>(
+    `${this.serverName}/api/business/cargo-awb?awb=${encodeURIComponent(awb)}`,
+    { headers: this.getHeaders() }
+  );
+}
+
+getOrderStatusByAwb(awb: string) {
+  return this.http.get<any>(
+    `${this.serverName}/api/customer/cargo-status-awb?awb=${encodeURIComponent(awb)}`,
+    { headers: this.getHeaders() }
+  );
+}
 }

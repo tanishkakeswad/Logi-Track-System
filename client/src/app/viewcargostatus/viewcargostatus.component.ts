@@ -17,8 +17,6 @@ export class ViewcargostatusComponent implements OnInit {
   showResult: boolean = false;
 
   showTracking: boolean = false;
-
-  // ✅ internal normalized key used by tracking UI
   private statusKey: string = '';
 
   constructor(
@@ -30,26 +28,29 @@ export class ViewcargostatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargoForm = this.fb.group({
-      cargoId: ['', Validators.required]
+      // accept digits only (awb or id)
+      cargoId: ['', [Validators.required, Validators.pattern('^[0-9]{1,18}$')]]
     });
   }
 
   getStatus() {
     if (this.cargoForm.invalid) {
-      this.errorMessage = 'Please enter Cargo ID';
+      this.errorMessage = 'Please enter A.W.B / Cargo ID';
       this.showResult = false;
       return;
     }
 
-    const cargoId = this.cargoForm.value.cargoId;
+    const raw = String(this.cargoForm.value.cargoId).trim();
+    const isAwb = /^[0-9]{11}$/.test(raw);
 
-    this.httpService.getOrderStatus(cargoId).subscribe({
+    const request$ = isAwb
+      ? this.httpService.getOrderStatusByAwb(raw)
+      : this.httpService.getOrderStatus(raw);
+
+    request$.subscribe({
       next: (res) => {
         this.cargoData = res;
-
-        // ✅ Normalize + map backend status to tracking step keys
         this.statusKey = this.normalizeToStepKey(this.cargoData?.status);
-
         this.showResult = true;
         this.errorMessage = '';
       },
@@ -60,52 +61,23 @@ export class ViewcargostatusComponent implements OnInit {
     });
   }
 
-  // 🔥 tracking modal
-  openTracking() {
-    this.showTracking = true;
-  }
+  openTracking() { this.showTracking = true; }
+  closeTracking() { this.showTracking = false; }
 
-  closeTracking() {
-    this.showTracking = false;
-  }
-
-  /**
-   * ✅ Map ANY backend status into our stepper-friendly keys.
-   * Works with:
-   * - "Order Pending" / "ORDER_PENDING"
-   * - "Order Assigned" / "ORDER_ASSIGNED"
-   * - "Order In-transit" / "ORDER_IN_TRANSIT"
-   * - "Order Delivered" / "ORDER_DELIVERED"
-   * Also supports:
-   * - "CONFIRMED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED"
-   */
   private normalizeToStepKey(rawStatus: any): string {
     if (!rawStatus) return 'CONFIRMED';
 
-    const s = String(rawStatus)
-      .trim()
-      .toUpperCase()
-      .replace(/[-\s]+/g, '_'); // spaces/hyphens → underscore
+    const s = String(rawStatus).trim().toUpperCase().replace(/[-\s]+/g, '_');
 
-    // ✅ Map common backend strings
     if (s === 'ORDER_PENDING' || s === 'PENDING') return 'CONFIRMED';
     if (s === 'ORDER_ASSIGNED' || s === 'ASSIGNED') return 'CONFIRMED';
-
-    if (s === 'ORDER_IN_TRANSIT' || s === 'IN_TRANSIT' || s === 'ORDER_IN_TRANSIT') return 'IN_TRANSIT';
-    if (s === 'ORDER_IN_TRANSIT' || s === 'ORDER_IN_TRANSIT') return 'IN_TRANSIT';
-
-    // Handle your older label: ORDER_IN-TRANSIT becomes ORDER_IN_TRANSIT after replace
-    if (s === 'ORDER_IN_TRANSIT') return 'IN_TRANSIT';
-
+    if (s === 'ORDER_IN_TRANSIT' || s === 'IN_TRANSIT') return 'IN_TRANSIT';
     if (s === 'OUT_FOR_DELIVERY') return 'OUT_FOR_DELIVERY';
-
     if (s === 'ORDER_DELIVERED' || s === 'DELIVERED') return 'ORDER_DELIVERED';
 
-    // fallback: if unknown, show as confirmed so UI still works
     return 'CONFIRMED';
   }
 
-  // ✅ STEP LOGIC (progressive)
   isStepActive(step: string): boolean {
     const order = ['CONFIRMED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'ORDER_DELIVERED'];
     return order.indexOf(this.statusKey) >= order.indexOf(step);
@@ -115,14 +87,11 @@ export class ViewcargostatusComponent implements OnInit {
     return this.isStepActive(step);
   }
 
-  // ✅ Show a friendly status label on the result card
   getDisplayStatus(): string {
-    // prefer backend original if present
     if (this.cargoData?.status) return this.cargoData.status;
     return this.statusKey;
   }
 
-  // ✅ Logout (keep as-is; you can remove button from HTML if navbar already has it)
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);

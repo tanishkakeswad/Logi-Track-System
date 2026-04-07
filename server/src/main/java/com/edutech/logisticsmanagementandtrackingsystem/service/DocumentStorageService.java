@@ -19,7 +19,10 @@ public class DocumentStorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentStorageService.class);
 
-    @Value("${file.upload.base-path:uploads}")
+    // ✅ IMPORTANT: /tmp is writable in most hosted/virtual environments
+    // You can override this in application.properties if you want:
+    // file.upload.base-path=/some/path
+    @Value("${file.upload.base-path:/tmp/cargowala-uploads}")
     private String basePath;
 
     public CargoDocument storeFile(MultipartFile file, Cargo cargo) throws IOException {
@@ -27,6 +30,11 @@ public class DocumentStorageService {
         if (file == null) {
             logger.warn("DOC-STORAGE: storeFile called with null file");
             throw new IOException("File is null");
+        }
+
+        if (file.isEmpty()) {
+            logger.warn("DOC-STORAGE: storeFile called with empty file");
+            throw new IOException("File is empty");
         }
 
         if (cargo == null || cargo.getId() == null) {
@@ -38,6 +46,11 @@ public class DocumentStorageService {
         long size = file.getSize();
         String contentType = file.getContentType();
 
+        // ✅ Safety: handle null/empty filename
+        if (originalName == null || originalName.trim().isEmpty()) {
+            originalName = "document";
+        }
+
         logger.info("DOC-STORAGE: Upload start | cargoId={} | originalName={} | size={} bytes | contentType={}",
                 cargo.getId(), originalName, size, contentType);
 
@@ -45,10 +58,16 @@ public class DocumentStorageService {
             String extension = getFileExtension(originalName);
             String storedFileName = UUID.randomUUID() + extension;
 
-            Path cargoDir = Paths.get(basePath, "cargo", cargo.getId().toString(), "documents");
+            // ✅ Normalize and use absolute path (more reliable in containers)
+            Path cargoDir = Paths.get(basePath, "cargo", cargo.getId().toString(), "documents")
+                    .toAbsolutePath()
+                    .normalize();
+
+            logger.info("DOC-STORAGE: Using upload directory={}", cargoDir);
+
             Files.createDirectories(cargoDir);
 
-            Path filePath = cargoDir.resolve(storedFileName);
+            Path filePath = cargoDir.resolve(storedFileName).normalize();
 
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 

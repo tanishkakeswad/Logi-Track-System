@@ -42,8 +42,9 @@ public class BusinessController {
         try {
             Cargo savedCargo = cargoService.addCargo(cargo);
 
-            logger.info("BUSINESS: Cargo created successfully | cargoId={}",
-                    savedCargo != null ? savedCargo.getId() : null);
+            logger.info("BUSINESS: Cargo created successfully | cargoId={} | awb={}",
+                    savedCargo != null ? savedCargo.getId() : null,
+                    savedCargo != null ? savedCargo.getAwb() : null);
 
             return new ResponseEntity<>(savedCargo, HttpStatus.OK);
 
@@ -120,23 +121,15 @@ public class BusinessController {
             boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId);
 
             if (assigned) {
-                logger.info("BUSINESS: Cargo assigned successfully | cargoId={} | driverId={}",
-                        cargoId, driverId);
-
                 response.put("message", "Cargo assigned successfully");
                 return ResponseEntity.ok(response);
             } else {
-                logger.warn("BUSINESS: Cargo assignment failed | cargoId={} | driverId={}",
-                        cargoId, driverId);
-
                 response.put("message", "Failed to assign cargo");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             }
 
         } catch (Exception ex) {
-            logger.error("BUSINESS: Error while assigning cargo | cargoId={} | driverId={} | Reason={}",
-                    cargoId, driverId, ex.getMessage(), ex);
-
+            logger.error("BUSINESS: Error while assigning cargo | Reason={}", ex.getMessage(), ex);
             response.put("message", "Failed to assign cargo");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -158,42 +151,55 @@ public class BusinessController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
-            logger.info("BUSINESS: Cargo fetched successfully | cargoId={}", cargoId);
             return ResponseEntity.ok(cargo);
 
         } catch (Exception ex) {
-            logger.error("BUSINESS: Error fetching cargo | cargoId={} | Reason={}",
-                    cargoId, ex.getMessage(), ex);
-
+            logger.error("BUSINESS: Error fetching cargo | Reason={}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // =========================
-    // ADD CARGO WITH DOCUMENTS
+    // ADD CARGO WITH DOCUMENTS (✅ DOCUMENTS MANDATORY)
     // =========================
-    @PostMapping("/cargo-with-documents")
-    public ResponseEntity<Cargo> addCargoWithDocuments(
-            @RequestPart("cargo") Cargo cargo,
-            @RequestPart(value = "documents", required = false) MultipartFile[] documents) {
+   @PostMapping(value = "/cargo-with-documents", consumes = "multipart/form-data")
+public ResponseEntity<Map<String, String>> addCargoWithDocuments(
+        @RequestPart("cargo") Cargo cargo,
+        @RequestPart(value = "documents", required = false) MultipartFile[] documents) {
 
-        logger.info("BUSINESS: Add cargo with documents request received");
+    logger.info("BUSINESS: Add cargo with documents request received");
 
-        try {
-            Cargo savedCargo =
-                    cargoService.createCargoWithDocuments(cargo, documents);
-                    
-    logger.info("BUSINESS: Cargo with documents created successfully | cargoId={}",
-                    savedCargo != null ? savedCargo.getId() : null);
+    Map<String, String> resp = new HashMap<>();
 
-            return ResponseEntity.ok(savedCargo);
-
-        } catch (Exception ex) {
-            logger.error("BUSINESS: Failed to add cargo with documents | Reason={}",
-                    ex.getMessage(), ex);
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    try {
+        // ✅ documents mandatory
+        if (documents == null || documents.length == 0) {
+            resp.put("message", "Documents are required");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
         }
+
+        Cargo savedCargo = cargoService.createCargoWithDocuments(cargo, documents);
+
+        resp.put("message", "Cargo created successfully");
+        resp.put("cargoId", savedCargo != null ? String.valueOf(savedCargo.getId()) : null);
+        resp.put("awb", savedCargo != null ? savedCargo.getAwb() : null);
+
+        return ResponseEntity.ok(resp);
+
+    } catch (Exception ex) {
+        logger.error("BUSINESS: Failed to add cargo with documents | Reason={}", ex.getMessage(), ex);
+
+        // ✅ find the deepest/root cause (actual SQL error)
+        Throwable root = ex;
+        while (root.getCause() != null) root = root.getCause();
+
+        resp.put("message", "UPLOAD_ERROR");
+        resp.put("error", ex.getClass().getSimpleName());
+        resp.put("details", ex.getMessage());
+        resp.put("rootCause", root.getClass().getSimpleName());
+        resp.put("rootMessage", root.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
     }
 }
-
+}

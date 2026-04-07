@@ -46,7 +46,7 @@
 
           <tbody>
             <tr *ngFor="let cargo of cargList">
-              <td class="text-center fw-semibold">{{ cargo.id }}</td>
+              <td class="text-center fw-semibold">{{ cargo.awb || cargo.id }}</td>
               <td>{{ cargo.content }}</td>
               <td>{{ cargo.size }}</td>
 
