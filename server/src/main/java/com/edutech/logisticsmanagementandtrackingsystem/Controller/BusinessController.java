@@ -1,15 +1,18 @@
 package com.edutech.logisticsmanagementandtrackingsystem.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.web.multipart.MultipartFile;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Cargo;
 import com.edutech.logisticsmanagementandtrackingsystem.entity.Driver;
 import com.edutech.logisticsmanagementandtrackingsystem.service.CargoService;
 import com.edutech.logisticsmanagementandtrackingsystem.service.DriverService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,72 +21,179 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/business")
 public class BusinessController {
-    
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(BusinessController.class);
+
     @Autowired
     private CargoService cargoService;
 
     @Autowired
     private DriverService driverService;
 
-
-
+    // =========================
+    // ADD CARGO
+    // =========================
     @PostMapping("/cargo")
-    public ResponseEntity<Cargo> addCargo( @RequestBody Cargo cargo ){
-        return new  ResponseEntity<Cargo>(cargoService.addCargo(cargo),HttpStatus.OK);
+    public ResponseEntity<Cargo> addCargo(@RequestBody Cargo cargo) {
+
+        logger.info("BUSINESS: Add cargo request received");
+
+        try {
+            Cargo savedCargo = cargoService.addCargo(cargo);
+
+            logger.info("BUSINESS: Cargo created successfully | cargoId={}",
+                    savedCargo != null ? savedCargo.getId() : null);
+
+            return new ResponseEntity<>(savedCargo, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Failed to add cargo | Reason={}",
+                    ex.getMessage(), ex);
+
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
+    // =========================
+    // GET ALL DRIVERS
+    // =========================
     @GetMapping("/drivers")
-    public ResponseEntity<List<Driver>> getAllDrivers(){
-        return new ResponseEntity<List<Driver>>(driverService.getAllDrivers(),HttpStatus.OK);
+    public ResponseEntity<List<Driver>> getAllDrivers() {
+
+        logger.info("BUSINESS: Fetch all drivers request received");
+
+        try {
+            List<Driver> drivers = driverService.getAllDrivers();
+
+            logger.info("BUSINESS: Drivers fetched successfully | count={}",
+                    drivers != null ? drivers.size() : 0);
+
+            return new ResponseEntity<>(drivers, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Failed to fetch drivers | Reason={}",
+                    ex.getMessage(), ex);
+
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-
+    // =========================
+    // GET ALL CARGO
+    // =========================
     @GetMapping("/cargo")
-    public ResponseEntity<List<Cargo>> getAllCargo(){
-        return new ResponseEntity<>(cargoService.viewAllCargo(),HttpStatus.OK);
+    public ResponseEntity<List<Cargo>> getAllCargo() {
+
+        logger.info("BUSINESS: Fetch all cargo request received");
+
+        try {
+            List<Cargo> cargoList = cargoService.viewAllCargo();
+
+            logger.info("BUSINESS: Cargo list fetched successfully | count={}",
+                    cargoList != null ? cargoList.size() : 0);
+
+            return new ResponseEntity<>(cargoList, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Failed to fetch cargo list | Reason={}",
+                    ex.getMessage(), ex);
+
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
+    // =========================
+    // ASSIGN CARGO TO DRIVER
+    // =========================
     @PostMapping("/assign-cargo")
-    public ResponseEntity<Map<String,String>> assignCargo(@RequestParam Long cargoId ,@RequestParam Long driverId){
-        Map<String,String> response = new HashMap<>();
+    public ResponseEntity<Map<String, String>> assignCargo(
+            @RequestParam Long cargoId,
+            @RequestParam Long driverId) {
+
+        logger.info("BUSINESS: Assign cargo request | cargoId={} | driverId={}",
+                cargoId, driverId);
+
+        Map<String, String> response = new HashMap<>();
 
         try {
             boolean assigned = cargoService.assignCargoToDriver(cargoId, driverId);
 
             if (assigned) {
+                logger.info("BUSINESS: Cargo assigned successfully | cargoId={} | driverId={}",
+                        cargoId, driverId);
+
                 response.put("message", "Cargo assigned successfully");
                 return ResponseEntity.ok(response);
-            }else{
-                 response.put("message", "Failed to assign cargo");
+            } else {
+                logger.warn("BUSINESS: Cargo assignment failed | cargoId={} | driverId={}",
+                        cargoId, driverId);
 
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+                response.put("message", "Failed to assign cargo");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
             }
-        } catch (Exception e) {
-              response.put("message", "Failed to assign cargo");
 
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Error while assigning cargo | cargoId={} | driverId={} | Reason={}",
+                    cargoId, driverId, ex.getMessage(), ex);
+
+            response.put("message", "Failed to assign cargo");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-      
     }
-    
+
+    // =========================
+    // GET CARGO BY ID
+    // =========================
     @GetMapping("/cargo-id")
-public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId) {
-    Cargo cargo = cargoService.getCargoById(cargoId);
+    public ResponseEntity<Cargo> findCargoById(@RequestParam Long cargoId) {
 
-    if (cargo == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        logger.info("BUSINESS: Fetch cargo by ID request | cargoId={}", cargoId);
+
+        try {
+            Cargo cargo = cargoService.getCargoById(cargoId);
+
+            if (cargo == null) {
+                logger.warn("BUSINESS: Cargo not found | cargoId={}", cargoId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            logger.info("BUSINESS: Cargo fetched successfully | cargoId={}", cargoId);
+            return ResponseEntity.ok(cargo);
+
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Error fetching cargo | cargoId={} | Reason={}",
+                    cargoId, ex.getMessage(), ex);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    return ResponseEntity.ok(cargo);
-}
+    // =========================
+    // ADD CARGO WITH DOCUMENTS
+    // =========================
     @PostMapping("/cargo-with-documents")
-public ResponseEntity<Cargo> addCargoWithDocuments(
-        @RequestPart("cargo") Cargo cargo,
-        @RequestPart(value = "documents", required = false) MultipartFile[] documents) {
+    public ResponseEntity<Cargo> addCargoWithDocuments(
+            @RequestPart("cargo") Cargo cargo,
+            @RequestPart(value = "documents", required = false) MultipartFile[] documents) {
 
-    Cargo savedCargo = cargoService.createCargoWithDocuments(cargo, documents);
-    return ResponseEntity.ok(savedCargo);
+        logger.info("BUSINESS: Add cargo with documents request received");
+
+        try {
+            Cargo savedCargo =
+                    cargoService.createCargoWithDocuments(cargo, documents);
+                    
+    logger.info("BUSINESS: Cargo with documents created successfully | cargoId={}",
+                    savedCargo != null ? savedCargo.getId() : null);
+
+            return ResponseEntity.ok(savedCargo);
+
+        } catch (Exception ex) {
+            logger.error("BUSINESS: Failed to add cargo with documents | Reason={}",
+                    ex.getMessage(), ex);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
-    
-    
-}
+

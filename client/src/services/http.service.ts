@@ -139,4 +139,12 @@ export class HttpService {
   sendOtp(email:string){
     return this.http.post(`${this.serverName}/api/send-otp?email=${email}`,{})
   }
+
+  sendChatMessage(payload: any): Observable<any> {
+  return this.http.post<any>(
+    `${this.serverName}/api/chat/message`,
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
 }
