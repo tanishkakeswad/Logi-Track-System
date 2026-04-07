@@ -14,6 +14,7 @@ export class ViewcargostatusComponent implements OnInit {
   cargoForm!: FormGroup;
   cargoData: any;
   errorMessage: string = '';
+  enteredAwb: string = '';
   showResult: boolean = false;
 
   showTracking: boolean = false;
@@ -27,39 +28,40 @@ export class ViewcargostatusComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cargoForm = this.fb.group({
-      // accept digits only (awb or id)
-      cargoId: ['', [Validators.required, Validators.pattern('^[0-9]{1,18}$')]]
-    });
-  }
+  this.cargoForm = this.fb.group({
+    awb: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern('^[0-9]{11}$') // ✅ exactly 11 digits
+      ]
+    ]
+  });
+}
 
   getStatus() {
-    if (this.cargoForm.invalid) {
-      this.errorMessage = 'Please enter A.W.B / Cargo ID';
-      this.showResult = false;
-      return;
-    }
+  this.showResult = false;
+  this.errorMessage = '';
 
-    const raw = String(this.cargoForm.value.cargoId).trim();
-    const isAwb = /^[0-9]{11}$/.test(raw);
-
-    const request$ = isAwb
-      ? this.httpService.getOrderStatusByAwb(raw)
-      : this.httpService.getOrderStatus(raw);
-
-    request$.subscribe({
-      next: (res) => {
-        this.cargoData = res;
-        this.statusKey = this.normalizeToStepKey(this.cargoData?.status);
-        this.showResult = true;
-        this.errorMessage = '';
-      },
-      error: () => {
-        this.errorMessage = 'Cargo not found or error occurred';
-        this.showResult = false;
-      }
-    });
+  if (this.cargoForm.invalid) {
+    this.errorMessage = 'Enter valid 11-digit A.W.B number';
+    return;
   }
+
+  this.enteredAwb = this.cargoForm.value.awb;
+
+  this.httpService.getOrderStatusByAwb(this.enteredAwb).subscribe({
+    next: (res) => {
+      this.cargoData = res;
+      this.statusKey = this.normalizeToStepKey(this.cargoData?.status);
+      this.showResult = true;
+    },
+    error: () => {
+      this.errorMessage = 'A.W.B number not found';
+      this.showResult = false;
+    }
+  });
+}
 
   openTracking() { this.showTracking = true; }
   closeTracking() { this.showTracking = false; }

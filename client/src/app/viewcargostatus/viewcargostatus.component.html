@@ -6,7 +6,7 @@
     <div class="page-header">
       <div class="page-chip">Customer Console</div>
       <h1>View <span>Cargo</span> Status</h1>
-      <p>Enter your A.W.B / Cargo ID to check the latest shipment status.</p>
+      <p>Enter your Cargo A.W.B No. to check the latest shipment status.</p>
     </div>
 
     <!-- Main layout -->
@@ -15,20 +15,21 @@
       <!-- Form Card -->
       <div class="card glass-card form-card">
         <h3>Track Shipment</h3>
-        <p class="muted">Enter Cargo ID and click “Get Status”.</p>
+        <p class="muted">Enter A.W.B No. and click “Get Status”.</p>
 
         <form [formGroup]="cargoForm" (ngSubmit)="getStatus()">
 
-          <label class="form-label">A.W.B No. / Cargo ID</label>
-
-          <input type="text" class="form-control" formControlName="cargoId"
-            placeholder="Enter 11-digit A.W.B or Cargo ID" />
+          <label class="form-label">A.W.B No. </label>
 
 
+          <input type="text" class="form-control" formControlName="awb" placeholder="Enter 11-digit A.W.B number"
+            maxlength="11" />
 
-          <div *ngIf="cargoForm.get('cargoId')?.invalid && cargoForm.get('cargoId')?.touched" class="field-error">
-            A.W.B / Cargo ID is required
+
+          <div *ngIf="cargoForm.get('awb')?.touched && cargoForm.get('awb')?.invalid" class="field-error">
+            Enter valid 11-digit A.W.B number
           </div>
+
 
 
           <button class="btn primary-btn w-100 mt-3" type="submit">
@@ -36,9 +37,9 @@
           </button>
         </form>
 
-        <div *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0">
+        <!-- <div *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0">
           {{ errorMessage }}
-        </div>
+        </div> -->
       </div>
 
       <!-- ✅ UPDATED RESULT CARD -->
@@ -49,7 +50,7 @@
 
         <div class="result-row">
           <span>A.W.B No.</span>
-          <strong>{{ cargoData?.awb || cargoData?.cargoId }}</strong>
+          <strong>{{ enteredAwb }}</strong>
         </div>
 
 
