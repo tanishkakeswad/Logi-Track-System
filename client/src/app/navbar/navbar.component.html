@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark px-4 px-lg-5 transparent-nav">
-  <a class="navbar-brand d-flex align-items-center" routerLink="/" (click)="closeMenu()">
-    <img src="assets/logo.png" class="nav-logo" />
+  <a class="navbar-brand d-flex align-items-center"
+     routerLink="/"
+     (click)="closeMenu()">
+    <img src="assets/logo.png" class="nav-logo" alt="CargoWala Logo" />
   </a>
 
   <button
@@ -10,15 +12,14 @@
     data-bs-target="#nav"
     aria-controls="nav"
     aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
+    aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div id="nav" #navCollapse class="collapse navbar-collapse">
     <ul class="navbar-nav ms-auto nav-links align-items-lg-center">
 
-      <!-- Common links for everyone -->
+      <!-- Common links -->
       <li class="nav-item">
         <a class="nav-link"
            routerLink="/"
@@ -47,7 +48,17 @@
         </a>
       </li>
 
-      <!-- ✅ Role-based dashboard tabs -->
+      <!-- ✅ FAQs (added correctly) -->
+      <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/faq"
+           routerLinkActive="active"
+           (click)="closeMenu()">
+          FAQs
+        </a>
+      </li>
+
+      <!-- Role-based -->
       <li class="nav-item" *ngIf="isLoggedIn && role === 'CUSTOMER'">
         <a class="nav-link"
            routerLink="/viewcargostatus"
@@ -75,7 +86,7 @@
         </a>
       </li>
 
-      <!-- Login/Logout -->
+      <!-- Login / Logout -->
       <li class="nav-item ms-lg-3" *ngIf="!isLoggedIn">
         <a class="nav-link nav-cta"
            routerLink="/login"

@@ -29,6 +29,7 @@ import { CustomerComponent } from './dashbaord/customer/customer.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 
 import { PaymentComponent } from './payment/payment.component';
+import { FaqComponent } from './faq/faq.component';
 // If you need it later, uncomment these two lines
 // import { DriverTrackingComponent } from './driver-tracking/driver-tracking.component';
 
@@ -38,7 +39,7 @@ import { PaymentComponent } from './payment/payment.component';
     LandingComponent,
     NavbarComponent,
     FooterComponent,
-
+    FaqComponent,
     LoginComponent,
     RegistrationComponent,
 

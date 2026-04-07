@@ -1,0 +1,26 @@
+<div class="faq-page">
+  <div class="container">
+
+    <div class="faq-header text-center">
+      <div class="page-chip">Support Center</div>
+      <h1>Frequently Asked <span>Questions</span></h1>
+      <p>
+        Find quick answers to common questions about cargos, tracking, drivers, and payments.
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-card" *ngFor="let f of faqs">
+        <button class="faq-question" (click)="toggle(f)">
+          <span>{{ f.question }}</span>
+          <span class="icon" [class.open]="f.open">+</span>
+        </button>
+
+        <div class="faq-answer" [class.open]="f.open">
+          {{ f.answer }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

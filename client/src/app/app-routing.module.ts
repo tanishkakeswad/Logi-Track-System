@@ -7,7 +7,7 @@ import { AddcargoComponent } from './addcargo/addcargo.component';
 // import { DashbaordComponent } from './dashbaord/dashbaord.component';
 import { AssginCargoComponent } from './assgin-cargo/assgin-cargo.component';
 import { ViewcargostatusComponent } from './viewcargostatus/viewcargostatus.component';
-import { LandingComponent } from './landing/landing.component'; 
+import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { BusinessComponent } from './dashbaord/business/business.component';
 import { DriverComponent } from './dashbaord/driver/driver.component';
@@ -15,19 +15,21 @@ import { CustomerComponent } from './dashbaord/customer/customer.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ContactComponent } from './contact/contact.component';
 import { PaymentComponent } from './payment/payment.component';
+import { FaqComponent } from './faq/faq.component';
 
 const routes: Routes = [
-  { path: '', component: LandingComponent },          
+  { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   // { path: 'dashboard', component: DashbaordComponent },
   { path: 'addcargo', component: AddcargoComponent },
   { path: 'assgin-cargo', component: AssginCargoComponent },
   { path: 'viewcargostatus', component: ViewcargostatusComponent },
-  {path: 'about', component: AboutComponent},
-  {path:  'contact', component: ContactComponent},
-  
-{
+  { path: 'about', component: AboutComponent },
+  { path: 'contact', component: ContactComponent },
+  {path: 'faq', component: FaqComponent},
+
+  {
     path: 'dashboard/business',
     component: BusinessComponent,
     canActivate: [AuthGuard]
@@ -42,16 +44,17 @@ const routes: Routes = [
     component: CustomerComponent,
     canActivate: [AuthGuard]
   },
-  { path: 'payment', 
+  {
+    path: 'payment',
     component: PaymentComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   },
 
-  { path: '**', redirectTo: '', pathMatch: 'full' }   
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
