@@ -11,6 +11,17 @@
     </div>
   </div>
 
+  <!-- ✅ GLOBAL ALERTS (Assign Driver results) -->
+  <div class="container">
+    <div *ngIf="assignSuccess" class="alert alert-success text-center mt-3">
+      {{ assignMessage }}
+    </div>
+
+    <div *ngIf="assignError" class="alert alert-danger text-center mt-3">
+      {{ assignErrorMessage }}
+    </div>
+  </div>
+
   <!-- Top Grid: Add Cargo + Search -->
   <div class="container">
     <div class="top-grid">
@@ -84,7 +95,6 @@
                     Upload invoices, permits, or related documents (max 10MB per file).
                   </div>
 
-                  <!-- Selected files -->
                   <div *ngIf="selectedFiles && selectedFiles.length > 0" class="file-chips">
                     <span class="file-chip" *ngFor="let f of selectedFiles">{{ f.name }}</span>
                   </div>
@@ -101,13 +111,13 @@
             </div>
           </form>
 
-          <!-- Error / Message -->
-          <div *ngIf="showError" class="alert alert-danger mt-3">
-            {{ errorMessage }}
+          <!-- ✅ Add Cargo Alerts (only for onSubmit) -->
+          <div *ngIf="addError" class="alert alert-danger mt-3">
+            {{ addErrorMessage }}
           </div>
 
-          <div *ngIf="showMessage" class="alert alert-success mt-3">
-            {{ responseMessage }}
+          <div *ngIf="addSuccess" class="alert alert-success mt-3">
+            {{ addMessage }}
           </div>
 
         </div>
@@ -179,7 +189,6 @@
               <td>{{ cargo.content }}</td>
               <td>{{ cargo.size }}</td>
 
-              <!-- status pill -->
               <td>
                 <span class="status-pill"
                   [ngClass]="{
@@ -192,7 +201,6 @@
                 </span>
               </td>
 
-              <!-- docs -->
               <td>
                 <div *ngIf="cargo.documents && cargo.documents.length > 0; else noDocs" class="docs-col">
                   <div class="doc-line" *ngFor="let doc of cargo.documents">
@@ -205,7 +213,6 @@
                 </ng-template>
               </td>
 
-              <!-- actions -->
               <td class="text-center">
                 <button
                   class="btn btn-primary btn-sm"
@@ -253,8 +260,9 @@
             </option>
           </select>
 
-          <div *ngIf="showError" class="text-danger small mt-2">
-            {{ errorMessage }}
+          <!-- ✅ Modal-specific error -->
+          <div *ngIf="assignError" class="text-danger small mt-2">
+            {{ assignErrorMessage }}
           </div>
         </div>
 
@@ -265,5 +273,4 @@
       </div>
     </div>
   </div>
-
 </div>

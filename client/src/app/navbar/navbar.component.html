@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark px-4 px-lg-5 transparent-nav">
-  <a class="navbar-brand d-flex align-items-center" routerLink="/">
+  <a class="navbar-brand d-flex align-items-center" routerLink="/" (click)="closeMenu()">
     <img src="assets/logo.png" class="nav-logo" />
   </a>
 
@@ -15,33 +15,83 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div id="nav" class="collapse navbar-collapse">
+  <div id="nav" #navCollapse class="collapse navbar-collapse">
     <ul class="navbar-nav ms-auto nav-links align-items-lg-center">
+
+      <!-- Common links for everyone -->
       <li class="nav-item">
-        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link"
+           routerLink="/"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           (click)="closeMenu()">
           Home
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" routerLink="/about" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/about"
+           routerLinkActive="active"
+           (click)="closeMenu()">
           About Us
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" routerLink="/contact" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/contact"
+           routerLinkActive="active"
+           (click)="closeMenu()">
           Contact
         </a>
       </li>
 
+      <!-- ✅ Role-based dashboard tabs -->
+      <li class="nav-item" *ngIf="isLoggedIn && role === 'CUSTOMER'">
+        <a class="nav-link"
+           routerLink="/viewcargostatus"
+           routerLinkActive="active"
+           (click)="closeMenu()">
+          Track
+        </a>
+      </li>
+
+      <li class="nav-item" *ngIf="isLoggedIn && role === 'BUSINESS'">
+        <a class="nav-link"
+           routerLink="/addcargo"
+           routerLinkActive="active"
+           (click)="closeMenu()">
+          Create Cargo
+        </a>
+      </li>
+
+      <li class="nav-item" *ngIf="isLoggedIn && role === 'DRIVER'">
+        <a class="nav-link"
+           routerLink="/assgin-cargo"
+           routerLinkActive="active"
+           (click)="closeMenu()">
+          Cargos
+        </a>
+      </li>
+
+      <!-- Login/Logout -->
       <li class="nav-item ms-lg-3" *ngIf="!isLoggedIn">
-        <a class="nav-link nav-cta" routerLink="/login">Login</a>
+        <a class="nav-link nav-cta"
+           routerLink="/login"
+           (click)="closeMenu()">
+          Login
+        </a>
       </li>
 
       <li class="nav-item ms-lg-3" *ngIf="isLoggedIn">
-        <a class="nav-link nav-cta" style="cursor:pointer" (click)="logout()">Logout</a>
+        <a class="nav-link nav-cta"
+           style="cursor:pointer"
+           (click)="logout(); closeMenu()">
+          Logout
+        </a>
       </li>
+
     </ul>
   </div>
 </nav>

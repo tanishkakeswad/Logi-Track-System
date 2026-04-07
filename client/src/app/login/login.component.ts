@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   captchaValid: boolean = false;
   captchaError: boolean = false;
 
+  // ✅ Show/Hide password
+  passwordFieldType: 'password' | 'text' = 'password';
+
   constructor(
     public router: Router,
     public httpService: HttpService,
@@ -30,7 +33,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private authService: AuthService
   ) {
     this.itemForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, Validators.maxLength(19)]],
       password: ['', Validators.required]
     });
   }
@@ -41,6 +44,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => this.drawCaptcha(), 100);
+  }
+
+  // ✅ Toggle password visibility
+  togglePasswordVisibility(): void {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
 
   generateRandomText(): string {
@@ -156,12 +164,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.itemForm.valid && this.captchaValid) {
       this.showError = false;
       const loginDetails = this.itemForm.value;
+
       this.httpService.Login(loginDetails).subscribe({
         next: (response: any) => {
           const role = response.role?.trim().toUpperCase();
-          this.authService.saveToken(response.token);
+
+          // ✅ Set role & id FIRST so navbar can read immediately
           this.authService.setRole(role);
           this.authService.setId(response.id);
+
+          // ✅ Then save token (this triggers isLoggedIn$)
+          this.authService.saveToken(response.token);
+
+          // Navigate based on role
           if (role === 'BUSINESS') {
             this.router.navigateByUrl('/dashboard/business');
           } else if (role === 'DRIVER') {
