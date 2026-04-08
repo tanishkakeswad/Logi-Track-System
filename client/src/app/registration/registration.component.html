@@ -1,9 +1,7 @@
 <div class="register-bg">
   <div class="container">
 
-    <!-- ✅ Removed min-vh-100 so footer can appear naturally -->
     <div class="row justify-content-center py-4">
-
       <div class="col-12 col-md-8 col-lg-5">
         <div class="card register-card shadow-sm border-0 rounded-3">
           <div class="card-body p-4">
@@ -18,6 +16,7 @@
               Please enter your details here
             </p>
 
+            <!-- FORM START -->
             <form [formGroup]="itemForm" (ngSubmit)="onRegister()">
 
               <!-- Username -->
@@ -39,7 +38,7 @@
                 </div>
               </div>
 
-              <!-- Email + OTP Button -->
+              <!-- Email + OTP -->
               <div class="mb-3">
                 <label class="form-label">
                   Email <span class="text-danger">*</span>
@@ -85,6 +84,11 @@
                   class="text-danger small mt-1">
                   OTP is required
                 </div>
+              </div>
+
+              <!-- 🔥 ATTEMPT MESSAGE (FIXED) -->
+              <div *ngIf="attemptMessage" class="otp-message text-danger text-center mb-3">
+                {{ attemptMessage }}
               </div>
 
               <!-- Password -->
@@ -143,11 +147,12 @@
               <button
                 type="submit"
                 class="btn btn-custom-gradient w-100"
-                [disabled]="itemForm.invalid">
+                [disabled]="itemForm.invalid || isBlocked">
                 Register
               </button>
 
             </form>
+            <!-- FORM END -->
 
             <!-- Login -->
             <p class="text-center mt-3 mb-0">
@@ -168,7 +173,7 @@
           </div>
         </div>
       </div>
-
     </div>
+
   </div>
 </div>

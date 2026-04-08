@@ -27,7 +27,7 @@ public class OtpEntity {
     @Column(nullable = false)
     private LocalDateTime expiryTime;
 
-    private int attempts =0;
+    private int attempts =1;
     private static final int MAX_ATTEMPTS = 5;
 
     // Getters and Setters
